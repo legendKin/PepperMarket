@@ -27,7 +27,9 @@ public class Board {
     private String filename;
     private String filepath;
     private Integer viewcount;
-    private Boolean heart;
+
+    private Integer authorId;
+
 
     @Column(name = "createdate", nullable = true)
     private LocalDateTime createDate;

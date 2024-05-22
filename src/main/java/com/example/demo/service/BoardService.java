@@ -3,6 +3,8 @@ package com.example.demo.service;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.example.demo.entity.Board;
@@ -53,7 +55,15 @@ public class BoardService {
     }
 
     public Board boardView(Integer id) {
-        return boardRepository.findById(id).get();
+        Optional<Board> boardOptional = boardRepository.findById(id);
+        // Optional에서 값이 있는지 확인
+        if (boardOptional.isPresent()) {
+            // 값이 있는 경우에만 get 메서드 호출
+            return boardOptional.get();
+        } else {
+            // 값이 없는 경우에는 예외 처리 또는 기본값 반환
+            throw new NoSuchElementException("Board not found with id: " + id);
+        }
     }
 
     public void boardDelete(Integer id) {
@@ -71,15 +81,8 @@ public class BoardService {
         }
     }
 
-    public void heartSave(Integer id) {
-        Board board = boardRepository.findById(id).orElse(null);
-        if (board != null) {
-            boolean currentHeart = board.getHeart();
-            board.setHeart(!currentHeart);
-            boardRepository.save(board);
-        }
 
-    }
+
 
 
     public Page<Board> boardSearchList(String searchKeyword, Pageable pageable){

@@ -7,33 +7,45 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Log4j2
 public class ChatHandler extends TextWebSocketHandler {
-    private static List<WebSocketSession> list = new ArrayList<>();
+
+    private Map<String, WebSocketSession> sessionMap = new HashMap<>();
+
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         log.info("payload : " + payload);
-        //페이로드란 전송되는 데이터를 의미한다.
-        for(WebSocketSession sess: list) {
-            sess.sendMessage(message);
+        String[] parts = payload.split(":", 2); // 최대 2개의 부분으로 분할
+        if (parts.length < 2) {
+            log.warn("Invalid message format: " + payload);
+            return; // 유효하지 않은 메시지 형식이면 처리하지 않음
+        }
+        String senderId = parts[0];
+        String msg = parts[1];
+
+        for (Map.Entry<String, WebSocketSession> entry : sessionMap.entrySet()) {
+            if (!entry.getKey().equals(senderId)) {
+                entry.getValue().sendMessage(new TextMessage(senderId + ": " + msg));
+            }
         }
     }
-    /* Client가 접속 시 호출되는 메서드 */
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        list.add(session);
-        log.info(session + " 클라이언트 접속");
+        String username = session.getUri().getQuery().split("=")[1];
+        sessionMap.put(username, session);
+        log.info(username + " 클라이언트 접속");
     }
-    /* Client가 접속 해제 시 호출되는 메서드드 */
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        log.info(session + " 클라이언트 접속 해제");
-        list.remove(session);
+        String username = session.getUri().getQuery().split("=")[1];
+        log.info(username + " 클라이언트 접속 해제");
+        sessionMap.remove(username);
     }
 }

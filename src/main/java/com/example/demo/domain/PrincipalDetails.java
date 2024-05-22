@@ -13,6 +13,7 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Users users;
+    private Map<String, Object> attributes;
 
     public PrincipalDetails(Users users) {
         this.users = users;
@@ -57,7 +58,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
-    private Map<String, Object> attributes;
+    @Override
+    public String getName() {
+        return users.getEmail();  // Or any other unique identifier
+    }
 
     public PrincipalDetails(Users users, Map<String, Object> attributes) {
         this.users = users;
@@ -69,10 +73,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return attributes; //Map으로 받는 이유: 이메일, 프로필이 value값이라서
     }
 
-    @Override
-    public String getName() {
-        return null;
-    }
+
 
 
 }
