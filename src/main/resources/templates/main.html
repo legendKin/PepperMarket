@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <p>메인홈페이지 넣을 곳</p>
-</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+    
+    <div class="main-content">
+        <div class="category-popular">
+            <h2>카테고리 별 인기매물</h2>
+            <div class="swiper-container upper-slider">
+                <div class="swiper-wrapper">
+                    <div class="pop swiper-slide">
+                            <a href="#">
+                                <img src="https://via.placeholder.com/1000x800">
+                                <p>상품명<br> 카테고리명</p>
+                            </a>
+                    </div>
+                    <div class="pop swiper-slide">Item 2</div>
+                    <div class="pop swiper-slide">Item 3</div>
+                    <div class="pop swiper-slide">Item 4</div>
+                    <div class="pop swiper-slide">Item 5</div>
+                    <div class="pop swiper-slide">Item 6</div>
+                </div>
+                <!-- Add Arrows -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+        <div class="categories">
+            <h2>카테고리</h2>
+            <div class="swiper-container bot-slider">
+                <div class="swiper-wrapper">
+                    <div class="cat swiper-slide">Category 1</div>
+                    <div class="cat swiper-slide">Category 2</div>
+                    <div class="cat swiper-slide">Category 3</div>
+                    <div class="cat swiper-slide">Category 4</div>
+                    <div class="cat swiper-slide">Category 5</div>
+                    <div class="cat swiper-slide">Category 6</div>
+                    <div class="cat swiper-slide">Category 7</div>
+                    <div class="cat swiper-slide">Category 8</div>
+                    <div class="cat swiper-slide">Category 9</div>
+                    <div class="cat swiper-slide">Category 10</div>
+                </div>
+                <!-- Add Arrows -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper1 = new Swiper('.category-popular .swiper-container', {
+                navigation: {
+                    nextEl: '.category-popular .swiper-button-next',
+                    prevEl: '.category-popular .swiper-button-prev',
+                },
+                slidesPerView: 'auto',
+                spaceBetween: 40,
+                loop: true,
+                centeredSlides : true,
+            });
+            
+            var swiper2 = new Swiper('.categories .swiper-container', {
+                navigation: {
+                    nextEl: '.categories .swiper-button-next',
+                    prevEl: '.categories .swiper-button-prev',
+                },
+                slidesPerView: 'auto',
+                spaceBetween: 20,
+                loop: true,
+                
+            });
+        });
+    </script>
+    
+</div>
 </html>
