@@ -26,12 +26,8 @@
 <div class="layout">
     <form action="/board/writepro" method="post" enctype="multipart/form-data">
         <input name="title" type="text" placeholder="제목">
-        <!-- 홈페이지 자체에서 로그인한 경우 -->
-        <input name="author" type="text" placeholder="작성자" th:value="${#authentication.name}">
-        <!-- 네이버에서 로그인한 경우 -->
-        <input name="author" type="text" placeholder="작성자" th:value="${#request.getAttribute('naverNickname')}">
-        <!-- 구글에서 로그인한 경우 -->
-        <input name="author" type="text" placeholder="작성자" th:value="${#request.getAttribute('googleNickname')}">
+        <!-- 로그인한 경우 작성자 필드를 자동으로 채웁니다. -->
+<!--        <input name="author" type="text" placeholder="작성자" th:value="${#authentication.isAuthenticated() ? #authentication.name : #request.getAttribute('naverNickname') != null ? #request.getAttribute('naverNickname') : #request.getAttribute('googleNickname')}">-->
         <textarea name="content" placeholder="내용"></textarea>
         <input type="file" name="file">
         <button type="submit">작성</button>

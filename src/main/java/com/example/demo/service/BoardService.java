@@ -28,6 +28,10 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
     private UserRepository userRepository;
+    @Autowired
+    public BoardService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     public void write(Board board, MultipartFile file) throws Exception {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
