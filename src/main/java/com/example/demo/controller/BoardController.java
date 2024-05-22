@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.PrincipalDetails;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;
@@ -35,11 +36,15 @@ public class BoardController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
     // 게시글 작성 폼을 표시
     @GetMapping("/board/write")
-    public String boardWriteForm(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // 현재 사용자의 별명 또는 닉네임 가져오기
+    public String boardWriteForm(Model model, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        String username = principalDetails.getUsername(); // 현재 사용자의 별명 또는 닉네임 가져오기
         model.addAttribute("username", username); // 모델에 사용자 별명 전달
         return "boardwrite";  // 게시글 작성 폼 뷰 이름 반환
     }
