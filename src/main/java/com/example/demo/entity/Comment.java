@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-;
-
 @Entity
 @Getter
 @Setter
@@ -19,6 +17,7 @@ public class Comment {
     private Board board;
 
     private String content;
-    private String author;
 
+    // 사용자의 별명 또는 닉네임을 저장하는 author 필드 추가
+    private String author;
 }

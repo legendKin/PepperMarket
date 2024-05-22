@@ -1,23 +1,16 @@
 package com.example.demo.entity;
 
-
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.demo.domain.Users;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
 @Entity
 @Data
-
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +21,13 @@ public class Board {
     private String filepath;
     private Integer viewcount;
 
-    private Integer authorId;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @Column(name = "createdate", nullable = true)
     private LocalDateTime createDate;
 
     @Column(name = "modifydate", nullable = true)
     private LocalDateTime modifyDate;
-
 }

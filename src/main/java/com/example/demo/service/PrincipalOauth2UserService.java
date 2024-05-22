@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-
 import com.example.demo.domain.PrincipalDetails;
 import com.example.demo.domain.Users;
+import com.example.demo.oauth.NaverUserInfo;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,49 +13,72 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j //로그 남기는 어노테이션 (구글에서 넘어오는 값을 로그로 남기기)
-//DefaultOAuth2UserService를 상속받아 회원가입 (첫 로그인이면 회원가입도 동시에)
+@Slf4j
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    //userRequest, OAuth2User로 필요한 정보를 추출해 가입 진행
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        log.info("getAttirbutes : {}", oAuth2User.getAttributes());
+        log.info("getAttributes : {}", oAuth2User.getAttributes());
 
-        //구글
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
-        // 구글 유저 id
-        String provider_id = oAuth2User.getAttribute("sub");
+        if (provider.equals("google")) {
+            return handleGoogleLogin(oAuth2User);
+        } else if (provider.equals("naver")) {
+            return handleNaverLogin(oAuth2User);
+        }
 
-        //provider_providerid형식으로 저장해 중복 방지
+        throw new OAuth2AuthenticationException("Unsupported provider: " + provider);
+    }
+
+    private OAuth2User handleGoogleLogin(OAuth2User oAuth2User) {
+        String providerId = oAuth2User.getAttribute("sub");
         String email = oAuth2User.getAttribute("email");
-
-        //구글_구글id
-        String social_id = provider + "_" + provider_id;
+        String socialId = "google_" + providerId;
+        String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
 
         Optional<Users> optionalUsers = userRepository.findByEmail(email);
-        Users users = null;
-
-        if(optionalUsers.isEmpty()) {
-            users = Users.builder()
+        Users users = optionalUsers.orElseGet(() -> {
+            Users newUser = Users.builder()
                     .email(email)
-                    .provider(provider)
-                    .provider(provider_id)
-                    .social_id(social_id)
+                    .provider("google")
+                    .providerId(providerId)
+                    .socialId(socialId)
+                    .nickname(nickname)
                     .build();
-            userRepository.save(users);
-        } else {
-            users = optionalUsers.get();
-        }
+            return userRepository.save(newUser);
+        });
+
+        return new PrincipalDetails(users, oAuth2User.getAttributes());
+    }
+
+    private OAuth2User handleNaverLogin(OAuth2User oAuth2User) {
+        NaverUserInfo naverUserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+        String providerId = naverUserInfo.getProviderId();
+        String email = naverUserInfo.getEmail();
+        String socialId = "naver_" + providerId;
+        String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
+
+        Optional<Users> optionalUsers = userRepository.findByEmail(email);
+        Users users = optionalUsers.orElseGet(() -> {
+            Users newUser = Users.builder()
+                    .email(email)
+                    .provider("naver")
+                    .providerId(providerId)
+                    .socialId(socialId)
+                    .nickname(nickname)
+                    .build();
+            return userRepository.save(newUser);
+        });
 
         return new PrincipalDetails(users, oAuth2User.getAttributes());
     }

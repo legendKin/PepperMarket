@@ -7,11 +7,15 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.example.demo.domain.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.BoardRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +27,15 @@ public class BoardService {
 
     @Autowired
     private BoardRepository boardRepository;
-
+    private UserRepository userRepository;
     public void write(Board board, MultipartFile file) throws Exception {
 
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Users user = userRepository.findByEmail(username).orElseThrow();
+
+        board.setUser(user);  // 작성자 설정
+        board.setCreateDate(LocalDateTime.now());
         if (file.isEmpty()) {
             board.setFilename(board.getFilename());
             board.setFilepath(board.getFilepath());

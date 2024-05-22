@@ -1,4 +1,3 @@
-<!-- boardView.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -38,8 +37,11 @@
 
     <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
 
-    <a th:href="@{'/chat/' + ${board.authorId}}">1:1 채팅</a>
-    <!-- 이 부분이 추가됨 -->
+    <!-- 수정된 부분 시작 -->
+    <th:block th:if="${board.user != null}">
+        <a th:href="@{'/chat/' + ${board.user.id}}">1:1 채팅</a>
+    </th:block>
+    <!-- 수정된 부분 끝 -->
 </div>
 </body>
 </html>
