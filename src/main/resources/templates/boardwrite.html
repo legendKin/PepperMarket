@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>야채쿵야의 Spring 스터디 ^^</title>
+    <title>게시글 작성</title>
     <style>
         .layout {
-            width : 500px;
+            width: 500px;
             margin: 0 auto;
             margin-top: 40px;
         }
 
-        input {
+        input, textarea {
             width: 100%;
             box-sizing: border-box;
         }
 
         textarea {
-            width: 100%;
             margin-top: 10px;
             min-height: 300px;
         }
@@ -26,10 +25,16 @@
 
 <div class="layout">
     <form action="/board/writepro" method="post" enctype="multipart/form-data">
-        <input name="title" type="text">
-        <textarea name="content"></textarea>
+        <input name="title" type="text" placeholder="제목">
+        <!-- 홈페이지 자체에서 로그인한 경우 -->
+        <input name="author" type="text" placeholder="작성자" th:value="${#authentication.name}">
+        <!-- 네이버에서 로그인한 경우 -->
+        <input name="author" type="text" placeholder="작성자" th:value="${#request.getAttribute('naverNickname')}">
+        <!-- 구글에서 로그인한 경우 -->
+        <input name="author" type="text" placeholder="작성자" th:value="${#request.getAttribute('googleNickname')}">
+        <textarea name="content" placeholder="내용"></textarea>
         <input type="file" name="file">
-        <button type="submit"> 작성 </button>
+        <button type="submit">작성</button>
     </form>
 </div>
 

@@ -12,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,10 @@ public class BoardController {
 
     // 게시글 작성 폼을 표시
     @GetMapping("/board/write")
-    public String boardWriteForm() {
+    public String boardWriteForm(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); // 현재 사용자의 별명 또는 닉네임 가져오기
+        model.addAttribute("username", username); // 모델에 사용자 별명 전달
         return "boardwrite";  // 게시글 작성 폼 뷰 이름 반환
     }
 

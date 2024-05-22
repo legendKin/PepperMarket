@@ -36,4 +36,7 @@ public class Users{
     @Column(name = "socialId")
     private String socialId;
 
+    @Column(name = "nickname")
+    private String nickname;
+
 }

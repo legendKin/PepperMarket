@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,5 +27,8 @@ public class AddUserRequest {
 
     @NotEmpty(message = "생년월일을 입력해주세요")
     private LocalDate birthDate;
+
+    @NotBlank
+    private String nickname;
 
 }

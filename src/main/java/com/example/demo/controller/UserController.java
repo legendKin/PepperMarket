@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "signup";
         }
 
@@ -36,7 +36,7 @@ public class UserController {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup";
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup";
@@ -44,8 +44,6 @@ public class UserController {
 
         return "redirect:/login";
     }
-
-
 
     @GetMapping("/login")
     public String login() {
@@ -64,5 +62,4 @@ public class UserController {
 
         return "redirect:/login";
     }
-
 }

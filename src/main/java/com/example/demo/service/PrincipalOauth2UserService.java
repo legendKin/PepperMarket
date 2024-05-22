@@ -29,15 +29,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         log.info("getAttributes : {}", oAuth2User.getAttributes());
 
-        // OAuth2 provider 정보
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
-        // Google 인증 처리
         if (provider.equals("google")) {
             return handleGoogleLogin(oAuth2User);
-        }
-        // Naver 인증 처리
-        else if (provider.equals("naver")) {
+        } else if (provider.equals("naver")) {
             return handleNaverLogin(oAuth2User);
         }
 
@@ -45,12 +41,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User handleGoogleLogin(OAuth2User oAuth2User) {
-        // 구글 유저 id
         String providerId = oAuth2User.getAttribute("sub");
         String email = oAuth2User.getAttribute("email");
-
-        // provider_providerId 형식으로 저장해 중복 방지
         String socialId = "google_" + providerId;
+        String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
 
         Optional<Users> optionalUsers = userRepository.findByEmail(email);
         Users users = optionalUsers.orElseGet(() -> {
@@ -59,6 +53,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider("google")
                     .providerId(providerId)
                     .socialId(socialId)
+                    .nickname(nickname)
                     .build();
             return userRepository.save(newUser);
         });
@@ -67,13 +62,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User handleNaverLogin(OAuth2User oAuth2User) {
-        // 네이버 사용자 정보 가져오기
         NaverUserInfo naverUserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
         String providerId = naverUserInfo.getProviderId();
         String email = naverUserInfo.getEmail();
-
-        // provider_providerId 형식으로 저장해 중복 방지
         String socialId = "naver_" + providerId;
+        String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
 
         Optional<Users> optionalUsers = userRepository.findByEmail(email);
         Users users = optionalUsers.orElseGet(() -> {
@@ -82,6 +75,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider("naver")
                     .providerId(providerId)
                     .socialId(socialId)
+                    .nickname(nickname)
                     .build();
             return userRepository.save(newUser);
         });
