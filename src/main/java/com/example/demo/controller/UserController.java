@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
-
         if(bindingResult.hasErrors()) {
             return "signup";
         }
@@ -33,7 +32,7 @@ public class UserController {
         }
         try {
             userService.save(request);
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup";
@@ -45,6 +44,7 @@ public class UserController {
 
         return "redirect:/login";
     }
+
 
 
     @GetMapping("/login")

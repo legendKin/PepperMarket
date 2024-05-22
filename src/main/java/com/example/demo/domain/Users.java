@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Builder
 @Getter
@@ -28,11 +30,10 @@ public class Users{
     @Column(name = "provider")
     private String provider;
 
-    @Column(name = "provider_id")
-    private String provider_id;
+    @Column(name = "providerId")
+    private String providerId;
 
-    @Column(name = "social_id")
-    private String social_id;
-
+    @Column(name = "socialId")
+    private String socialId;
 
 }
