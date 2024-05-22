@@ -10,4 +10,8 @@ public class MainController {
 
         return "main";
     }
+    @GetMapping("/chat")
+    public String chat(){
+        return "chater";
+    }
 }

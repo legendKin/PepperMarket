@@ -21,7 +21,7 @@ public class WebSecurityConfig {
     // 정적 자원 및 오류 페이지 무시
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring().requestMatchers("/static/**", "/error");
+        return (web) -> web.ignoring().requestMatchers( "/error");
     }
 
     // 보안 필터 체인 설정
@@ -30,7 +30,8 @@ public class WebSecurityConfig {
         return http
                 // HTTP 요청에 대한 권한 부여 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
+                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main","/css/**", "/js/**","/img/**").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
+
                         .anyRequest().authenticated()) // 다른 요청은 인증된 사용자만 허용
 
                 // 폼 로그인 설정
