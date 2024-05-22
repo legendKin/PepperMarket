@@ -80,7 +80,7 @@
 .search-box{
     display: flex;
     width: 538px;
-    height: 30px;
+    /*height: 30px;*/
     margin: auto 0;
     padding: 10px 24px;
     background: rgb(242,245,247);
