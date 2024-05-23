@@ -1,20 +1,29 @@
 package com.example.demo.handler;
 
+import com.example.demo.entity.ChatMessage;
+import com.example.demo.service.ChatMessageService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
 @Log4j2
 public class ChatHandler extends TextWebSocketHandler {
+    private final ChatMessageService chatMessageService;
+    private final Map<String, WebSocketSession> sessionMap = new HashMap<>();
 
-    private Map<String, WebSocketSession> sessionMap = new HashMap<>();
+    @Autowired
+    public ChatHandler(ChatMessageService chatMessageService) {
+        this.chatMessageService = chatMessageService;
+    }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -27,6 +36,13 @@ public class ChatHandler extends TextWebSocketHandler {
         }
         String senderId = parts[0];
         String msg = parts[1];
+
+        // 채팅 메시지 저장
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setUserId(senderId); // session.getUri().getQuery().split("=")[1] 대신 senderId 사용
+        chatMessage.setMessage(msg);
+        chatMessage.setTimestamp(LocalDateTime.now());
+        chatMessageService.saveChatMessage(chatMessage);
 
         for (Map.Entry<String, WebSocketSession> entry : sessionMap.entrySet()) {
             if (!entry.getKey().equals(senderId)) {

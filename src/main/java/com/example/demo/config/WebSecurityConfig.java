@@ -28,7 +28,7 @@ public class WebSecurityConfig {
 
     // 보안 필터 체인 설정
     @Bean
-    public SecurityFilterChain fillterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 // HTTP 요청에 대한 권한 부여 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                 .formLogin(formLogin -> {
                     formLogin
                             .loginPage("/login") // 로그인 페이지 지정
-                            .usernameParameter("email") // 사용자 이름 매개변수 설정
+                            .usernameParameter("nickname") // 사용자 이름 매개변수 설정
                             .defaultSuccessUrl("/"); // 기본 로그인 성공 후 이동할 페이지 설정
                 })
 
