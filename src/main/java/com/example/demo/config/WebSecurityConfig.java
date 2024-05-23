@@ -16,8 +16,8 @@ import org.springframework.security.web.context.SecurityContextRepository;
 
 @RequiredArgsConstructor
 @Configuration
-public class WebSecurityConfig {
-    //    private final UserDetailsService userService;
+public class WebSecurityConfig  {
+
     private final PrincipalOauth2UserService principalOauth2UserService;
 
     // 정적 자원 및 오류 페이지 무시

@@ -4,9 +4,14 @@
       layout:decorate="~{layouts/layout}">
 
 <div layout:fragment="content">
-    
+
     <div class="main-content">
         <div class="category-popular">
+
+<!--            <img th:href="${user.profilePictureUrl}">-->
+
+
+
             <h2>카테고리 별 인기매물</h2>
             <div class="swiper-container upper-slider">
                 <div class="swiper-wrapper">
@@ -70,16 +75,16 @@
                 <!-- Add Arrows -->
                 <div class="swiper-button-next">
                     <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                
+
                 </div>
                 <div class="swiper-button-prev">
                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-                
+
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -92,9 +97,9 @@
                 spaceBetween: 40,
                 loop: true,
                 // centeredSlides : true,
-                
+
             });
-            
+
             var swiper2 = new Swiper('.categories .swiper-container', {
                 navigation: {
                     nextEl: '.categories .swiper-button-next',
@@ -105,10 +110,10 @@
                 loop: true,
                 centeredSlides: false,
                 startSlide: 1,
-                
+
             });
         });
     </script>
-    
+
 </div>
 </html>

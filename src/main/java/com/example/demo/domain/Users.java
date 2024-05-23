@@ -1,10 +1,7 @@
 package com.example.demo.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 
 public class Users{
 
@@ -38,5 +36,6 @@ public class Users{
 
     @Column(name = "nickname")
     private String nickname;
-
+    @Column(name = "profile_picture_url")
+    private String profilePictureUrl; // 프로필 사진을 저장하는 필드 추가
 }
