@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<!--    CSS     -->
+    <!--    CSS     -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
@@ -14,36 +14,36 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    
+
     <style>
         body {
             top: 0;
             left: 0;
             width: 100%;
             background-color: rgb(255, 255, 255);
-            
+
             align-items: stretch;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            
+
             min-height: 100%;
             margin: unset;
             /* 👇넘치는 부분은 보여지지 않고 스크롤로 내릴 수 있음 */
             overflow: hidden auto;
             position: absolute;
         }
-        
+
         .container {
             flex: 1;
         }
     </style>
-    
-<!--    JS      -->
+
+    <!--    JS      -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
-    
+
     <th:block layout:fragment="script"></th:block>
     <th:block layout:fragment="css"></th:block>
 </head>
