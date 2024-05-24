@@ -1,38 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>게시글 작성</title>
     <style>
-        .layout {
-            width: 500px;
-            margin: 0 auto;
-            margin-top: 40px;
-        }
+      .layout {
+        width: 500px;
+        margin: 0 auto;
+        margin-top: 40px;
+      }
 
-        input, textarea {
-            width: 100%;
-            box-sizing: border-box;
-        }
+      input,
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+      }
 
-        textarea {
-            margin-top: 10px;
-            min-height: 300px;
-        }
+      textarea {
+        margin-top: 10px;
+        min-height: 300px;
+      }
     </style>
-</head>
-<body>
-
-<div class="layout">
-    <form action="/board/writepro" method="post" enctype="multipart/form-data">
-        <input name="title" type="text" placeholder="제목">
+  </head>
+  <body>
+    <div class="layout">
+      <form
+        action="/board/writepro"
+        enctype="multipart/form-data"
+        method="post"
+      >
+        <input name="title" placeholder="제목" type="text" />
         <!-- 로그인한 경우 작성자 필드를 자동으로 채웁니다. -->
-<!--        <input name="author" type="text" placeholder="작성자" th:value="${#authentication.isAuthenticated() ? #authentication.name : #request.getAttribute('naverNickname') != null ? #request.getAttribute('naverNickname') : #request.getAttribute('googleNickname')}">-->
+        <!--        <input name="author" type="text" placeholder="작성자" th:value="${#authentication.isAuthenticated() ? #authentication.name : #request.getAttribute('naverNickname') != null ? #request.getAttribute('naverNickname') : #request.getAttribute('googleNickname')}">-->
         <textarea name="content" placeholder="내용"></textarea>
-        <input type="file" name="file">
+        <input name="file" type="file" />
         <button type="submit">작성</button>
-    </form>
-</div>
-
-</body>
+      </form>
+    </div>
+  </body>
 </html>

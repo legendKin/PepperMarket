@@ -18,6 +18,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         this.users = users;
     }
 
+    public PrincipalDetails(Users users, Map<String, Object> attributes) {
+        this.users = users;
+        this.attributes = attributes;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("user"));
@@ -62,11 +67,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return users.getNickname();  // Or any other unique identifier
     }
 
-    public PrincipalDetails(Users users, Map<String, Object> attributes) {
-        this.users = users;
-        this.attributes = attributes;
-    }
-
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
@@ -79,8 +79,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return (String) attributes.get("profile_picture_url");
     }
 
-    public String getPPic(){
-    	return users.getProfilePictureUrl();
+    public String getPPic() {
+        return users.getProfilePictureUrl();
 //        속성이 아닌 단순 String으로 불러왔더니 작동했습니다. 확인필요
     }
 }

@@ -1,7 +1,5 @@
 package com.example.demo.config;
 
-import com.example.demo.handler.ChatHandler;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

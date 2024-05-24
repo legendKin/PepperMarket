@@ -1,5 +1,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="formErrorsFragment" class="alert alert-danger"
-     role="alert" th:if="${#fields.hasErrors()}">
+  <div
+    class="alert alert-danger"
+    role="alert"
+    th:fragment="formErrorsFragment"
+    th:if="${#fields.hasErrors()}"
+  >
     <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-</div>
+  </div>
+</html>

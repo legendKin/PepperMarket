@@ -1,12 +1,5 @@
 package com.example.demo.service;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.example.demo.domain.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.BoardRepository;
@@ -17,9 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -28,10 +25,12 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
     private UserRepository userRepository;
+
     @Autowired
     public BoardService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     public void write(Board board, MultipartFile file) throws Exception {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -43,7 +42,7 @@ public class BoardService {
         if (file.isEmpty()) {
             board.setFilename(board.getFilename());
             board.setFilepath(board.getFilepath());
-        }else {
+        } else {
 
             String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
 
@@ -64,7 +63,7 @@ public class BoardService {
     }
 
 
-    public Page<Board> boardList(Pageable pageable){
+    public Page<Board> boardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
@@ -96,10 +95,7 @@ public class BoardService {
     }
 
 
-
-
-
-    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable){
+    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
         return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 

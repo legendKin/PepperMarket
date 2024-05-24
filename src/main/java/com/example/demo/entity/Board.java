@@ -1,11 +1,12 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
 import com.example.demo.domain.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
