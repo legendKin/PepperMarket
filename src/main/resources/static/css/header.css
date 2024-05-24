@@ -17,11 +17,11 @@
 }
 .header1{
     display: flex;
-    margin-left: 30px;
     flex-direction: row;
-
+    height: 100%;
 }
-.header1 > .icon{
+
+.header1  .icon{
     font-size: 24px;
     width: 24px;
     height: 24px;
@@ -31,41 +31,30 @@
 .header1 .badg{
     letter-spacing: 0px;
     font-weight: 400;
-    font-size: 0.813rem;
+    font-size: 15px;
     font-family: "Pretendard Variable";
     line-height: 154%;
     cursor: pointer;
     margin: auto 0px;
     color: rgb(25, 31, 40);
 }
-.header1 .profile-img{
+.profile-img{
 
         width: 30px;
         height: 30px;
         border-radius: 50px;
-        margin: 0px 8px 0px -30px;
+        margin: 0px 8px 0px;
 
 }
-.header-1 .header-chat{
+.header-notification,.header-chat,.header-profile {
     display: flex;
     margin-left: 30px;
     flex-direction: row;
 
 }
-.header-1 .header-profile .icon{
-    width: 14px;
-    height: 14px;
-    margin: auto 0 auto 8px;
+.header-profile > .dropdown >.dropdown-toggle{
+    align-items: center;
 }
-.header-1 img{
-    width: 30px;
-    height: 30px;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px;
-    margin: 0 8px 0 -30px;
-}
-
 
 .header-2{
     margin-bottom: 15px;
