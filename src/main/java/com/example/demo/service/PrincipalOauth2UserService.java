@@ -17,17 +17,26 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * OAuth2 사용자 정보를 가져와서 처리하는 서비스 클래스입니다.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository; // 사용자 레포지토리
+    private final BCryptPasswordEncoder bCryptPasswordEncoder; // 비밀번호 암호화 인코더
 
+    /**
+     * OAuth2 사용자 정보를 가져오는 메서드입니다.
+     * @param userRequest OAuth2 사용자 요청
+     * @return OAuth2 사용자 정보
+     * @throws OAuth2AuthenticationException OAuth2 인증 예외
+     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
+        OAuth2User oAuth2User = super.loadUser(userRequest); // 부모 클래스의 메서드 호출
         log.info("getAttributes : {}", oAuth2User.getAttributes());
 
         String provider = userRequest.getClientRegistration().getRegistrationId();
@@ -41,6 +50,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         throw new OAuth2AuthenticationException("Unsupported provider: " + provider);
     }
 
+    /**
+     * 구글 로그인 정보를 처리하는 메서드입니다.
+     * @param oAuth2User OAuth2 사용자 정보
+     * @return PrincipalDetails 객체
+     */
     private OAuth2User handleGoogleLogin(OAuth2User oAuth2User) {
         GoogleUserInfo googleUserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
 
@@ -79,6 +93,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         return new PrincipalDetails(savedUser, oAuth2User.getAttributes());
     }
 
+    /**
+     * 네이버 로그인 정보를 처리하는 메서드입니다.
+     * @param oAuth2User OAuth2 사용자 정보
+     * @return PrincipalDetails 객체
+     */
     private OAuth2User handleNaverLogin(OAuth2User oAuth2User) {
         NaverUserInfo naverUserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
 
