@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.PrincipalDetails;
 import com.example.demo.domain.Users;
+import com.example.demo.oauth.GoogleUserInfo;
 import com.example.demo.oauth.NaverUserInfo;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,45 +42,78 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User handleGoogleLogin(OAuth2User oAuth2User) {
-        String providerId = oAuth2User.getAttribute("sub");
-        String email = oAuth2User.getAttribute("email");
+        GoogleUserInfo googleUserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+
+        // 프로필 사진 URL 가져오기
+        String profilePictureUrl = googleUserInfo.getProfilePictureUrl();
+
+        // 나머지 사용자 정보 가져오기
+        String providerId = googleUserInfo.getProviderId();
+        String email = googleUserInfo.getEmail();
         String socialId = "google_" + providerId;
         String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
 
-        Optional<Users> optionalUsers = userRepository.findByEmail(email);
-        Users users = optionalUsers.orElseGet(() -> {
-            Users newUser = Users.builder()
-                    .email(email)
-                    .provider("google")
-                    .providerId(providerId)
-                    .socialId(socialId)
-                    .nickname(nickname)
-                    .build();
-            return userRepository.save(newUser);
-        });
+        // 사용자 엔티티 생성
+        Users newUser = Users.builder()
+                .email(email)
+                .provider("google")
+                .providerId(providerId)
+                .socialId(socialId)
+                .nickname(nickname)
+                .profilePictureUrl(profilePictureUrl) // 프로필 사진 URL 추가
+                .build();
 
-        return new PrincipalDetails(users, oAuth2User.getAttributes());
+        // 사용자 저장 또는 업데이트
+        Optional<Users> optionalUser = userRepository.findByEmail(email);
+        Users savedUser;
+        if (optionalUser.isPresent()) {
+            Users existingUser = optionalUser.get();
+            // 기존 사용자 업데이트
+            existingUser.setProfilePictureUrl(profilePictureUrl); // 프로필 사진 URL 업데이트
+            savedUser = userRepository.save(existingUser);
+        } else {
+            // 새로운 사용자 저장
+            savedUser = userRepository.save(newUser);
+        }
+
+        return new PrincipalDetails(savedUser, oAuth2User.getAttributes());
     }
 
     private OAuth2User handleNaverLogin(OAuth2User oAuth2User) {
         NaverUserInfo naverUserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+
+        // 프로필 사진 URL 가져오기
+        String profilePictureUrl = naverUserInfo.getProfilePictureUrl();
+
+        // 나머지 사용자 정보 가져오기
         String providerId = naverUserInfo.getProviderId();
         String email = naverUserInfo.getEmail();
         String socialId = "naver_" + providerId;
         String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
 
-        Optional<Users> optionalUsers = userRepository.findByEmail(email);
-        Users users = optionalUsers.orElseGet(() -> {
-            Users newUser = Users.builder()
-                    .email(email)
-                    .provider("naver")
-                    .providerId(providerId)
-                    .socialId(socialId)
-                    .nickname(nickname)
-                    .build();
-            return userRepository.save(newUser);
-        });
+        // 사용자 엔티티 생성
+        Users newUser = Users.builder()
+                .email(email)
+                .provider("naver")
+                .providerId(providerId)
+                .socialId(socialId)
+                .nickname(nickname)
+                .profilePictureUrl(profilePictureUrl) // 프로필 사진 URL 추가
+                .build();
 
-        return new PrincipalDetails(users, oAuth2User.getAttributes());
+        // 사용자 저장 또는 업데이트
+        Optional<Users> optionalUser = userRepository.findByEmail(email);
+        Users savedUser;
+        if (optionalUser.isPresent()) {
+            Users existingUser = optionalUser.get();
+            // 기존 사용자 업데이트
+            existingUser.setProfilePictureUrl(profilePictureUrl); // 프로필 사진 URL 업데이트
+            savedUser = userRepository.save(existingUser);
+        } else {
+            // 새로운 사용자 저장
+            savedUser = userRepository.save(newUser);
+        }
+
+        return new PrincipalDetails(savedUser, oAuth2User.getAttributes());
     }
 }

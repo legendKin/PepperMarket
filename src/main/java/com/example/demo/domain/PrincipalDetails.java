@@ -1,6 +1,5 @@
 package com.example.demo.domain;
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,7 +59,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return users.getEmail();  // Or any other unique identifier
+        return users.getNickname();  // Or any other unique identifier
     }
 
     public PrincipalDetails(Users users, Map<String, Object> attributes) {
@@ -69,12 +68,16 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
 
     @Override
-    public Map<String, Object> getAttributes(){
-        return attributes; //Map으로 받는 이유: 이메일, 프로필이 value값이라서
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
-
-
+    // 추가 - 프로필 사진 URL 반환
+    public String getProfilePictureUrl() {
+        // 프로필 사진 URL은 OAuth2 사용자의 속성(attribute)으로 추가되었으므로,
+        // 여기서 해당 속성을 가져와서 반환합니다.
+        return (String) attributes.get("profile_picture_url");
+    }
 }
 
 

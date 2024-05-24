@@ -33,12 +33,12 @@ public class ChatController {
 
     @GetMapping("/chat/{receiverId}")
     public String chat(@PathVariable String receiverId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-        String username = principalDetails.getUsername(); // 로그인된 사용자의 이름 가져오기
+        String username = principalDetails.getName(); // 로그인된 사용자의 이름 가져오기
         model.addAttribute("username", username);
         model.addAttribute("receiverId", receiverId); // 상대방 사용자 ID 추가
 
 
 
-        return "chater";
+        return "chatter";
     }
 }

@@ -16,8 +16,8 @@ import org.springframework.security.web.context.SecurityContextRepository;
 
 @RequiredArgsConstructor
 @Configuration
-public class WebSecurityConfig {
-    //    private final UserDetailsService userService;
+public class WebSecurityConfig  {
+
     private final PrincipalOauth2UserService principalOauth2UserService;
 
     // 정적 자원 및 오류 페이지 무시
@@ -28,11 +28,12 @@ public class WebSecurityConfig {
 
     // 보안 필터 체인 설정
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain fillterChain(HttpSecurity http) throws Exception{
         return http
                 // HTTP 요청에 대한 권한 부여 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main","/layout","/img/**","/css/**", "/js/**").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
+                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main","/layout","/img/**","/css/**", "/js/**","/username").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
+
                         .anyRequest().authenticated()) // 다른 요청은 인증된 사용자만 허용
 
                 // 폼 로그인 설정
@@ -46,7 +47,7 @@ public class WebSecurityConfig {
                 // 로그아웃 설정
                 .logout(logout -> {
                     logout
-                            .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동할 페이지 설정
+                            .logoutSuccessUrl("/") // 로그아웃 성공 후 이동할 페이지 설정
                             .invalidateHttpSession(true) // HTTP 세션 무효화 여부 설정
                             .deleteCookies("JSESSIONID"); // 쿠키 삭제 설정
                 })

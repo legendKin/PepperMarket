@@ -5,5 +5,6 @@ public interface OAuth2UserInfo {
     String getProvider();
     String getEmail();
     String getName();
-
+    // 추가 - 프로필 사진 URL 반환
+    String getProfilePictureUrl();
 }
