@@ -3,8 +3,6 @@ package com.example.demo.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Entity
 @Builder
 @Getter
@@ -12,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Setter
 
-public class Users{
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

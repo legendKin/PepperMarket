@@ -1,17 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Insert title here</title>
-</head>
-<body>
-<script th:inline="javascript">
+  </head>
+  <body>
+    <script th:inline="javascript">
 
-    var message = [[${message}]];
-    alert(message);
+      var message = [[${message}]];
+      alert(message);
 
-    location.replace([[${searchUrl}]]);
-
-</script>
-</body>
+      location.replace([[${searchUrl}]]);
+    </script>
+  </body>
 </html>

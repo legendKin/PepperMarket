@@ -1,22 +1,19 @@
 package com.example.demo.config;
 
 import com.example.demo.service.PrincipalOauth2UserService;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 @RequiredArgsConstructor
 @Configuration
-public class WebSecurityConfig  {
+public class WebSecurityConfig {
 
     private final PrincipalOauth2UserService principalOauth2UserService;
 
@@ -28,11 +25,12 @@ public class WebSecurityConfig  {
 
     // 보안 필터 체인 설정
     @Bean
-    public SecurityFilterChain fillterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain fillterChain(HttpSecurity http) throws Exception {
         return http
                 // HTTP 요청에 대한 권한 부여 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main","/layout","/img/**","/css/**", "/js/**","/username", "/bal").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                        .requestMatchers("/login", "/signup", "/user", "/board/list", "/", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**", "/bal").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
 
                         .anyRequest().authenticated()) // 다른 요청은 인증된 사용자만 허용
 
@@ -66,6 +64,7 @@ public class WebSecurityConfig  {
 
                 .build(); // 보안 필터 체인 빌드
     }
+
     @Bean
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
