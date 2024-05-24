@@ -14,11 +14,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    // 새로운 사용자를 저장하는 메서드
     public Long save(AddUserRequest dto) {
-        return userRepository.save(Users.builder()
+        // 사용자 정보를 생성하고 저장합니다.
+        Users newUser = Users.builder()
                 .email(dto.getEmail())
-                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .password(bCryptPasswordEncoder.encode(dto.getPassword())) // 비밀번호 암호화
                 .nickname(dto.getNickname())  // 닉네임 추가
-                .build()).getId();
+                .build();
+
+        // 저장된 사용자의 ID를 반환합니다.
+        return userRepository.save(newUser).getId();
     }
 }
