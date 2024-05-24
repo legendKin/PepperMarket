@@ -73,10 +73,15 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
 
     // 추가 - 프로필 사진 URL 반환
-    public String getProfilePictureUrl() {
+    public String getProfilePic() {
         // 프로필 사진 URL은 OAuth2 사용자의 속성(attribute)으로 추가되었으므로,
         // 여기서 해당 속성을 가져와서 반환합니다.
         return (String) attributes.get("profile_picture_url");
+    }
+
+    public String getPPic(){
+    	return users.getProfilePictureUrl();
+//        속성이 아닌 단순 String으로 불러왔더니 작동했습니다. 확인필요
     }
 }
 

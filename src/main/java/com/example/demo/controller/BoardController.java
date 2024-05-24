@@ -161,4 +161,38 @@ public class BoardController {
             return new ResponseEntity<>(null, org.springframework.http.HttpStatus.NOT_FOUND);
         }
     }
+
+
+
+
+
+
+    // 테스트페이지입니다.
+    @GetMapping("/bal")
+    public String bal(Model model,
+                            @PageableDefault(page = 0, size = 10, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
+                            String searchKeyword) {
+
+        Page<Board> list = null;
+
+        if (searchKeyword == null) {
+            list = boardService.boardList(pageable);  // 게시글 목록 조회
+        } else {
+            list = boardService.boardSearchList(searchKeyword, pageable);  // 검색 키워드로 게시글 목록 조회
+        }
+
+        int nowPage = list.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, list.getTotalPages());
+
+        int totalPage = list.getTotalPages();
+
+        model.addAttribute("list", list);  // 게시글 목록을 모델에 추가
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("totalPage", totalPage);
+
+        return "BoardAllLists";  // 게시글 목록 뷰 이름 반환
+    }
 }

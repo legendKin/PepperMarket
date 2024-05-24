@@ -36,6 +36,8 @@ public class Users{
 
     @Column(name = "nickname")
     private String nickname;
+
+
     @Column(name = "profile_picture_url")
     private String profilePictureUrl; // 프로필 사진을 저장하는 필드 추가
 }

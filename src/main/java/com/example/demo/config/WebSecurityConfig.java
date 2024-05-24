@@ -32,7 +32,7 @@ public class WebSecurityConfig  {
         return http
                 // HTTP 요청에 대한 권한 부여 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main","/layout","/img/**","/css/**", "/js/**","/username").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
+                        .requestMatchers("/login", "/signup", "/user","/board/list","/","/main","/layout","/img/**","/css/**", "/js/**","/username", "/bal").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
 
                         .anyRequest().authenticated()) // 다른 요청은 인증된 사용자만 허용
 
