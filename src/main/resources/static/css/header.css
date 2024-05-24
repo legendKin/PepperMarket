@@ -21,7 +21,10 @@
     flex-direction: row;
 
 }
-.header1 > .icon{
+.header1>a{
+    display: flex;
+}
+.header1  .icon{
     font-size: 24px;
     width: 24px;
     height: 24px;
@@ -46,7 +49,7 @@
         margin: 0px 8px 0px -30px;
 
 }
-.header-1 .header-chat{
+.header1 .header-chat {
     display: flex;
     margin-left: 30px;
     flex-direction: row;
