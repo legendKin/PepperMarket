@@ -14,10 +14,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -40,6 +42,7 @@ public class BoardController {
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
+
     // 게시글 작성 폼을 표시
     @GetMapping("/board/write")
     public String boardWriteForm(Model model, Authentication authentication) {
@@ -52,7 +55,7 @@ public class BoardController {
     // 게시글 목록을 페이징 및 검색 기능과 함께 표시
     @GetMapping("/board/list")
     public String boardList(Model model,
-                            @PageableDefault(page = 0, size = 10, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
+                            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             String searchKeyword) {
 
         Page<Board> list = null;
@@ -160,5 +163,35 @@ public class BoardController {
             e.printStackTrace();
             return new ResponseEntity<>(null, org.springframework.http.HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    // 테스트페이지입니다.
+    @GetMapping("/bal")
+    public String bal(Model model,
+                      @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                      String searchKeyword) {
+
+        Page<Board> list = null;
+
+        if (searchKeyword == null) {
+            list = boardService.boardList(pageable);  // 게시글 목록 조회
+        } else {
+            list = boardService.boardSearchList(searchKeyword, pageable);  // 검색 키워드로 게시글 목록 조회
+        }
+
+        int nowPage = list.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, list.getTotalPages());
+
+        int totalPage = list.getTotalPages();
+
+        model.addAttribute("list", list);  // 게시글 목록을 모델에 추가
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("totalPage", totalPage);
+
+        return "BoardAllLists";  // 게시글 목록 뷰 이름 반환
     }
 }

@@ -14,17 +14,23 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 채팅 기능을 처리하는 웹소켓 핸들러 클래스입니다.
+ */
 @Component
 @Log4j2
 public class ChatHandler extends TextWebSocketHandler {
+
     private final ChatMessageService chatMessageService;
     private final Map<String, WebSocketSession> sessionMap = new HashMap<>();
 
+    // ChatHandler 생성자
     @Autowired
     public ChatHandler(ChatMessageService chatMessageService) {
         this.chatMessageService = chatMessageService;
     }
 
+    // 클라이언트로부터 메시지를 받았을 때 실행되는 메서드
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
@@ -44,6 +50,7 @@ public class ChatHandler extends TextWebSocketHandler {
         chatMessage.setTimestamp(LocalDateTime.now());
         chatMessageService.saveChatMessage(chatMessage);
 
+        // 세션맵에 있는 모든 클라이언트에게 메시지 전송
         for (Map.Entry<String, WebSocketSession> entry : sessionMap.entrySet()) {
             if (!entry.getKey().equals(senderId)) {
                 entry.getValue().sendMessage(new TextMessage(senderId + ": " + msg));
@@ -51,6 +58,7 @@ public class ChatHandler extends TextWebSocketHandler {
         }
     }
 
+    // 클라이언트가 연결되었을 때 실행되는 메서드
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String username = session.getUri().getQuery().split("=")[1];
@@ -58,6 +66,7 @@ public class ChatHandler extends TextWebSocketHandler {
         log.info(username + " 클라이언트 접속");
     }
 
+    // 클라이언트가 연결을 종료했을 때 실행되는 메서드
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String username = session.getUri().getQuery().split("=")[1];

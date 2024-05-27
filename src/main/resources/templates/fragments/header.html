@@ -1,73 +1,83 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-    <header th:fragment="header">
-        <div class="header-wrapper">
-            <div class="header-box">
-                <div class="header-1">
-                    <div class="header1 header-notification">
-                        <a href="#">
-                            <i class="fa fa-bell-o icon"></i>
-                            <div class="badg">나의 알림</div>
-                        </a>
-                    </div>
-                    <div class="header1 header-chat">
-                        <a href="/chat">
-                            <i class="fa fa-comment-o icon"></i>
-                            <div class="badg">채팅</div>
-                        </a>
-                    </div>
-                    <div class="header1 header-profile">
-                        <div class="profile-box badg">
-                            <div th:unless ="${#authentication.name == 'anonymousUser'}">
-                            <div class="logined dropdown">
-                                <a class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="더미입니다" class="profile-img">
-                                    <p th:text="${nickname}" class="profile-name badg"> </p>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="/logout">로그아웃</a>
-                                </div>
-                            </div>
-                            </div>
-                            
-                            <div th:if ="${#authentication.name == 'anonymousUser'}">
-                            <div class="header1 nologin">
-                                <a href="/login">로그인/회원가입</a>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-2">
-                    <a href="/"><img src="/img/logodummy.png" alt="" class="logo"></a>
-                    <div class="search-box-wrapper">
-                        <div class="search-box">
-                            <i class="fa fa-search dotbogi"></i>
-                            <div class="search">어떤 상품을 찾으시나요?</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-3">
-                    <div class="menu-box">
-                        <div class="menu">메뉴1</div>
-                        <div class="menu">메뉴2</div>
-                        <div class="menu">메뉴3</div>
-                        <div class="menu">메뉴4</div>
-                        <div class="menu">메뉴5</div>
-                        <div class="menu">메뉴6</div>
-                        <div class="menu">메뉴7</div>
-                        <div class="menu">메뉴8</div>
-                    
-                    </div>
-                </div>
-                
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <header th:fragment="header">
+    <div class="header-wrapper">
+      <div class="header-box">
+        <div class="header-1">
+          <div class="header-notification">
+            <a class="header1" href="#">
+              <i class="fa fa-bell-o icon"></i>
+              <div class="badg">나의 알림</div>
+            </a>
+          </div>
+          <div class="header-chat">
+            <a class="header1" href="/chat">
+              <i class="fa fa-comment-o icon"></i>
+              <div class="badg">채팅</div>
+            </a>
+          </div>
+          <div class="header-profile">
+            <!--                            로그인시        -->
+            <div
+              class="dropdown"
+              th:unless="${#authentication.name == 'anonymousUser'}"
+            >
+              <a
+                aria-expanded="false"
+                class="header1 dropdown-toggle"
+                data-bs-toggle="dropdown"
+                id="dropdownMenuButton"
+                type="button"
+              >
+                <img alt="프사" class="profile-img" th:src="@{${profilepic}}" />
+                <p class="profile-name badg" th:text="${nickname}"></p>
+              </a>
+              <div
+                aria-labelledby="dropdownMenuButton"
+                class="dropdown-menu dropdown-menu-end"
+              >
+                <a class="dropdown-item" href="#">내 정보 수정</a>
+                <a class="dropdown-item" href="#">메뉴2</a>
+                <hr class="dropdown-divider" />
+                <a class="dropdown-item" href="/logout">로그아웃</a>
+              </div>
             </div>
-            <div class="header-underline"></div>
+
+            <!--                            비로그인시       -->
+            <a
+              class="header1"
+              href="/login"
+              th:if="${#authentication.name == 'anonymousUser'}"
+            >
+              <div class="badg">로그인/회원가입</div>
+            </a>
+          </div>
         </div>
-    </header>
+        <div class="header-2">
+          <a href="/"><img alt="" class="logo" src="/img/logodummy.png" /></a>
+          <div class="search-box-wrapper">
+            <div class="search-box">
+              <i class="fa fa-search dotbogi"></i>
+              <div class="search">어떤 상품을 찾으시나요?</div>
+            </div>
+          </div>
+        </div>
+        <div class="header-3">
+          <div class="menu-box">
+            <div class="menu">
+              <a href="/bal">전체글보기</a>
+            </div>
+            <div class="menu">메뉴2</div>
+            <div class="menu">메뉴3</div>
+            <div class="menu">메뉴4</div>
+            <div class="menu">메뉴5</div>
+            <div class="menu">메뉴6</div>
+            <div class="menu">메뉴7</div>
+            <div class="menu">메뉴8</div>
+          </div>
+        </div>
+      </div>
+      <div class="header-underline"></div>
+    </div>
+  </header>
 </html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html
+  lang="en"
+  layout:decorate="~{layouts/layout}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <div layout:fragment="content">
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          <div class="col" th:each="board : ${list}">
+            <div class="card shadow-sm">
+              <img
+                class="bd-placeholder-img card-img-top"
+                height="225"
+                th:src="${board.filepath}"
+                width="100%"
+              />
+              <div class="card-body">
+                <a
+                  th:href="@{/board/view(id=${board.id})}"
+                  th:text="${board.title}"
+                  >제목</a
+                >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      type="button"
+                    >
+                      View
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>

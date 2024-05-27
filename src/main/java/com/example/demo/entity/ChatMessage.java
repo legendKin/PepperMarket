@@ -1,57 +1,32 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * 채팅 메시지를 나타내는 엔티티 클래스입니다.
+ */
+@Getter
+@Setter
 @Entity
 @Table(name = "chat_messages")
 public class ChatMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 메시지 식별자
 
     @Column(nullable = false)
-    private String userId;
+    private String userId; // 사용자 ID
 
     @Column(nullable = false)
-    private String message;
+    private String message; // 메시지 내용
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp; // 타임스탬프
 
-    // getters and setters
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
 }

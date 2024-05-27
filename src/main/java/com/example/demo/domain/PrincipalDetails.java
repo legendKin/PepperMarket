@@ -9,74 +9,140 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 사용자 정보를 담은 클래스입니다.
+ */
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Users users;
     private Map<String, Object> attributes;
 
+    /**
+     * PrincipalDetails의 생성자입니다.
+     *
+     * @param users 사용자 정보 객체
+     */
     public PrincipalDetails(Users users) {
         this.users = users;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
-    }
-
-    @Override
-    public String getPassword() {
-        return users.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return users.getEmail();
-    }
-
-    //살아있는지물어봄 (=생존하고 있는 id인지? 휴면id면 false)
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return users.getNickname();  // Or any other unique identifier
-    }
-
+    /**
+     * PrincipalDetails의 생성자입니다.
+     *
+     * @param users      사용자 정보 객체
+     * @param attributes OAuth2 사용자의 속성을 담은 맵
+     */
     public PrincipalDetails(Users users, Map<String, Object> attributes) {
         this.users = users;
         this.attributes = attributes;
     }
 
+    /**
+     * 사용자 권한 목록을 반환합니다.
+     *
+     * @return 권한 목록
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("user"));
+    }
+
+    /**
+     * 사용자 비밀번호를 반환합니다.
+     *
+     * @return 비밀번호
+     */
+    @Override
+    public String getPassword() {
+        return users.getPassword();
+    }
+
+    /**
+     * 사용자 식별 가능한 이름을 반환합니다.
+     *
+     * @return 사용자 이름
+     */
+    @Override
+    public String getUsername() {
+        return users.getEmail();
+    }
+
+    /**
+     * 계정의 만료 여부를 반환합니다.
+     *
+     * @return 계정 만료 여부
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * 계정의 잠금 여부를 반환합니다.
+     *
+     * @return 계정 잠금 여부
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * 자격 증명(비밀번호)의 만료 여부를 반환합니다.
+     *
+     * @return 자격 증명 만료 여부
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * 계정의 사용 가능 여부를 반환합니다.
+     *
+     * @return 계정 사용 가능 여부
+     */
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    /**
+     * 사용자의 이름(닉네임)을 반환합니다.
+     *
+     * @return 사용자 이름
+     */
+    @Override
+    public String getName() {
+        return users.getNickname();
+    }
+
+    /**
+     * OAuth2 사용자의 속성을 담은 맵을 반환합니다.
+     *
+     * @return OAuth2 사용자의 속성을 담은 맵
+     */
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    // 추가 - 프로필 사진 URL 반환
-    public String getProfilePictureUrl() {
-        // 프로필 사진 URL은 OAuth2 사용자의 속성(attribute)으로 추가되었으므로,
-        // 여기서 해당 속성을 가져와서 반환합니다.
+    /**
+     * 프로필 사진 URL을 반환합니다.
+     *
+     * @return 프로필 사진 URL
+     */
+    public String getProfilePic() {
         return (String) attributes.get("profile_picture_url");
+    }
+
+    /**
+     * 프로필 사진 URL을 반환합니다.
+     *
+     * @return 프로필 사진 URL
+     */
+    public String getPPic() {
+        return users.getProfilePictureUrl();
     }
 }
 
