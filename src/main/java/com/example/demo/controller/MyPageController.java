@@ -17,11 +17,11 @@ public class MyPageController {
 
     @GetMapping("/myPage")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        // Get the current logged-in user's email
+
         String email = userDetails.getUsername();
-        // Fetch the member details using the email
+
         Users user = memberService.findByEmail(email);
-        // Add the member details to the model to be displayed on the My Page
+
         model.addAttribute("user", user);
         return "myPage";
     }
