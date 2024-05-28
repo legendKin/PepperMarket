@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Page</title>
+</head>
+<body>
+<h1>My Page</h1>
+<p>닉네임: <span th:text="${user.nickname}"></span></p>
+<p>이메일: <span th:text="${user.email}"></span></p>
+<p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
+<p>제공자: <span th:text="${user.provider}"></span></p>
+<p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
+</body>
+</html>
