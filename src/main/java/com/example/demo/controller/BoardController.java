@@ -112,10 +112,10 @@ public class BoardController {
     public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception {
         board.setViewcount(0);  // 초기 조회수 0으로 설정
         board.setCreateDate(LocalDateTime.now());  // 생성 날짜를 현재 시간으로 설정
-        boardService.write(board, file);  // 새로운 게시글 저장
+        Board savedBoard = boardService.write(board, file);  // 새로운 게시글 저장 후 저장된 게시글 객체 반환
 
         model.addAttribute("message", "글 작성이 완료 되었습니다.");  // 성공 메시지를 모델에 추가
-        model.addAttribute("searchUrl", "/board/list");  // 작성 후 리디렉션할 URL 설정
+        model.addAttribute("searchUrl", "/board/view?id=" + savedBoard.getId());  // 작성 후 작성한 게시글로 이동할 URL 설정
 
         return "message";  // 성공 메시지 뷰 이름 반환
     }
@@ -132,7 +132,7 @@ public class BoardController {
         boardService.write(boardTemp, file);  // 수정된 게시글 저장
 
         model.addAttribute("message", "글 수정이 완료 되었습니다.");  // 성공 메시지를 모델에 추가
-        model.addAttribute("searchUrl", "/board/list");  // 수정 후 리디렉션할 URL 설정
+        model.addAttribute("searchUrl", "redirect:/board/view?id");  // 수정 후 리디렉션할 URL 설정
 
         return "message";  // 성공 메시지 뷰 이름 반환
     }
