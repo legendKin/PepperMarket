@@ -99,6 +99,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
      * @return PrincipalDetails 객체
      */
     private OAuth2User handleNaverLogin(OAuth2User oAuth2User) {
+        @SuppressWarnings("unchecked")
         NaverUserInfo naverUserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
 
         // 프로필 사진 URL 가져오기
