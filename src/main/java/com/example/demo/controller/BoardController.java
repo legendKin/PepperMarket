@@ -56,7 +56,7 @@ public class BoardController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         String username = principalDetails.getUsername(); // 현재 사용자의 별명 또는 닉네임 가져오기
         model.addAttribute("username", username); // 모델에 사용자 별명 전달
-        return "boardwrite";  // 게시글 작성 폼 뷰 이름 반환
+        return "BoardWrite";  // 게시글 작성 폼 뷰 이름 반환
     }
 
     @GetMapping("/board/list")
