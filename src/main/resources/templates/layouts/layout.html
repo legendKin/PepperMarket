@@ -1,0 +1,68 @@
+<!doctype html>
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pepper Market</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!--    jQuery      -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!--    CSS     -->
+
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+
+    <style>
+      body {
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        min-height: 100%;
+        margin: unset;
+        /* 👇넘치는 부분은 보여지지 않고 스크롤로 내릴 수 있음 */
+        overflow: hidden auto;
+        position: absolute;
+      }
+
+      .container {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div th:replace="~{fragments/header::header}"></div>
+
+    <div class="container" layout:fragment="content"></div>
+
+    <div th:replace="~{fragments/footer::footer}"></div>
+
+    <!--    JS      -->
+    <th:block th:insert="~{fragments/scripts::script}"></th:block>
+  </body>
+</html>

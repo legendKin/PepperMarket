@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns:th="http://www.thymleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+    <style>
+      .layout {
+        width: 500px;
+        margin: 0 auto;
+        margin-top: 40px;
+      }
+
+      input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      textarea {
+        width: 100%;
+        margin-top: 10px;
+        min-height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <form
+        enctype="multipart/form-data"
+        method="post"
+        th:action="@{/board/update/{id}(id=${board.id})}"
+      >
+        <input name="title" th:value="${board.title}" type="text" />
+        <textarea name="content" th:text="${board.content}"></textarea>
+        <input name="file" type="file" />
+        <button type="submit">수정</button>
+      </form>
+    </div>
+  </body>
+</html>

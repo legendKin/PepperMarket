@@ -1,0 +1,18 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Message</title>
+</head>
+<body>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var message = /*[[${message}]]*/ 'Default message';
+  alert(message);
+
+  var searchUrl = /*[[${searchUrl}]]*/ '/default/url';
+  location.replace(searchUrl);
+  /*]]>*/
+</script>
+</body>
+</html>
