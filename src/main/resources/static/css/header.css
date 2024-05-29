@@ -73,10 +73,14 @@
   height: 49px;
 }
 
+.search-box-wrapper {
+  position: relative;
+  left: -100px;
+}
+
 .search-box {
   display: flex;
   width: 538px;
-  /*height: 30px;*/
   margin: auto 0;
   padding: 10px 24px;
   background: rgb(242, 245, 247);
@@ -101,6 +105,14 @@
   height: 30px;
   font-size: 30px;
   margin-right: 10px;
+}
+
+.header-2 .write {
+  width: 200px;
+}
+.header-2 .write > p {
+  font-size: 25px;
+  line-height: 100%;
 }
 
 .header-3 {

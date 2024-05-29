@@ -59,7 +59,13 @@
                 th:text="${board.title}"
                 >제목</a
               >
-              <img th:src="${board.filepath}" />
+              <div th:unless="${board.filepath}==null">
+                <img th:src="${board.filepath}" />
+              </div>
+
+              <div th:if="${board.filepath}==null">
+                <img alt="" src="/files/default.png" />
+              </div>
             </td>
 
             <td></td>

@@ -63,7 +63,10 @@ public class BoardService {
         } else {
             throw new NoSuchElementException("Board not found with id: " + id);
         }
+
+
     }
+
 
     public void boardDelete(Integer id) {
         boardRepository.deleteById(id);
@@ -80,4 +83,6 @@ public class BoardService {
     public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
         return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
+
+
 }
