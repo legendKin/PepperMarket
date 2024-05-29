@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.domain.Category;
 import com.example.demo.domain.Users;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -35,4 +36,9 @@ public class Board {
 
     @Column(name = "modifydate", nullable = true)
     private LocalDateTime modifyDate; // 수정일
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
+

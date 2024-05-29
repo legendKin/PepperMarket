@@ -5,6 +5,9 @@ import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CommentService;
+import com.example.demo.service.KeywordService;
+import com.example.demo.service.NotificationService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,13 +30,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
+//@RequestMapping("/board")
 public class BoardController {
 
+    @Autowired
+    private KeywordService keywordService;
+
+    @Autowired
+    private NotificationService notificationService;
     @Autowired
     private BoardService boardService;
 
     @Autowired
     private CommentService commentService;
+
 
     @Autowired
     public BoardController(BoardService boardService) {
@@ -52,7 +59,6 @@ public class BoardController {
         return "boardwrite";  // 게시글 작성 폼 뷰 이름 반환
     }
 
-    // 게시글 목록을 페이징 및 검색 기능과 함께 표시
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -70,13 +76,11 @@ public class BoardController {
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
 
-        int totalPage = list.getTotalPages();
-
         model.addAttribute("list", list);  // 게시글 목록을 모델에 추가
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("totalPage", list.getTotalPages());
 
         return "boardList";  // 게시글 목록 뷰 이름 반환
     }
@@ -165,7 +169,6 @@ public class BoardController {
         }
     }
 
-
     // 테스트페이지입니다.
     @GetMapping("/bal")
     public String bal(Model model,
@@ -193,5 +196,18 @@ public class BoardController {
         model.addAttribute("totalPage", totalPage);
 
         return "BoardAllLists";  // 게시글 목록 뷰 이름 반환
+    }
+
+    @PostMapping("/add")
+    public String addBoard(@RequestBody Board board) {
+        System.out.println("Adding board: " + board.getTitle()); // 로그 추가
+        boardService.saveBoard(board);
+        return "Board added";
+    }
+    @GetMapping("/list/category/{categoryId}")
+    public String boardListByCategory(@PathVariable Long categoryId, Model model) {
+        List<Board> boards = boardService.boardListByCategory(categoryId);
+        model.addAttribute("list", boards);
+        return "boardListByCategory";
     }
 }

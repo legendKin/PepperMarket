@@ -39,4 +39,7 @@ public class Users {
 
     @Column(name = "profile_picture_url")
     private String profilePictureUrl; // 프로필 사진 URL
+
+
+
 }

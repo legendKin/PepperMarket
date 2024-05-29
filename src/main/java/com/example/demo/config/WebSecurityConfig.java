@@ -25,20 +25,20 @@ public class WebSecurityConfig {
 
     // 보안 필터 체인 설정
     @Bean
-    public SecurityFilterChain fillterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 // HTTP 요청에 대한 권한 부여 설정
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         .requestMatchers("/login", "/signup", "/user", "/board/list", "/", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**", "/bal").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
-
-                        .anyRequest().authenticated()) // 다른 요청은 인증된 사용자만 허용
+                        .anyRequest().authenticated() // 다른 요청은 인증된 사용자만 허용
+                )
 
                 // 폼 로그인 설정
                 .formLogin(formLogin -> {
                     formLogin
                             .loginPage("/login") // 로그인 페이지 지정
-                            .usernameParameter("nickname") // 사용자 이름 매개변수 설정
+                            .usernameParameter("email") // 사용자 이름 매개변수 설정 (nickname 대신 email)
                             .defaultSuccessUrl("/"); // 기본 로그인 성공 후 이동할 페이지 설정
                 })
 
@@ -61,7 +61,6 @@ public class WebSecurityConfig {
                         )
                 )
 
-
                 .build(); // 보안 필터 체인 빌드
     }
 
@@ -69,5 +68,4 @@ public class WebSecurityConfig {
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
-
 }

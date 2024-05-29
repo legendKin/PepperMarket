@@ -4,6 +4,7 @@ import com.example.demo.domain.Users;
 import com.example.demo.dto.AddUserRequest;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    @Autowired
     private final UserRepository userRepository; // 사용자 레포지토리
     private final BCryptPasswordEncoder bCryptPasswordEncoder; // 비밀번호 암호화를 위한 인코더
 
@@ -31,4 +33,11 @@ public class UserService {
                 .build();
         return userRepository.save(newUser).getId(); // 사용자의 ID 반환
     }
+
+
+
+    public Users findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + id));
+    }
+
 }
