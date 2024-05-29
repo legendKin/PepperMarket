@@ -4,6 +4,5 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestController {
-    @Autowired
-    private UserRepository userRepository;
+
 }
