@@ -14,17 +14,6 @@ public class Category {
 
     private String name;
 
-    private String food;
-
-    private String shoes;
-
-    private String toy;
-
-    private String clothes;
-
-    private String appliances;
-
-    private String Accessories;
 
     // 카테고리별로 게시글을 구분하기 위해 필요합니다.
     public Category(String name) {

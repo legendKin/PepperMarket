@@ -13,5 +13,6 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Board> findByCategory(Category category);
     Page<Board> findByTitleContaining(String searchKeyword, Pageable pageable);
+    void deleteById(Long id);
 
 }
