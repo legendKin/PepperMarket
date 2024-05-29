@@ -82,7 +82,7 @@ public class BoardController {
         model.addAttribute("totalPage", list.getTotalPages());
 
 //        return "boardList";  // 게시글 목록 뷰 이름 반환
-        return "BoardAllLists";
+        return "BoardLists";
     }
 
     // 특정 게시글 및 댓글 표시
