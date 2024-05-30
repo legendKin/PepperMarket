@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.PrincipalDetails;
+import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;

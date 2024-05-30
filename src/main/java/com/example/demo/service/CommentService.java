@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
-import com.example.demo.domain.Users;
+import com.example.demo.entity.Users;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.UserRepository;

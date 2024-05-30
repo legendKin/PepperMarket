@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Keyword;
-import com.example.demo.domain.PrincipalDetails;
-import com.example.demo.domain.Users;
+import com.example.demo.entity.Keyword;
+import com.example.demo.entity.PrincipalDetails;
+import com.example.demo.entity.Users;
 import com.example.demo.dto.KeywordRequest;
 import com.example.demo.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.domain.Category;
-import com.example.demo.domain.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;

@@ -1,6 +1,5 @@
-package com.example.demo.domain;
+package com.example.demo.entity;
 
-import com.example.demo.entity.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 

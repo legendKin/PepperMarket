@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.PrincipalDetails;
 import com.example.demo.entity.ChatMessage;
+import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.service.ChatMessageService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class ChatController {
         this.chatMessageService = chatMessageService;
     }
 
-    @GetMapping("/previous-chat-messages")
-    public ResponseEntity<List<ChatMessage>> getPreviousChatMessages() {
-        List<ChatMessage> previousMessages = chatMessageService.getPreviousChatMessages();
+    @GetMapping("/previous-chat-messages/{userId}")
+    public ResponseEntity<List<ChatMessage>> getPreviousChatMessages(@PathVariable String userId) {
+        List<ChatMessage> previousMessages = chatMessageService.getPreviousChatMessages(userId);
         return ResponseEntity.ok(previousMessages);
     }
 

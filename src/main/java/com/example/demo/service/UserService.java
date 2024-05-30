@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Users;
+import com.example.demo.entity.Users;
 import com.example.demo.dto.AddUserRequest;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * 사용자 관련 기능을 처리하는 서비스 클래스입니다.
@@ -36,8 +38,12 @@ public class UserService {
 
 
 
-    public Users findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + id));
+    public Optional<Users> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public Optional<Users> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }

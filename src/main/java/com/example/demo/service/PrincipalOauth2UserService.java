@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.PrincipalDetails;
-import com.example.demo.domain.Users;
+import com.example.demo.entity.PrincipalDetails;
+import com.example.demo.entity.Users;
 import com.example.demo.oauth.GoogleUserInfo;
 import com.example.demo.oauth.NaverUserInfo;
+import com.example.demo.oauth.OAuth2UserInfo;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,99 +42,72 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
+        OAuth2UserInfo userInfo;
         if (provider.equals("google")) {
-            return handleGoogleLogin(oAuth2User);
+            userInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         } else if (provider.equals("naver")) {
-            return handleNaverLogin(oAuth2User);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> response = (Map<String, Object>) oAuth2User.getAttributes().get("response");
+            userInfo = new NaverUserInfo(response);
+        } else {
+            throw new OAuth2AuthenticationException("Unsupported provider: " + provider);
         }
 
-        throw new OAuth2AuthenticationException("Unsupported provider: " + provider);
+        return handleLogin(oAuth2User, userInfo);
     }
 
     /**
-     * 구글 로그인 정보를 처리하는 메서드입니다.
+     * 공통 로그인 처리를 담당하는 메서드입니다.
      * @param oAuth2User OAuth2 사용자 정보
+     * @param userInfo OAuth2 사용자 정보 인터페이스
      * @return PrincipalDetails 객체
      */
-    private OAuth2User handleGoogleLogin(OAuth2User oAuth2User) {
-        GoogleUserInfo googleUserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-
-        // 프로필 사진 URL 가져오기
-        String profilePictureUrl = googleUserInfo.getProfilePictureUrl();
-
-        // 나머지 사용자 정보 가져오기
-        String providerId = googleUserInfo.getProviderId();
-        String email = googleUserInfo.getEmail();
-        String socialId = "google_" + providerId;
+    private OAuth2User handleLogin(OAuth2User oAuth2User, OAuth2UserInfo userInfo) {
+        String provider = userInfo.getProvider();
+        String providerId = userInfo.getProviderId();
+        String email = userInfo.getEmail();
+        String socialId = provider + "_" + providerId;
         String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
+        String profilePictureUrl = userInfo.getProfilePictureUrl();
 
-        // 사용자 엔티티 생성
-        Users newUser = Users.builder()
-                .email(email)
-                .provider("google")
-                .providerId(providerId)
-                .socialId(socialId)
-                .nickname(nickname)
-                .profilePictureUrl(profilePictureUrl) // 프로필 사진 URL 추가
-                .build();
+        // 사용자 엔티티 생성 또는 업데이트
+        Users user = userRepository.findByEmail(email)
+                .map(existingUser -> updateExistingUser(existingUser, profilePictureUrl))
+                .orElseGet(() -> createNewUser(email, provider, providerId, socialId, nickname, profilePictureUrl));
 
-        // 사용자 저장 또는 업데이트
-        Optional<Users> optionalUser = userRepository.findByEmail(email);
-        Users savedUser;
-        if (optionalUser.isPresent()) {
-            Users existingUser = optionalUser.get();
-            // 기존 사용자 업데이트
-            existingUser.setProfilePictureUrl(profilePictureUrl); // 프로필 사진 URL 업데이트
-            savedUser = userRepository.save(existingUser);
-        } else {
-            // 새로운 사용자 저장
-            savedUser = userRepository.save(newUser);
-        }
-
-        return new PrincipalDetails(savedUser, oAuth2User.getAttributes());
+        return new PrincipalDetails(user, oAuth2User.getAttributes());
     }
 
     /**
-     * 네이버 로그인 정보를 처리하는 메서드입니다.
-     * @param oAuth2User OAuth2 사용자 정보
-     * @return PrincipalDetails 객체
+     * 기존 사용자의 정보를 업데이트합니다.
+     * @param user 기존 사용자
+     * @param profilePictureUrl 프로필 사진 URL
+     * @return 업데이트된 사용자
      */
-    private OAuth2User handleNaverLogin(OAuth2User oAuth2User) {
-        @SuppressWarnings("unchecked")
-        NaverUserInfo naverUserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+    private Users updateExistingUser(Users user, String profilePictureUrl) {
+        user.setProfilePictureUrl(profilePictureUrl);
+        return userRepository.save(user);
+    }
 
-        // 프로필 사진 URL 가져오기
-        String profilePictureUrl = naverUserInfo.getProfilePictureUrl();
-
-        // 나머지 사용자 정보 가져오기
-        String providerId = naverUserInfo.getProviderId();
-        String email = naverUserInfo.getEmail();
-        String socialId = "naver_" + providerId;
-        String nickname = email.split("@")[0]; // 기본 닉네임은 이메일의 로컬 파트
-
-        // 사용자 엔티티 생성
-        Users newUser = Users.builder()
+    /**
+     * 새로운 사용자를 생성합니다.
+     * @param email 이메일
+     * @param provider 제공자
+     * @param providerId 제공자 ID
+     * @param socialId 소셜 ID
+     * @param nickname 닉네임
+     * @param profilePictureUrl 프로필 사진 URL
+     * @return 생성된 사용자
+     */
+    private Users createNewUser(String email, String provider, String providerId, String socialId, String nickname, String profilePictureUrl) {
+        Users user = Users.builder()
                 .email(email)
-                .provider("naver")
+                .provider(provider)
                 .providerId(providerId)
                 .socialId(socialId)
                 .nickname(nickname)
-                .profilePictureUrl(profilePictureUrl) // 프로필 사진 URL 추가
+                .profilePictureUrl(profilePictureUrl)
                 .build();
-
-        // 사용자 저장 또는 업데이트
-        Optional<Users> optionalUser = userRepository.findByEmail(email);
-        Users savedUser;
-        if (optionalUser.isPresent()) {
-            Users existingUser = optionalUser.get();
-            // 기존 사용자 업데이트
-            existingUser.setProfilePictureUrl(profilePictureUrl); // 프로필 사진 URL 업데이트
-            savedUser = userRepository.save(existingUser);
-        } else {
-            // 새로운 사용자 저장
-            savedUser = userRepository.save(newUser);
-        }
-
-        return new PrincipalDetails(savedUser, oAuth2User.getAttributes());
+        return userRepository.save(user);
     }
 }

@@ -34,7 +34,6 @@ public class WebSecurityConfig {
                         .requestMatchers("/myPage/**").authenticated() // /myPage 경로는 인증된 사용자에게만 허용
                         .anyRequest().authenticated() // 다른 요청은 인증된 사용자만 허용
                 )
-
                 // 폼 로그인 설정
                 .formLogin(formLogin -> {
                     formLogin
@@ -42,7 +41,6 @@ public class WebSecurityConfig {
                             .usernameParameter("email") // 사용자 이름 매개변수 설정 (nickname 대신 email)
                             .defaultSuccessUrl("/"); // 기본 로그인 성공 후 이동할 페이지 설정
                 })
-
                 // 로그아웃 설정
                 .logout(logout -> {
                     logout
@@ -50,9 +48,7 @@ public class WebSecurityConfig {
                             .invalidateHttpSession(true) // HTTP 세션 무효화 여부 설정
                             .deleteCookies("JSESSIONID"); // 쿠키 삭제 설정
                 })
-
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
-
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/login") // 로그인 페이지 지정
@@ -61,7 +57,6 @@ public class WebSecurityConfig {
                                 .userService(principalOauth2UserService) // OAuth2 사용자 정보 엔드포인트 설정
                         )
                 )
-
                 .build(); // 보안 필터 체인 빌드
     }
 

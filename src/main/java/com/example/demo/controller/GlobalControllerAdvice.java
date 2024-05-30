@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.PrincipalDetails;
+import com.example.demo.entity.PrincipalDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

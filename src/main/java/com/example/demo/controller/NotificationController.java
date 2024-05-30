@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Notification;
-import com.example.demo.domain.Users;
+import com.example.demo.entity.Notification;
+import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

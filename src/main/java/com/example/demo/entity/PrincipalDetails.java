@@ -1,5 +1,5 @@
 
-package com.example.demo.domain;
+package com.example.demo.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Keyword;
-import com.example.demo.domain.Notification;
-import com.example.demo.domain.Users;
+import com.example.demo.entity.Keyword;
+import com.example.demo.entity.Notification;
+import com.example.demo.entity.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.NotificationRepository;
 import com.example.demo.repository.UserRepository;

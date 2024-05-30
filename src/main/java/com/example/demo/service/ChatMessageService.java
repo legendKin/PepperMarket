@@ -5,7 +5,6 @@ import com.example.demo.repository.ChatMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -14,7 +13,7 @@ import java.util.List;
 @Service
 public class ChatMessageService {
 
-    private final ChatMessageRepository chatMessageRepository; // 채팅 메시지 레포지토리
+    private final ChatMessageRepository chatMessageRepository;
 
     @Autowired
     public ChatMessageService(ChatMessageRepository chatMessageRepository) {
@@ -33,8 +32,8 @@ public class ChatMessageService {
      * 이전 채팅 메시지 목록을 조회하는 메서드입니다.
      * @return 이전 채팅 메시지 목록
      */
-    public List<ChatMessage> getPreviousChatMessages() {
-        // ChatMessageRepository에서 이전 채팅 메시지를 조회하는 메소드를 호출하여 반환
-        return chatMessageRepository.findAll(); // findAll() 메소드 사용 예시. 실제로는 적절한 메소드를 사용해야 합니다.
+    public List<ChatMessage> getPreviousChatMessages(String userId) {
+        // 유저 ID로 채팅 메시지를 조회하고 타임스탬프 순서대로 정렬하여 반환
+        return chatMessageRepository.findByUserIdOrderByTimestampAsc(userId);
     }
 }
