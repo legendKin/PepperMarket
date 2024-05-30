@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>My Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <h1>My Page</h1>
@@ -11,24 +12,167 @@
 <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
 <p>제공자: <span th:text="${user.provider}"></span></p>
 <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
-<p>프로필 사진: <img th:src="@{${profilepic}}" alt="Profile Picture"></p>
+<!-- 사용자 ID를 숨겨진 필드로 추가 -->
+<input id="userId" th:value="${user.id}" type="hidden">
 
 <!-- 프로필 정보 변경 섹션 -->
 <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
-    <form th:action="@{/mypage/change-profile-info}" method="post" enctype="multipart/form-data">
+    <form enctype="multipart/form-data" method="post" th:action="@{/myPage/change-profile-info}">
         <label for="file">프로필 사진:</label>
-        <input type="file" name="file" id="file"><br>
+        <input id="file" name="file" type="file"><br>
 
         <label for="nickname">닉네임:</label>
-        <input type="text" name="nickname" id="nickname" th:value="${user.nickname}"><br>
+        <input id="nickname" name="nickname" th:value="${user.nickname}" type="text"><br>
 
         <label for="email">이메일:</label>
-        <input type="email" name="email" id="email" th:value="${user.email}"><br>
+        <input id="email" name="email" th:value="${user.email}" type="email"><br>
 
         <button type="submit">프로필 정보 변경</button>
     </form>
 </section>
+
+<!-- 키워드 관리 섹션 -->
+<section id="keywords-section">
+    <h2>키워드 목록</h2>
+    <input id="new-keyword" placeholder="Enter new keyword" type="text">
+    <button onclick="addKeyword()">Add Keyword</button>
+    <ul id="keyword-list"></ul>
+</section>
+
+<!-- 알림 섹션 -->
+<section id="notifications-section">
+    <h2>알림목록</h2>
+    <ul id="notification-list"></ul>
+</section>
+
+<!-- 채팅 목록 섹션 -->
+<section id="chat-list-section">
+    <h2>My Chats</h2>
+    <ul id="chatList">
+        <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
+    </ul>
+</section>
+
+<script th:inline="javascript">
+    // API URL 설정
+    const API_BASE_URL = '/keywords';
+    const NOTIFICATION_API_URL = '/notifications';
+
+    // 키워드 추가 함수
+    function addKeyword() {
+        const keyword = $('#new-keyword').val();
+        const userId = $('#userId').val(); // 사용자 ID 가져오기
+        $.ajax({
+            type: 'POST',
+            url: API_BASE_URL,
+            contentType: 'application/json',
+            data: JSON.stringify({ keyword: keyword, userId: userId }),
+            success: function() {
+                loadKeywords();
+                $('#new-keyword').val('');
+            },
+            error: function(error) {
+                console.error('Error adding keyword:', error);
+            }
+        });
+    }
+
+    // 키워드 삭제 함수
+    function deleteKeyword(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: `${API_BASE_URL}/${id}`,
+            success: function() {
+                loadKeywords();
+            },
+            error: function(error) {
+                console.error('Error deleting keyword:', error);
+            }
+        });
+    }
+
+    // 키워드 목록 불러오기 함수
+    function loadKeywords() {
+        $.ajax({
+            type: 'GET',
+            url: API_BASE_URL,
+            success: function(keywords) {
+                const keywordList = $('#keyword-list');
+                keywordList.empty();
+                keywords.forEach(keyword => {
+                    keywordList.append(`<li>${keyword.keyword} <button onclick="deleteKeyword(${keyword.id})">Delete</button></li>`);
+                });
+            },
+            error: function(error) {
+                console.error('Error loading keywords:', error);
+            }
+        });
+    }
+
+    // 알림 목록 불러오기 함수
+    function loadNotifications() {
+        const userId = $('#userId').val(); // 사용자 ID 가져오기
+        console.log('Loading notifications for user ID:', userId); // 디버깅 로그 추가
+
+        $.ajax({
+            type: 'GET',
+            url: `${NOTIFICATION_API_URL}?userId=${userId}`,
+            success: function(notifications) {
+                console.log('Notifications fetched:', notifications); // 디버깅 로그 추가
+
+                const notificationList = $('#notification-list');
+                notificationList.empty();
+                notifications.forEach(notification => {
+                    const readStatus = notification.read ? 'Read' : 'Unread';
+                    notificationList.append(`<li>${notification.message} - ${readStatus} <button onclick="markAsRead(${notification.id})">Mark as read</button></li>`);
+                });
+            },
+            error: function(error) {
+                console.error('Error loading notifications:', error);
+            }
+        });
+    }
+
+    // 알림 읽음 표시 함수
+    function markAsRead(id) {
+        $.ajax({
+            type: 'POST',
+            url: `${NOTIFICATION_API_URL}/${id}/read`,
+            success: function() {
+                loadNotifications();
+            },
+            error: function(error) {
+                console.error('Error marking notification as read:', error);
+            }
+        });
+    }
+
+    // 채팅 목록 불러오기 함수
+    function loadChatRooms() {
+        $.ajax({
+            type: 'GET',
+            url: '/chats',
+            success: function(chatRooms) {
+                const chatList = $('#chatList');
+                chatList.empty();
+                chatRooms.forEach(chatRoomId => {
+                    chatList.append(`<li><a href="/chat/${chatRoomId}">Chat Room ${chatRoomId}</a></li>`);
+                });
+            },
+            error: function(error) {
+                console.error('Error loading chat rooms:', error);
+            }
+        });
+    }
+
+    // 페이지 로드 시 데이터 불러오기
+    $(document).ready(function() {
+        loadKeywords();
+        loadNotifications();
+        loadChatRooms();
+    });
+</script>
 
 </body>
 </html>

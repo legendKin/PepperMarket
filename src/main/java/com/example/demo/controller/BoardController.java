@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Category;
 import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.entity.Board;
-import com.example.demo.entity.Category;
 import com.example.demo.entity.Comment;
+import com.example.demo.repository.BoardRepository;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.KeywordService;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -41,6 +41,9 @@ public class BoardController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
     @Autowired
     private BoardService boardService;
@@ -113,6 +116,12 @@ public class BoardController {
         return "BoardLists";
     }
 
+    @GetMapping("/board/view/{id}")
+    public String viewBoard(@PathVariable Integer id, Model model) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid board Id:" + id));
+        model.addAttribute("board", board);
+        return "boardView";
+    }
     @GetMapping("/board/view")
     public String boardview(Model model, Integer id) {
         boardService.boardViewCount(id);
@@ -195,10 +204,11 @@ public class BoardController {
         boardService.saveBoard(board);
         return "Board added";
     }
+
 //    @GetMapping("/list/category/{categoryId}")
 //    public String boardListByCategory(@PathVariable Long categoryId, Model model) {
 ////        List<Board> boards = boardService.boardListByCategory(categoryId);
-//        model.addAttribute("list", boards);
+////        model.addAttribute("list", boards);
 //        return "boardListByCategory";
 //    }
 }

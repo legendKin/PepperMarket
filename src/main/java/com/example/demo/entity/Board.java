@@ -28,7 +28,7 @@ import static com.example.demo.entity.Category.categoryList;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 게시글 식별자
+    private Integer id; // Integer 타입으로 수정
 
     private String title; // 게시글 제목
     private String content; // 게시글 내용

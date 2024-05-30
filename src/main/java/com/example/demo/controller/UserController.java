@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import com.example.demo.dto.AddUserRequest;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,20 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 @RequiredArgsConstructor
 @Controller
 public class UserController {
-
     private final UserService userService;
-
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "signup";
         }
-
         if (!request.getPassword().equals(request.getPasswordCheck())) {
             bindingResult.rejectValue("passwordCheck", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
             return "signup";
@@ -43,26 +37,23 @@ public class UserController {
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup";
         }
-
         return "redirect:/login";
     }
-
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-
     @GetMapping("/signup")
     public String signup(AddUserRequest addUserRequest) {
         return "signup";
     }
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response,
                 SecurityContextHolder.getContext().getAuthentication());
-
         return "redirect:/";
     }
+
+
 
 }

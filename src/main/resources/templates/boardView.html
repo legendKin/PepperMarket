@@ -8,7 +8,7 @@
   <div>
     <h2 th:text="${board.title}">제목</h2>
     <p th:text="${board.content}">내용</p>
-    <img alt="게시글 이미지" th:src="${board.filepath}" />
+    <img alt="게시글 이미지" th:src="@{${board.filepath}}" />
   </div>
 
   <div>
@@ -16,7 +16,7 @@
     <div th:each="comment : ${comments}">
       <p th:text="${comment.nickname}">Nickname</p>
       <p th:text="${comment.content}">Content</p>
-<!--      <p th:text="${comment.createDate}">Create Date</p>-->
+      <!--      <p th:text="${comment.createDate}">Create Date</p>-->
     </div>
   </div>
 
@@ -33,9 +33,37 @@
     <a th:href="@{/board/delete(id=${board.id})}">글 삭제</a>
     <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
     <th:block th:if="${board.user != null}">
-      <a th:href="@{'/chat/' + ${board.user.id}}">1:1 채팅</a>
+      <button data-receiver-id="${board.user.id}" id="startChatButton">1:1 채팅</button>
     </th:block>
   </div>
 </div>
+
+<script th:inline="javascript">
+  document.addEventListener("DOMContentLoaded", function() {
+    const startChatButton = document.getElementById("startChatButton");
+    if (startChatButton) {
+      startChatButton.addEventListener("click", function() {
+        const receiverId = this.getAttribute("data-receiver-id");
+        const senderId = /*[[${#authentication.principal.username}]]*/ 'anonymous'; // 로그인한 사용자 ID를 가져옵니다.
+
+        fetch('/chat/start', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            senderId: senderId,
+            receiverId: receiverId
+          })
+        })
+        .then(response => response.text())
+        .then(chatRoomId => {
+          window.location.href = '/chat/' + chatRoomId;
+        })
+        .catch(error => console.error('Error starting chat:', error));
+      });
+    }
+  });
+</script>
 </body>
 </html>
