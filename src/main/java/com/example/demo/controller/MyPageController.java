@@ -48,4 +48,20 @@ public class MyPageController {
 
         return "redirect:/myPage";
     }
+
+    @PostMapping("/myPage/change-profile-info")
+    public String changeProfileInfo(@RequestParam("file") MultipartFile file,
+                                    @RequestParam("nickname") String nickname,
+                                    @RequestParam("email") String email,
+                                    @AuthenticationPrincipal UserDetails userDetails,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            memberService.updateUserProfileInfo(userDetails.getUsername(), file, nickname, email);
+            redirectAttributes.addFlashAttribute("message", "Profile updated successfully.");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("message", "Profile update failed: " + e.getMessage());
+        }
+
+        return "redirect:/myPage";
+    }
 }
