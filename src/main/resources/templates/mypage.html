@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8" />
     <title>My Page</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <h1>My Page</h1>
@@ -12,122 +12,14 @@
 <p>제공자: <span th:text="${user.provider}"></span></p>
 <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
 
-<!-- 사용자 ID를 숨겨진 필드로 추가 -->
-<input id="userId" th:value="${user.id}" type="hidden">
-
-<!-- 키워드 관리 섹션 -->
-<section id="keywords-section">
-    <h2>키워드 목록</h2>
-    <input id="new-keyword" placeholder="Enter new keyword" type="text">
-    <button onclick="addKeyword()">Add Keyword</button>
-    <ul id="keyword-list"></ul>
+<!-- 프로필 사진 변경 섹션 -->
+<section id="profile-picture-section">
+    <h2>프로필 사진 변경</h2>
+    <form th:action="@{/myPage/change-profile-picture}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
 </section>
 
-<!-- 알림 섹션 -->
-<section id="notifications-section">
-    <h2>알림목록</h2>
-    <ul id="notification-list"></ul>
-</section>
-
-<script>
-    // API URL 설정
-    const API_BASE_URL = '/keywords';
-    const NOTIFICATION_API_URL = '/notifications';
-
-    // 키워드 추가 함수
-    function addKeyword() {
-        const keyword = $('#new-keyword').val();
-        const userId = $('#userId').val(); // 사용자 ID 가져오기
-        $.ajax({
-            type: 'POST',
-            url: API_BASE_URL,
-            contentType: 'application/json',
-            data: JSON.stringify({ keyword: keyword, userId: userId }),
-            success: function() {
-                loadKeywords();
-                $('#new-keyword').val('');
-            },
-            error: function(error) {
-                console.error('Error adding keyword:', error);
-            }
-        });
-    }
-
-    // 키워드 삭제 함수
-    function deleteKeyword(id) {
-        $.ajax({
-            type: 'DELETE',
-            url: `${API_BASE_URL}/${id}`,
-            success: function() {
-                loadKeywords();
-            },
-            error: function(error) {
-                console.error('Error deleting keyword:', error);
-            }
-        });
-    }
-
-    // 키워드 목록 불러오기 함수
-    function loadKeywords() {
-        $.ajax({
-            type: 'GET',
-            url: API_BASE_URL,
-            success: function(keywords) {
-                const keywordList = $('#keyword-list');
-                keywordList.empty();
-                keywords.forEach(keyword => {
-                    keywordList.append(`<li>${keyword.keyword} <button onclick="deleteKeyword(${keyword.id})">Delete</button></li>`);
-                });
-            },
-            error: function(error) {
-                console.error('Error loading keywords:', error);
-            }
-        });
-    }
-
-    // 알림 목록 불러오기 함수
-    function loadNotifications() {
-        const userId = $('#userId').val(); // 사용자 ID 가져오기
-        console.log('Loading notifications for user ID:', userId); // 디버깅 로그 추가
-
-        $.ajax({
-            type: 'GET',
-            url: `${NOTIFICATION_API_URL}?userId=${userId}`,
-            success: function(notifications) {
-                console.log('Notifications fetched:', notifications); // 디버깅 로그 추가
-
-                const notificationList = $('#notification-list');
-                notificationList.empty();
-                notifications.forEach(notification => {
-                    const readStatus = notification.read ? 'Read' : 'Unread';
-                    notificationList.append(`<li>${notification.message} - ${readStatus} <button onclick="markAsRead(${notification.id})">Mark as read</button></li>`);
-                });
-            },
-            error: function(error) {
-                console.error('Error loading notifications:', error);
-            }
-        });
-    }
-
-    // 알림 읽음 표시 함수
-    function markAsRead(id) {
-        $.ajax({
-            type: 'POST',
-            url: `${NOTIFICATION_API_URL}/${id}/read`,
-            success: function() {
-                loadNotifications();
-            },
-            error: function(error) {
-                console.error('Error marking notification as read:', error);
-            }
-        });
-    }
-
-    // 초기 로드 시 키워드 및 알림 불러오기
-    $(document).ready(function() {
-        loadKeywords();
-        loadNotifications();
-    });
-</script>
 </body>
 </html>
