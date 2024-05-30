@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Category;
 import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CommentService;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -61,10 +63,11 @@ public class BoardController {
 
     @GetMapping("/board/list")
     public String boardList(Model model,
-                            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                            String searchKeyword) {
+                            @PageableDefault(page = 0, size = 9, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                            String searchKeyword, Integer searchCateID) {
 
-        Page<Board> list = null;
+        Page<Board> list;
+
 
         if (searchKeyword == null) {
             list = boardService.boardList(pageable);
@@ -72,16 +75,41 @@ public class BoardController {
             list = boardService.boardSearchList(searchKeyword, pageable);
         }
 
+        model.addAttribute("list", list);  // 게시글 목록을 모델에 추가
+
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
 
-        model.addAttribute("list", list);
+
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("totalPage", list.getTotalPages());
 
+
+//카테고리 관련
+
+        List<String> categList = Category.categoryList;
+        Page<Board> byCateg;
+
+
+
+        if (searchCateID == null) {
+            byCateg = boardService.boardList(pageable);  // 게시글 목록 조회
+        } else {
+            byCateg = boardService.searchByCateID(searchCateID, pageable);  // 검색 카테고리로 게시글 목록 조회
+        }
+        model.addAttribute("categList", categList);
+        model.addAttribute("list", byCateg);
+
+
+
+
+
+
+
+//        return "boardList";  // 게시글 목록 뷰 이름 반환
         return "BoardLists";
     }
 
@@ -167,11 +195,10 @@ public class BoardController {
         boardService.saveBoard(board);
         return "Board added";
     }
-
-    @GetMapping("/list/category/{categoryId}")
-    public String boardListByCategory(@PathVariable Long categoryId, Model model) {
-        List<Board> boards = boardService.boardListByCategory(categoryId);
-        model.addAttribute("list", boards);
-        return "boardListByCategory";
-    }
+//    @GetMapping("/list/category/{categoryId}")
+//    public String boardListByCategory(@PathVariable Long categoryId, Model model) {
+////        List<Board> boards = boardService.boardListByCategory(categoryId);
+//        model.addAttribute("list", boards);
+//        return "boardListByCategory";
+//    }
 }

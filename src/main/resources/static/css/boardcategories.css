@@ -1,95 +1,79 @@
-/* 카테고리 전체 */
-.category-buttons {
-  margin: 30px auto;
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.cat_button {
+/* 카테고리 전체 */
+.category-section {
+  margin: 30px auto;
+  max-width: 1200px;
+}
+
+/* 카테고리 설정 */
+.category-container {
   display: flex;
 }
-/* 카테고리 설정 */
-.se_up {
+.category-toggle {
   cursor: pointer;
-  /* display: flex; */
   width: 202px;
   margin-right: 8px;
-  /* padding-bottom: 50px; */
-  -webkit-box-align: center;
-  align-items: center;
   padding: 12px 28px;
   border-radius: 24px;
-  -webkit-box-pack: justify;
-  justify-content: space-between;
   border: 1.3px solid rgb(229, 232, 235);
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 4px;
   background-color: rgb(255, 255, 255);
 }
+
 /* 카테고리 하단 */
-.bmVtWg {
+.reset-filter {
   display: flex;
   position: relative;
   left: 10px;
   width: 100%;
   flex-wrap: wrap;
   margin-top: 10px;
-  -webkit-box-align: center;
   align-items: center;
-  -webkit-box-pack: justify;
   justify-content: space-between;
   padding-top: 10px;
 }
 
-.bnwOyU {
-  flex-wrap: wrap;
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  width: 100%;
-}
-
-.se_down {
+.reset-button {
   cursor: pointer;
   background: rgb(249, 250, 251);
   border-radius: 40px;
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
-  -webkit-box-pack: center;
   justify-content: center;
   padding: 13px 16px;
   margin: 0px 6px 6px 0px;
 }
 
-.grhqVJ {
+.reset-text {
   color: rgb(107, 118, 132);
-  letter-spacing: 0px;
   font-weight: 600;
   font-size: 0.875rem;
   font-family: "Pretendard Variable";
   line-height: 100%;
 }
 
-.egIJJ {
+.reset-icon {
   margin-left: 10px;
   width: 16px;
   height: 18px;
 }
 
 /* 카테고리/브랜드 리스트 */
-.cat-list {
+.category-list {
   margin-top: 5px;
-  /* padding-top: 50px; */
 }
 
-.fwRnhM {
+.category-list-container {
   background: rgb(249, 250, 251);
   border: 1.2px solid rgb(229, 232, 235);
   border-radius: 10px;
-}
-
-.bUtUja {
   padding: 18px 20px 0px;
 }
 
-.bKIFzM {
+.category-item {
   height: 32px;
   border-bottom: 1px solid rgb(230, 235, 239);
   display: flex;
@@ -100,51 +84,10 @@
   line-height: 154%;
 }
 
-.jysvFP {
-  letter-spacing: 0px;
+.category-name {
   font-weight: 700;
-  font-size: 0.813rem;
-  font-family: "Pretendard Variable";
-  line-height: 154%;
 }
-
-.fJYdRR {
-  display: flex;
-}
-
-.cRHoES {
-  display: flex;
-  letter-spacing: 0px;
-  font-weight: 700;
-  font-size: 0.813rem;
-  font-family: "Pretendard Variable";
-  line-height: 154%;
-}
-
-.kqGLhD {
-  width: 12px;
-  height: 12px;
-  margin: 3.8px 1px 0px 2px;
-}
-
-.gHcsyc {
-  margin-left: 3px;
-  letter-spacing: 0px;
-  font-weight: 700;
-  font-size: 0.813rem;
-  font-family: "Pretendard Variable";
-  line-height: 154%;
-}
-
-.hCoLLR {
-  /* margin-top: 50px; */
-  padding-top: 14px;
-  display: grid;
-  grid-auto-rows: 34px;
-  grid-template-columns: auto auto auto auto auto auto;
-}
-
-.cirqgV {
+.category-link {
   letter-spacing: 0px;
   font-weight: 600;
   font-size: 0.813rem;
@@ -154,20 +97,16 @@
   color: rgb(20, 30, 43);
 }
 
-.gTCNND {
-  letter-spacing: 0px;
-  font-weight: 600;
-  font-size: 0.813rem;
-  font-family: "Pretendard Variable";
-  line-height: 154%;
-  cursor: pointer;
-  color: rgb(78, 89, 104);
+.category-count {
+  padding-top: 14px;
+  display: grid;
+  grid-auto-rows: 34px;
+  grid-template-columns: auto auto auto auto auto auto;
 }
 
 /* 가격 검색 창*/
-.jHsBZB {
+.price-filter {
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
   height: 103px;
   background: rgb(249, 250, 251);
@@ -175,7 +114,7 @@
   border-radius: 10px;
 }
 
-.jHsBZB input {
+.price-filter input {
   padding: 0px;
   width: 188px;
   height: 44px;
@@ -189,7 +128,7 @@
   border: none;
 }
 
-.gALDeD {
+.price-divider {
   margin-left: 8px;
   letter-spacing: -0.2px;
   font-weight: 600;
@@ -198,30 +137,7 @@
   line-height: 134%;
 }
 
-.jHsBZB input {
-  padding: 0px;
-  width: 188px;
-  height: 44px;
-  border-radius: 8px;
-  text-align: center;
-  letter-spacing: -0.2px;
-  font-weight: 700;
-  font-size: 0.938rem;
-  font-family: "Pretendard Variable";
-  line-height: 134%;
-}
-
-.laUdDy {
-  margin-left: 8px;
-  width: 65px;
-  letter-spacing: -0.2px;
-  font-weight: 600;
-  font-size: 1rem;
-  font-family: "Pretendard Variable";
-  line-height: 134%;
-}
-
-.eYibEy {
+.apply-button {
   width: 164px;
   height: 44px;
   background: rgb(176, 184, 193);
@@ -236,28 +152,53 @@
   border: none;
 }
 
-.eYibEy:hover {
+.apply-button:hover {
   background-color: black;
 }
 
 /* 카테고리 목록 */
 /* 카테고리 목록 전체 */
-.eRRgAh {
-  margin: 55px 0px 0px;
+.product-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.product-album .container {
+  max-width: 1200px;
+}
+
+.product-album .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product-album .col {
+  flex: 0 0 25%;
+  max-width: 25%;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.product-album .card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.product-album .col:nth-child(n + 13) {
+  display: none;
 }
 
 /* 카테고리 상품 수 */
-.jLAUsU {
+.product-count {
   display: flex;
   position: relative;
-  -webkit-box-pack: justify;
   justify-content: space-between;
   margin: 0px 20px 21px 0px;
 }
 
 /* 좌측 상품 수 */
-.gtWCvB {
-  letter-spacing: 0px;
+.product-count-left {
   font-weight: 600;
   font-size: 0.875rem;
   font-family: "Pretendard Variable";
@@ -265,8 +206,7 @@
   color: rgb(25, 31, 40);
 }
 
-.jMeZwr {
-  letter-spacing: 0px;
+.count-text {
   font-weight: 600;
   font-size: 0.875rem;
   font-family: "Pretendard Variable";
@@ -275,13 +215,13 @@
 }
 
 /* 우측 추천 */
-.ceaxHt {
+.recommendation {
   display: flex;
   cursor: pointer;
   margin-right: 280px;
 }
 
-.jBOywe {
+.recommendation-text {
   letter-spacing: -0.6px;
   font-weight: 600;
   font-size: 0.938rem;
@@ -291,7 +231,7 @@
   margin-right: 8px;
 }
 
-.dRkAWE {
+.sort-icon {
   width: 15px;
   height: 15px;
 }

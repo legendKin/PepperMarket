@@ -8,229 +8,178 @@
   <head>
     <link rel="stylesheet" th:href="@{/css/boardcategories.css}" />
   </head>
-  <div class="main-content" layout:fragment="content">
-    <div class="category-buttons">
-      <div class="cat_button">
-        <!-- 카테고리 설정 -->
-        <div class="se_up se_up1">
-          <div class="se_up_allcat">
-            <span class="filtername">카테고리</span>
-            <img
-              alt="화살표 아래 아이콘"
-              src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
-            />
+  <body>
+    <div class="main-content" layout:fragment="content">
+      <div class="wrapper">
+        <div class="category-section">
+          <div class="category-container">
+            <div class="category-toggle category-toggle1">
+              <div class="category-toggle-content">
+                <span class="filtername">카테고리</span>
+                <img
+                  alt="화살표 아래 아이콘"
+                  src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
+                />
+              </div>
+            </div>
+            <div class="category-toggle category-toggle2">
+              <div class="category-toggle-content">
+                <span class="filtername">가격</span>
+                <img
+                  alt="화살표 아래 아이콘"
+                  src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
+                />
+              </div>
+            </div>
+            <div class="reset-filter">
+              <div class="reset-button">
+                <div class="reset-text">필터 초기화</div>
+                <img
+                  alt="reset"
+                  class="reset-icon"
+                  src="https://ccimage.hellomarket.com/img/web/search/filter/refresh.svg"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="category-list category-sublist1" style="display: none">
+            <div class="category-list-container">
+              <div class="category-item">
+                <div class="category-name">카테고리</div>
+              </div>
+              <div class="category-count">
+                <a class="category-link" th:href="@{/board/list(searchCateID=)}"
+                  >#### 전체 (###,###)</a
+                >
+                <div th:each="board : ${categList}">
+                  <a
+                    class="category-link"
+                    th:href="@{/board/list(searchCateID=${categList.indexOf(board)+1})}"
+                    th:text="${board} + ' (' + ${categList.indexOf(board)+1} + ')'"
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="category-list category-sublist2" style="display: none">
+            <div class="price-filter">
+              <input
+                class="min-price"
+                placeholder="최저금액"
+                type="text"
+                value=""
+              />
+              <div class="price-divider">원 부터~ &nbsp;</div>
+              <input
+                class="max-price"
+                placeholder="최고금액"
+                type="text"
+                value=""
+              />
+              <div class="price-divider">원 까지</div>
+              <button class="apply-button">적용하기</button>
+            </div>
           </div>
         </div>
-        <div class="se_up se_up2">
-          <div class="se_up_price">
-            <span class="filtername">가격</span>
-            <img
-              alt="화살표 아래 아이콘"
-              src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
-            />
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="bmVtWg">
-          <div class="bnwOyU">
-            <div class="se_down">
-              <div class="grhqVJ">필터초기화</div>
+        <div class="product-section">
+          <div class="product-count">
+            <div class="product-count-left">
+              <span class="count-text"
+                ><span th:text="${list.getTotalElements()}"></span>개의 상품이
+                있습니다.</span
+              >
+            </div>
+            <div class="recommendation">
+              <div class="recommendation-text">추천순</div>
               <img
-                alt="reset"
-                class="egIJJ"
-                src="https://ccimage.hellomarket.com/img/web/search/filter/refresh.svg"
+                alt="정렬 아이콘"
+                class="sort-icon"
+                src="https://ccimage.hellomarket.com/img/web/search/itemList/ico_sort.png"
               />
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- 카테고리 리스트 -->
-      <div class="cat-list sub1" style="display: none">
-        <div class="fwRnhM">
-          <div class="bUtUja">
-            <div class="bKIFzM">
-              <div class="jysvFP">전체 카테고리</div>
-              <div class="fJYdRR">
-                <div class="cRHoES"></div>
-              </div>
-            </div>
-            <div class="hCoLLR">
-              <div class="cirqgV">#### 전체 (###,###)</div>
-              <div class="gTCNND">## (#,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-              <div class="gTCNND">## (##,###)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 가격 -->
-
-      <!-- 가격 검색 창 -->
-      <div class="cat-list sub2" style="display: none">
-        <div class="jHsBZB">
-          <input class="cLUjpP" placeholder="최저금액" type="text" value="" />
-          <div class="gALDeD">원 부터~ &nbsp;</div>
-          <input class="fvfRii" placeholder="최고금액" type="text" value="" />
-          <div class="laUdDy">원 까지</div>
-          <button class="eYibEy">적용하기</button>
-        </div>
-      </div>
-
-      <!-- 카테고리 하단 설정 -->
-    </div>
-
-    <div class="goods">
-      <!-- 카테고리 상품 수 -->
-      <div class="jLAUsU">
-        <!-- 좌측 상품 수 -->
-        <div class="gtWCvB">
-          <span class="jMeZwr">
-            <span th:text="${list.getTotalElements()}"></span>개의 상품이
-            있습니다.
-          </span>
-        </div>
-        <!-- 우측 추천 -->
-        <div class="ceaxHt">
-          <div class="jBOywe">추천순</div>
-          <img
-            alt="정렬 아이콘"
-            class="dRkAWE"
-            src="https://ccimage.hellomarket.com/img/web/search/itemList/ico_sort.png"
-          />
-        </div>
-      </div>
-      <div class="album py-5 bg-light">
-        <div class="container">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col" th:each="board : ${list}">
-              <div class="card shadow-sm">
-                <div th:unless="${board.filepath}==null">
-                  <img
-                    class="bd-placeholder-img card-img-top"
-                    height="225"
-                    th:src="${board.filepath}"
-                    width="100%"
-                  />
-                </div>
-                <div th:if="${board.filepath}==null">
-                  <img
-                    class="bd-placeholder-img card-img-top"
-                    height="225"
-                    src="/files/default.png"
-                    width="100%"
-                  />
-                </div>
-                <div class="card-body">
-                  <a
-                    th:href="@{/board/view(id=${board.id})}"
-                    th:text="${board.title}"
-                    >제목</a
-                  >
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <div class="btn-group">
-                      <button
-                        class="btn btn-sm btn-outline-secondary"
-                        type="button"
+          <div class="product-album py-5 bg-light">
+            <div class="container">
+              <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col" th:each="board : ${list}">
+                  <div class="card shadow-sm">
+                    <img
+                      class="card-img-top"
+                      height="225"
+                      onerror="this.src='/files/default.png'"
+                      th:src="${board.filepath}"
+                      width="100%"
+                    />
+                    <div class="card-body">
+                      <p th:text="${board.categName}"></p>
+                      <a
+                        th:href="@{/board/view(id=${board.id})}"
+                        th:text="${board.title}"
+                        >제목</a
                       >
-                        View
-                      </button>
-                      <button
-                        class="btn btn-sm btn-outline-secondary"
-                        type="button"
+                      <div class="button-group">
+                        <button
+                          class="btn btn-sm btn-outline-secondary view-button"
+                          type="button"
+                        >
+                          View
+                        </button>
+                        <button
+                          class="btn btn-sm btn-outline-secondary edit-button"
+                          type="button"
+                        >
+                          Edit
+                        </button>
+                      </div>
+                      <small class="text-muted" th:text="${board.timeAgo}"
+                        >timeago</small
                       >
-                        Edit
-                      </button>
                     </div>
-                    <small class="text-muted" th:text="${board.timeAgo}"
-                      >timeago</small
-                    >
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <a class="page-link" th:href="@{/board/list(page=0)}">첫 페이지</a>
+          <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <a
+              class="page-link"
+              th:href="@{/board/list(page=${page-1}, searchKeyword=${param.searchKeyword}, searchCateID=${param.searchCateID})}"
+              th:if="${page != nowPage}"
+              th:text="${page}"
+            ></a>
+            <strong
+              class="page-link-active"
+              th:if="${page == nowPage}"
+              th:text="${page}"
+            ></strong>
+          </th:block>
+          <a class="page-link" th:href="@{/board/list(page=${totalPage-1})}"
+            >마지막 페이지</a
+          >
         </div>
       </div>
+
+      <script>
+        $(".category-toggle1").click(function () {
+          if ($(".category-sublist1").is(":visible")) {
+            $(".category-sublist1").slideUp();
+          } else {
+            $(".category-sublist1").slideDown();
+            $(".category-sublist2").slideUp();
+          }
+        });
+
+        $(".category-toggle2").click(function () {
+          if ($(".category-sublist2").is(":visible")) {
+            $(".category-sublist2").slideUp();
+          } else {
+            $(".category-sublist2").slideDown();
+            $(".category-sublist1").slideUp();
+          }
+        });
+      </script>
     </div>
-
-    <script>
-      $(".se_up1").click(function () {
-        if ($(".sub1").is(":visible")) {
-          $(".sub1").slideUp();
-        } else {
-          if ($(".sub2").is(":visible")) {
-            $(".sub2").slideUp();
-          }
-          if ($(".sub3").is(":visible")) {
-            $(".sub3").slideUp();
-          }
-          if ($(".sub4").is(":visible")) {
-            $(".sub4").slideUp();
-          }
-          $(".sub1").slideDown();
-        }
-      });
-
-      $(".se_up2").click(function () {
-        if ($(".sub2").is(":visible")) {
-          $(".sub2").slideUp();
-        } else {
-          if ($(".sub1").is(":visible")) {
-            $(".sub1").slideUp();
-          }
-          if ($(".sub3").is(":visible")) {
-            $(".sub3").slideUp();
-          }
-          if ($(".sub4").is(":visible")) {
-            $(".sub4").slideUp();
-          }
-          $(".sub2").slideDown();
-        }
-      });
-      $(".se_up3").click(function () {
-        if ($(".sub3").is(":visible")) {
-          $(".sub3").slideUp();
-        } else {
-          if ($(".sub1").is(":visible")) {
-            $(".sub1").slideUp();
-          }
-          if ($(".sub2").is(":visible")) {
-            $(".sub2").slideUp();
-          }
-          if ($(".sub4").is(":visible")) {
-            $(".sub4").slideUp();
-          }
-          $(".sub3").slideDown();
-        }
-      });
-      $(".se_up4").click(function () {
-        if ($(".sub4").is(":visible")) {
-          $(".sub4").slideUp();
-        } else {
-          if ($(".sub1").is(":visible")) {
-            $(".sub1").slideUp();
-          }
-          if ($(".sub2").is(":visible")) {
-            $(".sub2").slideUp();
-          }
-          if ($(".sub3").is(":visible")) {
-            $(".sub3").slideUp();
-          }
-          $(".sub4").slideDown();
-        }
-      });
-    </script>
-  </div>
+  </body>
 </html>

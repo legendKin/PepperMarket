@@ -32,8 +32,8 @@ public class BoardService {
 
     @Autowired
     private NotificationRepository notificationRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+//    @Autowired
+//    private CategoryRepository categoryRepository;
     @Autowired
     private KeywordRepository keywordRepository;
     @Autowired
@@ -92,6 +92,10 @@ public class BoardService {
         return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
+    public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable) {
+        return boardRepository.findByCateID(searchCateID, pageable);
+    }
+
     private void checkForKeywords(Board board) {
         List<Keyword> keywords = keywordRepository.findAll();
         for (Keyword keyword : keywords) {
@@ -108,11 +112,11 @@ public class BoardService {
         }
     }
 
-    public List<Board> boardListByCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("Category not found with id: " + categoryId));
-        return boardRepository.findByCategory(category);
-    }
+//    public List<Board> boardListByCategory(Board cateID) {
+//        Board category = boardRepository.findByCategoryIDX(cateID)
+//                .orElseThrow(() -> new NoSuchElementException("Category not found with id: " + cateID));
+//        return boardRepository.findByCategoryIDX(category);
+//    }
     public Board saveBoard(Board board) {
         System.out.println("Saving board: " + board.getTitle()); // 로그 추가
         Board savedBoard = boardRepository.save(board);

@@ -11,8 +11,9 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer> {
-    List<Board> findByCategory(Category category);
+    Page<Board> findByCateID(Integer searchCateID, Pageable pageable);
     Page<Board> findByTitleContaining(String searchKeyword, Pageable pageable);
     void deleteById(Long id);
 
+//    Page<Board> findByCateID(Integer searchCateID, Pageable pageable);
 }

@@ -56,10 +56,17 @@
         <div class="header-2">
           <a href="/"><img alt="" class="logo" src="/img/logodummy.png" /></a>
           <div class="search-box-wrapper">
-            <div class="search-box">
-              <i class="fa fa-search dotbogi"></i>
-              <div class="search">어떤 상품을 찾으시나요?</div>
-            </div>
+            <form class="search-box" method="get" th:action="@{/board/list}">
+              <input
+                class="search"
+                name="searchKeyword"
+                placeholder="어떤 상품을 찾으시나요?"
+                type="text"
+              />
+              <button type="submit">
+                <i class="fa fa-search dotbogi"></i>
+              </button>
+            </form>
           </div>
           <a class="btn btn-primary write" href="/board/write" role="button">
             <p>
