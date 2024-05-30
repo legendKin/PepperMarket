@@ -1,8 +1,11 @@
 package com.example.demo.entity;
 
+import com.example.demo.domain.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 /**
  * 댓글을 나타내는 엔티티 클래스입니다.
@@ -13,13 +16,20 @@ import lombok.Setter;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 댓글 식별자
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "board_id")
-    private Board board; // 댓글이 속한 게시글
+    private Board board;
 
-    private String content; // 댓글 내용
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
-    private String author; // 사용자의 별명 또는 닉네임을 저장하는 필드
+    private String content;
+
+    private LocalDateTime createDate;
+
+    // 작성자 닉네임 추가
+    private String nickname;
 }
