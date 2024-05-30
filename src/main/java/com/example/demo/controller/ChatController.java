@@ -27,18 +27,15 @@ public class ChatController {
 
     @GetMapping("/previous-chat-messages")
     public ResponseEntity<List<ChatMessage>> getPreviousChatMessages() {
-        // 데이터베이스에서 이전 채팅 메시지를 가져와서 클라이언트에게 응답
         List<ChatMessage> previousMessages = chatMessageService.getPreviousChatMessages();
         return ResponseEntity.ok(previousMessages);
     }
 
     @GetMapping("/chat/{receiverId}")
     public String chat(@PathVariable String receiverId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-        String username = principalDetails.getName(); // 로그인된 사용자의 이름 가져오기
+        String username = principalDetails.getName();
         model.addAttribute("username", username);
-        model.addAttribute("receiverId", receiverId); // 상대방 사용자 ID 추가
-
-
+        model.addAttribute("receiverId", receiverId);
         return "chatter";
     }
 }

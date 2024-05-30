@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 게시글을 나타내는 엔티티 클래스입니다.
@@ -28,6 +29,9 @@ public class Board {
     private String filename; // 파일 이름
     private String filepath; // 파일 경로
     private Integer viewcount; // 조회수
+
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments; // 게시글에 달린 댓글 목록
 
     @ManyToOne
     @JoinColumn(name = "user_id")

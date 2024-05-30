@@ -17,11 +17,8 @@ public class MyPageController {
 
     @GetMapping("/myPage")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-
         String email = userDetails.getUsername();
-
         Users user = memberService.findByEmail(email);
-
         model.addAttribute("user", user);
         return "myPage";
     }

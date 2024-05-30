@@ -24,7 +24,7 @@ public class KeywordController {
     public ResponseEntity<Keyword> addKeyword(@RequestBody KeywordRequest keywordRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Users user = principalDetails.getUsers(); // PrincipalDetails에서 Users 객체를 가져옴
+        Users user = principalDetails.getUsers();
         Keyword keyword = new Keyword();
         keyword.setKeyword(keywordRequest.getKeyword());
         keyword.setUser(user);
@@ -41,7 +41,7 @@ public class KeywordController {
     public ResponseEntity<List<Keyword>> getKeywords() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Users user = principalDetails.getUsers(); // PrincipalDetails에서 Users 객체를 가져옴
+        Users user = principalDetails.getUsers();
         return ResponseEntity.ok(keywordService.findByUser(user));
     }
 }

@@ -1,7 +1,10 @@
 package com.example.demo.domain;
 
+import com.example.demo.entity.Comment;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * 사용자 정보를 담는 엔티티 클래스입니다.
@@ -41,5 +44,7 @@ public class Users {
     private String profilePictureUrl; // 프로필 사진 URL
 
 
-
+    // 양방향 관계 설정
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }
