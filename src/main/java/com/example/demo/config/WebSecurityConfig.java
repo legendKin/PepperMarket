@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         .requestMatchers("/login", "/signup", "/user", "/board/list", "/", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**", "/bal").permitAll() // /login, /signup, /user 경로는 모든 사용자에게 허용
-                        .requestMatchers("/myPage/**").authenticated() // /myPage 경로는 인증된 사용자에게만 허용
+                        .requestMatchers("/mypage/**").authenticated() // /myPage 경로는 인증된 사용자에게만 허용
                         .anyRequest().authenticated() // 다른 요청은 인증된 사용자만 허용
                 )
                 // 폼 로그인 설정

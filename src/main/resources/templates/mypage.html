@@ -11,12 +11,12 @@
 <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
 <p>제공자: <span th:text="${user.provider}"></span></p>
 <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
-<p>프로필 사진: <img th:src="@{'/uploads/' + ${user.profilePictureUrl}}" alt="Profile Picture"></p>
+<p>프로필 사진: <img th:src="@{${profilepic}}" alt="Profile Picture"></p>
 
 <!-- 프로필 정보 변경 섹션 -->
 <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
-    <form th:action="@{/myPage/change-profile-info}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/mypage/change-profile-info}" method="post" enctype="multipart/form-data">
         <label for="file">프로필 사진:</label>
         <input type="file" name="file" id="file"><br>
 

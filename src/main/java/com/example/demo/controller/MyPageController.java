@@ -21,7 +21,7 @@ public class MyPageController {
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/myPage")
+    @GetMapping("/mypage")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String email = userDetails.getUsername();
         Users user = memberService.findByEmail(email);
@@ -29,13 +29,13 @@ public class MyPageController {
         return "mypage";
     }
 
-    @PostMapping("/myPage/change-profile-picture")
+    @PostMapping("/mypage/change-profile-picture")
     public String changeProfilePicture(@RequestParam("file") MultipartFile file,
                                        @AuthenticationPrincipal UserDetails userDetails,
                                        RedirectAttributes redirectAttributes) {
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:/myPage";
+            return "redirect:/mypage";
         }
 
         try {
@@ -46,10 +46,10 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("message", "File upload failed: " + e.getMessage());
         }
 
-        return "redirect:/myPage";
+        return "redirect:/mypage";
     }
 
-    @PostMapping("/myPage/change-profile-info")
+    @PostMapping("/mypage/change-profile-info")
     public String changeProfileInfo(@RequestParam("file") MultipartFile file,
                                     @RequestParam("nickname") String nickname,
                                     @RequestParam("email") String email,
@@ -62,6 +62,6 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("message", "Profile update failed: " + e.getMessage());
         }
 
-        return "redirect:/myPage";
+        return "redirect:/mypage";
     }
 }
