@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>My Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <h1>My Page</h1>
@@ -11,29 +12,21 @@
 <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
 <p>제공자: <span th:text="${user.provider}"></span></p>
 <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
-<p>프로필 사진: <img th:src="@{'/uploads/' + ${user.profilePictureUrl}}" alt="Profile Picture"></p>
+<!-- 사용자 ID를 숨겨진 필드로 추가 -->
+<input id="userId" th:value="${user.id}" type="hidden">
 
 <!-- 프로필 정보 변경 섹션 -->
 <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
-    <form th:action="@{/myPage/change-profile-info}" method="post" enctype="multipart/form-data">
+    <form enctype="multipart/form-data" method="post" th:action="@{/myPage/change-profile-info}">
         <label for="file">프로필 사진:</label>
-        <input type="file" name="file" id="file"><br>
+        <input id="file" name="file" type="file"><br>
 
         <label for="nickname">닉네임:</label>
-        <input type="text" name="nickname" id="nickname" th:value="${user.nickname}"><br>
+        <input id="nickname" name="nickname" th:value="${user.nickname}" type="text"><br>
 
         <label for="email">이메일:</label>
-        <input type="email" name="email" id="email" th:value="${user.email}"><br>
-
-        <label for="name">이름:</label>
-        <input type="text" name="name" id="name" th:value="${user.name}"><br>
-
-        <label for="age">나이:</label>
-        <input type="number" name="age" id="age" th:value="${user.age}"><br>
-
-        <label for="birthdate">생년월일:</label>
-        <input type="date" name="birthdate" id="birthdate" th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}"><br>
+        <input id="email" name="email" th:value="${user.email}" type="email"><br>
 
         <button type="submit">프로필 정보 변경</button>
     </form>
