@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,16 @@ public class Users {
 
     @Column(name = "profile_picture_url")
     private String profilePictureUrl; // 프로필 사진 URL
+
+    @Column(name = "name")
+    private String name; // 이름
+
+    @Column(name = "age")
+    private Integer age; // 나이
+
+    @Column(name = "birthdate")
+    @Temporal(TemporalType.DATE)
+    private Date birthdate; // 생년월일
 
     // 양방향 관계 설정
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
