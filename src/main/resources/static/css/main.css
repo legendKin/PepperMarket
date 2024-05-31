@@ -1,6 +1,16 @@
+/*// <uniquifier>: Use a unique and descriptive class name*/
+/*// <weight>: Use a value from 100 to 900*/
+
+/*.noto-sans-kr-<uniquifier > {*/
+/*  font-family: "Noto Sans KR", sans-serif;*/
+/*  font-optical-sizing: auto;*/
+/*  font-weight: <weight>;*/
+/*  font-style: normal;*/
+/*}*/
+
 * {
   box-sizing: border-box;
-  /*font-family: Arial, sans-serif;*/
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
 }

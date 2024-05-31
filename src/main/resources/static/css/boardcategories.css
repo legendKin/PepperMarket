@@ -11,10 +11,15 @@
 /* 카테고리 설정 */
 .category-container {
   display: flex;
+  height: 50px;
+}
+.category-toggle-wrapper {
+  display: flex;
 }
 .category-toggle {
   cursor: pointer;
   width: 202px;
+  height: 50px;
   margin-right: 8px;
   padding: 12px 28px;
   border-radius: 24px;
@@ -22,33 +27,41 @@
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 4px;
   background-color: rgb(255, 255, 255);
 }
+.category-toggle-content {
+  display: flex;
+  justify-content: space-between;
+}
+.filtername {
+  font-weight: 700;
+  font-size: 0.938rem;
+  font-family: "Pretendard Variable";
+  line-height: 134%;
+}
 
 /* 카테고리 하단 */
 .reset-filter {
   display: flex;
   position: relative;
-  left: 10px;
+  /* left: 10px; */
   width: 100%;
   flex-wrap: wrap;
-  margin-top: 10px;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 10px;
+  /* margin-top: 10px; */
+  justify-content: flex-end;
+  /* padding-top: 10px; */
 }
 
 .reset-button {
   cursor: pointer;
-  background: rgb(249, 250, 251);
+  background: rgb(148, 148, 148);
   border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 13px 16px;
-  margin: 0px 6px 6px 0px;
 }
 
 .reset-text {
-  color: rgb(107, 118, 132);
+  color: #fff;
   font-weight: 600;
   font-size: 0.875rem;
   font-family: "Pretendard Variable";
@@ -97,6 +110,9 @@
   color: rgb(20, 30, 43);
 }
 
+.category-link-n:nth-child(1) > .category-link {
+  color: red;
+}
 .category-count {
   padding-top: 14px;
   display: grid;
@@ -198,14 +214,12 @@
 }
 
 /* 좌측 상품 수 */
-.product-count-left {
-  font-weight: 600;
-  font-size: 0.875rem;
-  font-family: "Pretendard Variable";
-  line-height: 100%;
-  color: rgb(25, 31, 40);
+.product-count {
+  display: flex;
+  position: relative;
+  margin: 0px 20px 21px 0px;
+  justify-content: space-between;
 }
-
 .count-text {
   font-weight: 600;
   font-size: 0.875rem;
@@ -218,7 +232,6 @@
 .recommendation {
   display: flex;
   cursor: pointer;
-  margin-right: 280px;
 }
 
 .recommendation-text {

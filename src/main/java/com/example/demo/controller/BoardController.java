@@ -6,10 +6,7 @@ import com.example.demo.entity.Comment;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.BoardService;
-import com.example.demo.service.CommentService;
-import com.example.demo.service.KeywordService;
-import com.example.demo.service.NotificationService;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -41,6 +39,9 @@ public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private CommentService commentService;
@@ -63,15 +64,23 @@ public class BoardController {
 
     @GetMapping("/board/list")
     public String boardList(Model model,
-                            @PageableDefault(page = 0, size = 9, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                            @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             String searchKeyword, Integer searchCateID) {
 
         Page<Board> list;
 
-        if (searchKeyword == null) {
-            list = boardService.boardList(pageable);
-        } else {
+        if (searchKeyword != null && searchCateID != null) {
+            // 검색어와 카테고리 ID가 모두 주어진 경우
+            list = boardService.searchByKeywordAndCateID(searchKeyword, searchCateID, pageable);
+        } else if (searchKeyword != null) {
+            // 검색어만 주어진 경우
             list = boardService.boardSearchList(searchKeyword, pageable);
+        } else if (searchCateID != null) {
+            // 카테고리 ID만 주어진 경우
+            list = boardService.searchByCateID(searchCateID, pageable);
+        } else {
+            // 검색어와 카테고리 ID가 모두 주어지지 않은 경우
+            list = boardService.boardList(pageable);
         }
 
         model.addAttribute("list", list);  // 게시글 목록을 모델에 추가
@@ -85,20 +94,27 @@ public class BoardController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("totalPage", list.getTotalPages());
 
-        // 카테고리 관련
-        List<String> categList = Category.categoryList;
-        Page<Board> byCateg;
-
-        if (searchCateID == null) {
-            byCateg = boardService.boardList(pageable);  // 게시글 목록 조회
-        } else {
-            byCateg = boardService.searchByCateID(searchCateID, pageable);  // 검색 카테고리로 게시글 목록 조회
+        //카테고리
+        List<String> categList = categoryService.getCategoryList();
+        Map<Integer, Long> categoryPostCounts = boardService.getCategoryPostCounts();
+        String categNow;
+        if(searchCateID == null){
+            categNow = "전체 상품";
+        }else{
+            categNow = categList.get(searchCateID - 1);
         }
+        model.addAttribute( "categNow", categNow);
         model.addAttribute("categList", categList);
-        model.addAttribute("list", byCateg);
 
-        return "BoardLists";
+
+
+        model.addAttribute("categoryPostCounts", categoryPostCounts);
+
+        model.addAttribute("searchKeyword", searchKeyword);
+        model.addAttribute("searchCateID", searchCateID);
+        return "BoardLists";  // 게시글 목록 뷰 이름 반환
     }
+
 
     @GetMapping("/board/view/{id}")
     public String viewBoard(@PathVariable Integer id, Model model, Authentication authentication) {

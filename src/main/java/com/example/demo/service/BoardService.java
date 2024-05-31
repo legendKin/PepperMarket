@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Category;
 import com.example.demo.entity.Keyword;
 import com.example.demo.entity.Notification;
 import com.example.demo.entity.Users;
@@ -16,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BoardService {
@@ -96,6 +92,10 @@ public class BoardService {
         return boardRepository.findByCateID(searchCateID, pageable);
     }
 
+    public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable) {
+        return boardRepository.findByTitleContainingAndCateID(searchKeyword, searchCateID, pageable);
+    }
+
     private void checkForKeywords(Board board) {
         List<Keyword> keywords = keywordRepository.findAll();
         for (Keyword keyword : keywords) {
@@ -126,9 +126,28 @@ public class BoardService {
 
 
 //    조회수로 정렬
-
+    public List<Board> getPostsByViewcount() {
+        return boardRepository.findByOrderByViewcountDesc();
+    }
+// 조회수 상위 10 게시글만 출력
     public List<Board> getTop10PostsByViewcount() {
         return boardRepository.findTop10ByOrderByViewcountDesc();
+
+
     }
+//카테고리별 글 갯수
+public Map<Integer, Long> getCategoryPostCounts() {
+    List<Object[]> results = boardRepository.findCategoryPostCounts();
+    Map<Integer, Long> categoryPostCounts = new HashMap<>();
+    for (Object[] result : results) {
+        Integer cateID = (Integer) result[0];
+        Long count = (Long) result[1];
+        categoryPostCounts.put(cateID, count);
+    }
+    return categoryPostCounts;
+}
+
+
+
 
 }

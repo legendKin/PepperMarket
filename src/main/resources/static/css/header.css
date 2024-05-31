@@ -35,7 +35,6 @@
   letter-spacing: 0px;
   font-weight: 400;
   font-size: 15px;
-  font-family: "Pretendard Variable";
   line-height: 154%;
   cursor: pointer;
   margin: auto 0px;
@@ -96,7 +95,6 @@
   letter-spacing: -0.4px;
   font-weight: 500;
   font-size: 1.125rem;
-  font-family: "Pretendard Variable";
   line-height: 150%;
   padding-top: 2px;
   border: none;
@@ -132,7 +130,6 @@
   letter-spacing: -0.2px;
   font-weight: 600;
   font-size: 1rem;
-  font-family: "Pretendard Variable";
   line-height: 134%;
   cursor: pointer;
   padding: 20px 0px;

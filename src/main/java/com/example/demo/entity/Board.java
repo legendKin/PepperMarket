@@ -12,10 +12,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.demo.entity.Category.categoryList;
+import static com.example.demo.service.CategoryService.categoryList;
 
 
-import static com.example.demo.entity.Category.categoryList;
 
 
 /**

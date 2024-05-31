@@ -57,12 +57,22 @@
           <a href="/"><img alt="" class="logo" src="/img/logodummy.png" /></a>
           <div class="search-box-wrapper">
             <form class="search-box" method="get" th:action="@{/board/list}">
+              <!-- 검색어 입력 폼 -->
               <input
                 class="search"
                 name="searchKeyword"
                 placeholder="어떤 상품을 찾으시나요?"
                 type="text"
+                th:value="${searchKeyword}"
               />
+
+              <!-- 현재 선택된 카테고리 ID를 숨겨 전달 -->
+              <input
+                type="hidden"
+                name="searchCateID"
+                th:value="${searchCateID}"
+              />
+
               <button type="submit">
                 <i class="fa fa-search dotbogi"></i>
               </button>
@@ -70,9 +80,8 @@
           </div>
           <a class="btn btn-primary write" href="/board/write" role="button">
             <p>
-              <i aria-hidden="true" class="fa fa-pencil-square">
-                &nbsp; 상품 올리기</i
-              >
+              <i aria-hidden="true" class="fa fa-pencil-square"> &nbsp; </i>
+              상품 올리기
             </p>
           </a>
         </div>
