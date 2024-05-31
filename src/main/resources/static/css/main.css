@@ -52,7 +52,7 @@
   /* This ensures the image covers the container */
 }
 
-.pop p {
+.pop > a > span {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -84,7 +84,9 @@
   border-radius: 50%;
   margin: 50px auto;
 }
-
+.goods-img {
+  object-fit: cover;
+}
 .categories .swiper-button-next,
 .categories .swiper-button-prev {
   position: absolute;

@@ -105,12 +105,12 @@
                 <div class="col" th:each="board : ${list}">
                   <div class="card shadow-sm">
                     <img
-                      class="card-img-top"
+                      class="card-img-top goods-img"
                       height="225"
                       onerror="this.src='/files/default.png'"
                       th:src="${board.filepath}"
                       width="100%"
-                    />
+                     alt="상품이미지"/>
                     <div class="card-body">
                       <p th:text="${board.categName}"></p>
                       <a

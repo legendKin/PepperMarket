@@ -123,4 +123,12 @@ public class BoardService {
         checkForKeywords(savedBoard);  // 키워드 체크 및 알림 생성 호출
         return savedBoard;
     }
+
+
+//    조회수로 정렬
+
+    public List<Board> getTop10PostsByViewcount() {
+        return boardRepository.findTop10ByOrderByViewcountDesc();
+    }
+
 }
