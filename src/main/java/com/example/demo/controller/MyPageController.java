@@ -53,7 +53,7 @@ public class MyPageController {
         return "redirect:/mypage";
     }
 
-    @PostMapping("/myPage/change-profile-info")
+    @PostMapping("/mypage/change-profile-info")
     public String changeProfileInfo(@RequestParam("file") MultipartFile file,
                                     @RequestParam("nickname") String nickname,
                                     @RequestParam("email") String email,
@@ -71,6 +71,6 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
         }
 
-        return "redirect:/myPage";
+        return "redirect:/mypage";
     }
 }
