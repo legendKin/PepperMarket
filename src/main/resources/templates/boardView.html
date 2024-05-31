@@ -16,7 +16,6 @@
     <div th:each="comment : ${comments}">
       <p th:text="${comment.nickname}">Nickname</p>
       <p th:text="${comment.content}">Content</p>
-      <!--      <p th:text="${comment.createDate}">Create Date</p>-->
     </div>
   </div>
 
@@ -32,38 +31,10 @@
     <a th:href="@{/board/list}">목록으로 돌아가기</a>
     <a th:href="@{/board/delete(id=${board.id})}">글 삭제</a>
     <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
-    <th:block th:if="${board.user != null}">
-      <button data-receiver-id="${board.user.id}" id="startChatButton">1:1 채팅</button>
+    <th:block th:if="${board.user != null && loggedInUser != null && loggedInUser.email != board.user.email}">
+      <a class="btn btn-primary" th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}">1:1 채팅</a>
     </th:block>
   </div>
 </div>
-
-<script th:inline="javascript">
-  document.addEventListener("DOMContentLoaded", function() {
-    const startChatButton = document.getElementById("startChatButton");
-    if (startChatButton) {
-      startChatButton.addEventListener("click", function() {
-        const receiverId = this.getAttribute("data-receiver-id");
-        const senderId = /*[[${#authentication.principal.username}]]*/ 'anonymous'; // 로그인한 사용자 ID를 가져옵니다.
-
-        fetch('/chat/start', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            senderId: senderId,
-            receiverId: receiverId
-          })
-        })
-        .then(response => response.text())
-        .then(chatRoomId => {
-          window.location.href = '/chat/' + chatRoomId;
-        })
-        .catch(error => console.error('Error starting chat:', error));
-      });
-    }
-  });
-</script>
 </body>
 </html>

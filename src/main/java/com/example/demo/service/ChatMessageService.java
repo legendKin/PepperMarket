@@ -1,39 +1,45 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.ChatMessage;
+import com.example.demo.entity.Users;
 import com.example.demo.repository.ChatMessageRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * 채팅 메시지와 관련된 비즈니스 로직을 처리하는 서비스 클래스입니다.
- */
 @Service
 public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ChatMessageService(ChatMessageRepository chatMessageRepository) {
+    public ChatMessageService(ChatMessageRepository chatMessageRepository, UserRepository userRepository) {
         this.chatMessageRepository = chatMessageRepository;
+        this.userRepository = userRepository;
     }
 
-    /**
-     * 새로운 채팅 메시지를 저장하는 메서드입니다.
-     * @param chatMessage 저장할 채팅 메시지
-     */
-    public void saveChatMessage(ChatMessage chatMessage) {
-        chatMessageRepository.save(chatMessage);
+    public ChatMessage saveChatMessage(ChatMessage chatMessage) {
+        // sender와 receiver를 Users 엔티티로 설정
+        Users sender = userRepository.findById(chatMessage.getSender().getId()).orElseThrow();
+        Users receiver = userRepository.findById(chatMessage.getReceiver().getId()).orElseThrow();
+        chatMessage.setSender(sender);
+        chatMessage.setReceiver(receiver);
+
+        return chatMessageRepository.save(chatMessage);
     }
 
-    /**
-     * 이전 채팅 메시지 목록을 조회하는 메서드입니다.
-     * @return 이전 채팅 메시지 목록
-     */
-    public List<ChatMessage> getPreviousChatMessages(String userId) {
-        // 유저 ID로 채팅 메시지를 조회하고 타임스탬프 순서대로 정렬하여 반환
-        return chatMessageRepository.findByUserIdOrderByTimestampAsc(userId);
+    public List<ChatMessage> getMessagesByChatRoomId(String chatRoomId) {
+        return chatMessageRepository.findByChatRoomIdOrderByTimestampAsc(chatRoomId);
+    }
+
+    public List<ChatMessage> getMessagesByReceiver(Users receiver) {
+        return chatMessageRepository.findByReceiver(receiver);
+    }
+
+    public List<ChatMessage> getMessagesBySenderOrReceiver(Users sender, Users receiver) {
+        return chatMessageRepository.findBySenderOrReceiver(sender, receiver);
     }
 }

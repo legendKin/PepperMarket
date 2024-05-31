@@ -157,14 +157,16 @@
 
     // 채팅 목록 불러오기 함수
     function loadChatRooms() {
+        const userId = $('#userId').val(); // 사용자 ID 가져오기
         $.ajax({
             type: 'GET',
-            url: '/chats',
+            url: `/chat/chats?userId=${userId}`,
             success: function(chatRooms) {
                 const chatList = $('#chatList');
                 chatList.empty();
                 chatRooms.forEach(chatRoomId => {
-                    chatList.append(`<li><a href="/chat/${chatRoomId}">Chat Room ${chatRoomId}</a></li>`);
+                    const receiverId = 1; // 수신자의 ID를 여기에 설정합니다. (예: receiverId가 1인 경우)
+                    chatList.append(`<li><a href="/chat/room/${chatRoomId}?receiverId=${receiverId}">Chat Room ${chatRoomId}</a></li>`);
                 });
             },
             error: function(error) {
