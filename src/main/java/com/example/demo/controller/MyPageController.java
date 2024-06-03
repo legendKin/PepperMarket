@@ -53,7 +53,7 @@ public class MyPageController {
         return "redirect:/mypage";
     }
 
-    @PostMapping("/myPage/change-profile-info")
+    @PostMapping("/mypage/change-profile-info")
     public String changeProfileInfo(@RequestParam("file") MultipartFile file,
                                     @RequestParam("nickname") String nickname,
                                     @RequestParam("email") String email,
@@ -71,6 +71,21 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
         }
 
-        return "redirect:/myPage";
+        return "redirect:/mypage";
     }
+
+//    // 비밀번호 변경 처리
+//    @PostMapping("/mypage/change-password")
+//    public String changePassword(@RequestParam("currentPassword") String currentPassword,
+//                                 @RequestParam("newPassword") String newPassword,
+//                                 @AuthenticationPrincipal UserDetails userDetails,
+//                                 RedirectAttributes redirectAttributes) {
+//        try {
+//            memberService.changeUserPassword(userDetails.getUsername(), currentPassword, newPassword);
+//            redirectAttributes.addFlashAttribute("message", "Password updated successfully.");
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("message", "Password update failed: " + e.getMessage());
+//        }
+//        return "redirect:/mypage";
+//    }
 }
