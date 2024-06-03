@@ -180,4 +180,3 @@ public class BoardController {
         return "redirect:/board/write"; // 게시글 작성 페이지로 리다이렉트
     }
 }
-

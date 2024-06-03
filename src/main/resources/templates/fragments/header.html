@@ -17,7 +17,7 @@
           </a>
         </div>
         <div class="header-profile">
-          <!-- 로그인시 -->
+          <!--                            로그인시        -->
           <div
                   class="dropdown"
                   th:unless="${#authentication.name == 'anonymousUser'}"
@@ -29,8 +29,8 @@
                     id="dropdownMenuButton"
                     type="button"
             >
-              <img alt="프사" class="profile-img" th:src="@{${user.profilePictureUrl}}" th:if="${user.profilePictureUrl != null}" />
-              <p class="profile-name badg" th:text="${user.nickname}"></p>
+              <img alt="프사" class="profile-img" th:src="@{${profilepic}}" />
+              <p class="profile-name badg" th:text="${nickname}"></p>
             </a>
             <div
                     aria-labelledby="dropdownMenuButton"
@@ -42,8 +42,7 @@
               <a class="dropdown-item" href="/logout">로그아웃</a>
             </div>
           </div>
-
-          <!-- 비로그인시 -->
+          <!--                            비로그인시       -->
           <a
                   class="header1"
                   href="/login"
@@ -62,15 +61,15 @@
                     class="search"
                     name="searchKeyword"
                     placeholder="어떤 상품을 찾으시나요?"
-                    type="text"
                     th:value="${searchKeyword}"
+                    type="text"
             />
 
             <!-- 현재 선택된 카테고리 ID를 숨겨 전달 -->
             <input
-                    type="hidden"
                     name="searchCateID"
                     th:value="${searchCateID}"
+                    type="hidden"
             />
 
             <button type="submit">
@@ -80,8 +79,10 @@
         </div>
         <a class="btn btn-primary write" href="/board/write" role="button">
           <p>
-            <i aria-hidden="true" class="fa fa-pencil-square"> &nbsp; </i>
-            상품 올리기
+            <i aria-hidden="true" class="fa fa-pencil-square">
+              &nbsp; 상품 올리기</i
+            >
+
           </p>
         </a>
       </div>
