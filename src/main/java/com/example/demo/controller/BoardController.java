@@ -179,4 +179,19 @@ public class BoardController {
         redirectAttributes.addFlashAttribute("message", "파일 업로드 크기를 초과했습니다. 최대 파일 크기는 10MB입니다."); // 오류 메시지를 리다이렉트 속성에 추가
         return "redirect:/board/write"; // 게시글 작성 페이지로 리다이렉트
     }
+
+    // 게시글 삭제 처리 메서드
+    @GetMapping("/board/delete/{id}")
+    public String boardDelete(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
+        Board board = boardService.boardView(id);
+        if (!board.getUser().getEmail().equals(userDetails.getUsername())) {
+            redirectAttributes.addFlashAttribute("message", "작성자만 글을 삭제할 수 있습니다.");
+            return "redirect:/board/list";
+        }
+
+        commentService.deleteCommentsByBoardId(id); // 게시글의 댓글 삭제
+        boardService.boardDelete(id); // 게시글 삭제
+
+        return "redirect:/board/list";
+    }
 }

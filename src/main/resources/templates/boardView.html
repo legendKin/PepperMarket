@@ -29,8 +29,10 @@
 
   <div>
     <a th:href="@{/board/list}">목록으로 돌아가기</a>
-    <a th:href="@{/board/delete(id=${board.id})}">글 삭제</a>
-    <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
+    <th:block th:if="${loggedInUser != null && loggedInUser.username == board.user.email}">
+      <a th:href="@{/board/delete/{id}(id=${board.id})}">글 삭제</a>
+      <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
+    </th:block>
     <th:block th:if="${board.user != null && loggedInUser != null && loggedInUser.username != board.user.email}">
       <a class="btn btn-primary" th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}">1:1 채팅</a>
     </th:block>
