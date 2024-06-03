@@ -67,7 +67,7 @@
                   name="searchCateID"
                   required
                 >
-                  <option value="">전체 카테고리</option>
+                  <option value=" ">전체 카테고리</option>
                   <th:block th:each="board, iterStat : ${categList}">
                     <option
                       th:value="${iterStat.index + 1}"
