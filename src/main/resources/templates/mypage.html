@@ -24,6 +24,7 @@
         th:action="@{/mypage/change-profile-info}"
       >
         <label for="file">프로필 사진:</label>
+        <img alt="프사" class="profile-img" th:src="@{${profilepic}}" />
         <input id="file" name="file" type="file" /><br />
 
         <label for="nickname">닉네임:</label>
