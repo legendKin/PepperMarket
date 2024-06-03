@@ -37,7 +37,7 @@ public class MyPageController {
                                        RedirectAttributes redirectAttributes) {
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:";
+            return "redirect:/mypage";
         }
 
         try {
@@ -50,7 +50,7 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
         }
 
-        return "redirect:";
+        return "redirect:/mypage";
     }
 
     @PostMapping("/mypage/change-profile-info")
@@ -71,7 +71,7 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
         }
 
-        return "redirect:";
+        return "redirect:/mypage";
     }
 
 //    // 비밀번호 변경 처리
