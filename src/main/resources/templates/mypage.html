@@ -22,7 +22,7 @@
         <label for="file">프로필 사진:</label>
         <img alt="프사" class="profile-img" th:src="@{${profilepic}}" />
         <input id="file" name="file" type="file"><br>
-s
+
         <label for="nickname">닉네임:</label>
         <input id="nickname" name="nickname" th:value="${user.nickname}" type="text"><br>
 
@@ -149,32 +149,34 @@ s
         });
     }
 
-    // 채팅 목록 불러오기 함수
-    function loadChatRooms() {
-        const userId = $('#userId').val(); // 사용자 ID 가져오기
-        $.ajax({
-            type: 'GET',
-            url: `/chat/chats?userId=${userId}`,
-            success: function(chatRooms) {
-                const chatList = $('#chatList');
-                chatList.empty();
-                chatRooms.forEach(chatRoomId => {
-                    const receiverId = 1; // 수신자의 ID를 여기에 설정합니다. (예: receiverId가 1인 경우)
-                    chatList.append(`<li><a href="/chat/room/${chatRoomId}?receiverId=${receiverId}">Chat Room ${chatRoomId}</a></li>`);
-                });
-            },
-            error: function(error) {
-                console.error('Error loading chat rooms:', error);
-            }
-        });
-    }
-
-    // 페이지 로드 시 데이터 불러오기
-    $(document).ready(function() {
-        loadKeywords();
-        loadNotifications();
-        loadChatRooms();
+// 채팅 목록 불러오기 함수
+function loadChatRooms() {
+    const userId = $('#userId').val(); // 사용자 ID 가져오기
+    $.ajax({
+        type: 'GET',
+        url: `/chat/chats?userId=${userId}`,
+        success: function(chatRooms) {
+            const chatList = $('#chatList');
+            chatList.empty();
+            chatRooms.forEach(chatRoom => {
+                const { chatRoomId, lastMessage, senderNickname, senderId } = chatRoom;
+                if (senderId != userId) {
+                    chatList.append(`<li>${senderNickname}님이 메시지를 보냈습니다: "${lastMessage}" <a href="/chat/room/${chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
+                }
+            });
+        },
+        error: function(error) {
+            console.error('Error loading chat rooms:', error);
+        }
     });
+}
+
+// 페이지 로드 시 데이터 불러오기
+$(document).ready(function() {
+    loadKeywords();
+    loadNotifications();
+    loadChatRooms();
+});
 </script>
 
 </body>
