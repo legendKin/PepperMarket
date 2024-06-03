@@ -7,39 +7,45 @@
 >
   <head>
     <link rel="stylesheet" th:href="@{/css/boardcategories.css}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
     <div class="main-content" layout:fragment="content">
       <div class="wrapper">
         <div class="category-section">
           <div class="category-container">
-            <div class="category-toggle category-toggle1">
-              <div class="category-toggle-content">
-                <span class="filtername">카테고리</span>
-                <img
-                  alt="화살표 아래 아이콘"
-                  src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
-                />
+            <div class="category-toggle-wrapper">
+              <div class="category-toggle category-toggle1">
+                <div class="category-toggle-content">
+                  <span class="filtername">카테고리 </span>
+                  <img
+                    alt="화살표 아래 아이콘"
+                    src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="category-toggle category-toggle2">
-              <div class="category-toggle-content">
-                <span class="filtername">가격</span>
-                <img
-                  alt="화살표 아래 아이콘"
-                  src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
-                />
+              <div class="category-toggle category-toggle2">
+                <div class="category-toggle-content">
+                  <span class="filtername">가격</span>
+                  <img
+                    alt="화살표 아래 아이콘"
+                    src="https://ccimage.hellomarket.com/img/web/search/filter/white_arrow.svg"
+                  />
+                </div>
               </div>
             </div>
             <div class="reset-filter">
-              <div class="reset-button">
+              <a
+                class="reset-button"
+                th:href="@{/board/list(page=${page},searchKeyword=${searchKeyword}, searchCateID=)}"
+              >
                 <div class="reset-text">필터 초기화</div>
                 <img
                   alt="reset"
                   class="reset-icon"
                   src="https://ccimage.hellomarket.com/img/web/search/filter/refresh.svg"
                 />
-              </div>
+              </a>
             </div>
           </div>
 
@@ -49,14 +55,21 @@
                 <div class="category-name">카테고리</div>
               </div>
               <div class="category-count">
-                <a class="category-link" th:href="@{/board/list(searchCateID=)}"
-                  >#### 전체 (###,###)</a
+                <a
+                  class="category-link"
+                  th:href="@{/board/list(searchKeyword=${searchKeyword}, searchCateID=)}"
+                  >전체</a
                 >
-                <div th:each="board : ${categList}">
+
+                <div
+                  th:each="board, iterStat : ${categList}"
+                  class="category-link-n"
+                >
                   <a
                     class="category-link"
-                    th:href="@{/board/list(searchCateID=${categList.indexOf(board)+1})}"
-                    th:text="${board} + ' (' + ${categList.indexOf(board)+1} + ')'"
+                    th:classappend="'category' + ${iterStat.index + 1}"
+                    th:href="@{/board/list(searchKeyword=${searchKeyword}, searchCateID=${iterStat.index + 1})}"
+                    th:text="${board} + ' (' + (${categoryPostCounts[iterStat.index + 1]} ?: 0) + ')'"
                   ></a>
                 </div>
               </div>
@@ -84,6 +97,7 @@
         </div>
         <div class="product-section">
           <div class="product-count">
+            <h2><span th:text="${categNow}"></span></h2>
             <div class="product-count-left">
               <span class="count-text"
                 ><span th:text="${list.getTotalElements()}"></span>개의 상품이
@@ -105,18 +119,20 @@
                 <div class="col" th:each="board : ${list}">
                   <div class="card shadow-sm">
                     <img
-                      class="card-img-top"
+                      class="card-img-top goods-img"
                       height="225"
                       onerror="this.src='/files/default.png'"
                       th:src="${board.filepath}"
                       width="100%"
+                      alt="상품이미지"
                     />
                     <div class="card-body">
-                      <p th:text="${board.categName}"></p>
+<!--                      <p th:text="${board.categName}"></p>-->
                       <a
                         th:href="@{/board/view(id=${board.id})}"
                         th:text="${board.title}"
-                        >제목</a>
+                        >제목</a
+                      >
                       <div class="button-group">
                         <button
                           class="btn btn-sm btn-outline-secondary view-button"
@@ -140,23 +156,52 @@
               </div>
             </div>
           </div>
-          <a class="page-link" th:href="@{/board/list(page=0)}">첫 페이지</a>
-          <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-            <a
-              class="page-link"
-              th:href="@{/board/list(page=${page-1}, searchKeyword=${param.searchKeyword}, searchCateID=${param.searchCateID})}"
-              th:if="${page != nowPage}"
-              th:text="${page}"
-            ></a>
-            <strong
-              class="page-link-active"
-              th:if="${page == nowPage}"
-              th:text="${page}"
-            ></strong>
-          </th:block>
-          <a class="page-link" th:href="@{/board/list(page=${totalPage-1})}"
-            >마지막 페이지</a
-          >
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <!-- Previous button -->
+              <li
+                class="page-item"
+                th:classappend="${nowPage == 1} ? 'disabled'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/board/list(page=${startPage - 1}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <!-- Page numbers -->
+              <th:block
+                th:each="page : ${#numbers.sequence(startPage, endPage)}"
+              >
+                <li
+                  class="page-item"
+                  th:if="${page > 0}"
+                  th:classappend="${page == nowPage} ? 'active'"
+                >
+                  <a
+                    class="page-link"
+                    th:href="@{/board/list(page=${page-1}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
+                    th:text="${page}"
+                  ></a>
+                </li>
+              </th:block>
+              <!-- Next button -->
+              <li
+                class="page-item"
+                th:classappend="${nowPage == totalPage} ? 'disabled'"
+              >
+                <a
+                  class="page-link"
+                  th:href="@{/board/list(page=${endPage}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
+                  aria-label="Next"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
 
@@ -178,6 +223,36 @@
             $(".category-sublist1").slideUp();
           }
         });
+        function getCurrentCategoryId() {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get("searchCateID");
+        }
+
+        /* 현재 URL을 확인하여 선택된 카테고리에 대한 스타일을 적용하는 함수 */
+        function applyStyleToSelectedCategory() {
+          const currentCategoryId = getCurrentCategoryId();
+          let selectedCategory = null;
+
+          if (currentCategoryId !== null) {
+            selectedCategory = document.querySelector(
+              ".category" + currentCategoryId,
+            );
+            selectedCategoryTab = document.querySelector(".category-toggle");
+          } /* 선택된 카테고리에 대한 스타일을 적용 */
+          if (selectedCategory !== null) {
+            selectedCategory.style.color = "red"; // 원하는 스타일을 여기에 적용
+            selectedCategoryTab.style.backgroundColor = "red";
+            selectedCategoryTab.style.color = "white";
+          }
+
+          console.log(selectedCategory);
+          console.log(currentCategoryId);
+        }
+
+        /* 페이지가 로드될 때 선택된 카테고리에 대한 스타일을 적용 */
+        window.onload = function () {
+          applyStyleToSelectedCategory();
+        };
       </script>
     </div>
   </body>

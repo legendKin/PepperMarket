@@ -6,64 +6,35 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * 채팅 메시지를 나타내는 엔티티 클래스입니다.
- */
 @Getter
 @Setter
 @Entity
-@Table(name = "chat_messages")
 public class ChatMessage {
-
-    // 컬럼 이름을 상수로 정의
-    public static final String ID = "id";
-    public static final String USER_ID = "user_id";
-    public static final String MESSAGE = "message";
-    public static final String TIMESTAMP = "timestamp";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = ID)
-    private Long id; // 메시지 식별자
+    private Long id;
 
-    @Column(name = USER_ID, nullable = false)
-    private String userId; // 사용자 ID
+    @Column(nullable = false)
+    private String chatRoomId;
 
-    @Column(name = MESSAGE, nullable = false)
-    private String message; // 메시지 내용
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private Users sender;
 
-    @Column(name = TIMESTAMP, nullable = false)
-    private LocalDateTime timestamp; // 타임스탬프
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private Users receiver;
 
-    /**
-     * 기본 생성자.
-     */
-    public ChatMessage() {
-    }
+    @Column(nullable = false)
+    private String content;
 
-    /**
-     * 모든 필드를 초기화하는 생성자.
-     *
-     * @param userId    사용자 ID
-     * @param message   메시지 내용
-     * @param timestamp 타임스탬프
-     */
-    public ChatMessage(String userId, String message, LocalDateTime timestamp) {
-        this.userId = userId;
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
 
-    /**
-     * ID를 제외한 모든 필드를 초기화하는 생성자.
-     * @param userId 사용자 ID
-     * @param message 메시지 내용
-     * @param timestamp 타임스탬프
-     */
-    public ChatMessage(Long id, String userId, String message, LocalDateTime timestamp) {
-        this.id = id;
-        this.userId = userId;
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+    @Transient
+    private Long senderId;
+
+    @Transient
+    private Long receiverId;
 }

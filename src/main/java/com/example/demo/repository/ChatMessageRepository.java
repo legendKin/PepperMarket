@@ -1,8 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.ChatMessage;
-import org.springframework.data.domain.Pageable;
+import com.example.demo.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,20 +12,15 @@ import java.util.List;
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-    /**
-     * 특정 사용자의 채팅 메시지를 타임스탬프 오름차순으로 조회합니다.
-     *
-     * @param userId 조회할 사용자의 ID
-     * @return 타임스탬프 오름차순으로 정렬된 채팅 메시지 목록
-     */
-    List<ChatMessage> findByUserIdOrderByTimestampAsc(String userId);
+    // 사용자 ID를 통해 참여한 채팅방 ID를 조회하는 메서드
+    @Query("SELECT DISTINCT cm.chatRoomId FROM ChatMessage cm WHERE cm.sender.email = :userEmail OR cm.receiver.email = :userEmail")
+    List<String> findChatRoomsByUserEmail(@Param("userEmail") String userEmail);
 
-    /**
-     * 특정 사용자의 채팅 메시지를 페이징 처리하여 조회합니다.
-     *
-     * @param userId 조회할 사용자의 ID
-     * @param pageable 페이징 및 정렬 정보
-     * @return 페이징된 채팅 메시지 목록
-     */
-    List<ChatMessage> findByUserId(String userId, Pageable pageable);
+    List<ChatMessage> findByChatRoomIdOrderByTimestampAsc(String chatRoomId);
+
+    @Query("SELECT cm FROM ChatMessage cm WHERE cm.sender = :sender OR cm.receiver = :receiver")
+    List<ChatMessage> findBySenderOrReceiver(@Param("sender") Users sender, @Param("receiver") Users receiver);
+
+    List<ChatMessage> findByReceiver(Users receiver);
+    List<ChatMessage> findBySender(Users sender);
 }

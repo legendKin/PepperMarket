@@ -10,40 +10,16 @@
         <h2>카테고리 별 인기매물</h2>
         <div class="swiper-container upper-slider">
           <div class="swiper-wrapper">
-            <div class="pop swiper-slide">
-              <a href="#">
-                <img src="https://via.placeholder.com/1000x800" />
-                <p>상품명<br />카테고리명</p>
-              </a>
-            </div>
-            <div class="pop swiper-slide">
-              <a href="#">
-                <img src="https://via.placeholder.com/1000x800" />
-                <p>상품명<br />카테고리명</p>
-              </a>
-            </div>
-            <div class="pop swiper-slide">
-              <a href="#">
-                <img src="https://via.placeholder.com/1000x800" />
-                <p>상품명<br />카테고리명</p>
-              </a>
-            </div>
-            <div class="pop swiper-slide">
-              <a href="#">
-                <img src="https://via.placeholder.com/1000x800" />
-                <p>상품명<br />카테고리명</p>
-              </a>
-            </div>
-            <div class="pop swiper-slide">
-              <a href="#">
-                <img src="https://via.placeholder.com/1000x800" />
-                <p>상품명<br />카테고리명</p>
-              </a>
-            </div>
-            <div class="pop swiper-slide">
-              <a href="#">
-                <img src="https://via.placeholder.com/1000x800" />
-                <p>상품명<br />카테고리명</p>
+            <div th:each="post : ${topPosts}" class="pop swiper-slide">
+              <a th:href="@{/board/view(id=${post.id})}">
+                <img
+                  th:src="${post.filepath}"
+                  onerror="this.src='/files/default.png'"
+                />
+                <span>
+                  <div th:text="${post.title}">상품명</div>
+                  <div th:text="${post.categName}">카테고리</div>
+                </span>
               </a>
             </div>
           </div>

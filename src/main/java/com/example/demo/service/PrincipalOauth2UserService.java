@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * OAuth2 사용자 정보를 가져와서 처리하는 서비스 클래스입니다.
@@ -102,6 +101,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private Users createNewUser(String email, String provider, String providerId, String socialId, String nickname, String profilePictureUrl) {
         Users user = Users.builder()
                 .email(email)
+                .password(bCryptPasswordEncoder.encode("")) // 빈 문자열을 암호화하여 설정
                 .provider(provider)
                 .providerId(providerId)
                 .socialId(socialId)

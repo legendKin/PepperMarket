@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,17 +17,23 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 public class Users {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
-    private Long id; // 사용자 식별자
+    private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email; // 이메일 주소
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Column(name = "password")
-    private String password; // 비밀번호
+    @Column(nullable = true) // 변경: nullable = true
+    private String password;
+
+    private String nickname;
+
+    private String profilePictureUrl;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
     @Column(name = "provider")
     private String provider; // 제공자 (OAuth 등)
@@ -37,11 +44,17 @@ public class Users {
     @Column(name = "socialId")
     private String socialId; // 소셜 ID (OAuth 등)
 
-    @Column(name = "nickname")
-    private String nickname; // 닉네임
+    @Builder
+    public Users(String email, String password, String nickname, String profilePictureUrl, String provider, String providerId, String socialId) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.profilePictureUrl = profilePictureUrl;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.socialId = socialId;
+    }
 
-    @Column(name = "profile_picture_url")
-    private String profilePictureUrl; // 프로필 사진 URL
 
     @Column(name = "name")
     private String name; // 이름
@@ -53,7 +66,4 @@ public class Users {
     @Temporal(TemporalType.DATE)
     private Date birthdate; // 생년월일
 
-    // 양방향 관계 설정
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Comment> comments;
 }

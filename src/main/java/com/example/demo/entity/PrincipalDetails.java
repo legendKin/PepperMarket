@@ -1,4 +1,3 @@
-
 package com.example.demo.entity;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +25,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     public Users getUsers() {
         return users;
+    }
+
+    public Long getId() {
+        return users.getId();
     }
 
     @Override
