@@ -9,8 +9,8 @@ import java.util.List;
 public class CategoryService {
 
     public static final List<String> categoryList = Arrays.asList(
-            "카테고리1", "카테고리2", "카테고리3", "카테고리4",
-            "카테고리5", "카테고리6", "카테고리7", "카테고리8"
+            "남성의류", "여성의류", "잡화", "디지털",
+            "취미/게임", "스포츠/레저", "가구/인테리어", "반려동물/식물"
     );
 
     public List<String> getCategoryList() {

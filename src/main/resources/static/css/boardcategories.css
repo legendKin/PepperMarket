@@ -1,11 +1,11 @@
 .wrapper {
-  max-width: 1200px;
+  width: 1200px;
   margin: 0 auto;
 }
 /* 카테고리 전체 */
 .category-section {
   margin: 30px auto;
-  max-width: 1200px;
+  width: 1200px;
 }
 
 /* 카테고리 설정 */
@@ -178,6 +178,10 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+.product-album {
+  padding-top: 0 !important;
+  background-color: transparent !important;
+}
 .product-album .container {
   max-width: 1200px;
 }
@@ -247,4 +251,72 @@
 .sort-icon {
   width: 15px;
   height: 15px;
+}
+
+/* 상품목록 */
+.row {
+  margin: 0 -0.5rem;
+}
+
+.col {
+  padding: 0 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  border: none;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-img-top {
+  border-bottom: 1px solid #ddd;
+}
+
+.card-box {
+  padding: 1rem;
+}
+
+.card-cate p {
+  background-color: #000;
+  color: #fff;
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-t {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.card-t:hover {
+  text-decoration: underline;
+}
+
+.card-price {
+  font-size: 1.1rem;
+  color: #e74c3c;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-button {
+  font-size: 0.9rem;
+}
+
+.text-muted {
+  font-size: 0.8rem;
 }

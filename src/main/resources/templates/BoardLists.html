@@ -97,8 +97,8 @@
         </div>
         <div class="product-section">
           <div class="product-count">
-            <h2><span th:text="${categNow}"></span></h2>
             <div class="product-count-left">
+              <h2><span th:text="${categNow}"></span></h2>
               <span class="count-text"
                 ><span th:text="${list.getTotalElements()}"></span>개의 상품이
                 있습니다.</span
@@ -118,38 +118,53 @@
               <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" th:each="board : ${list}">
                   <div class="card shadow-sm">
-                    <img
-                      class="card-img-top goods-img"
-                      height="225"
-                      onerror="this.src='/files/default.png'"
-                      th:src="${board.filepath}"
-                      width="100%"
-                      alt="상품이미지"
-                    />
-                    <div class="card-body">
-<!--                      <p th:text="${board.categName}"></p>-->
+                    <a th:href="@{/board/view(id=${board.id})}">
+                      <img
+                        class="card-img-top goods-img"
+                        weight="225"
+                        height="300"
+                        onerror="this.src='/files/default.png'"
+                        th:src="${board.filepath}"
+                        width="100%"
+                        alt="상품이미지"
+                      />
+                    </a>
+                    <div class="card-body card-box">
+                      <div class="card-cate">
+                        <p th:text="${board.categName}"></p>
+                      </div>
                       <a
+                        class="card-t"
                         th:href="@{/board/view(id=${board.id})}"
                         th:text="${board.title}"
                         >제목</a
                       >
-                      <div class="button-group">
-                        <button
-                          class="btn btn-sm btn-outline-secondary view-button"
-                          type="button"
+                      <span
+                        class="card-price"
+                        th:text="${board.price} + 원"
+                      ></span>
+                      <div class="card-bottom">
+                        <th:block th:unless="${board.writer !=  loggedUserId}">
+                          <button
+                            class="btn btn-sm btn-outline-secondary edit-button"
+                            type="button"
+                          >
+                            Edit
+                          </button>
+                        </th:block>
+                        <th:block th:if="${board.writer !=  loggedUserId}">
+                          <button
+                            class="btn btn-sm btn-outline-secondary edit-button"
+                            type="button"
+                            style="visibility: hidden"
+                          >
+                            Edit
+                          </button>
+                        </th:block>
+                        <small class="text-muted" th:text="${board.timeAgo}"
+                          >timeago</small
                         >
-                          View
-                        </button>
-                        <button
-                          class="btn btn-sm btn-outline-secondary edit-button"
-                          type="button"
-                        >
-                          Edit
-                        </button>
                       </div>
-                      <small class="text-muted" th:text="${board.timeAgo}"
-                        >timeago</small
-                      >
                     </div>
                   </div>
                 </div>

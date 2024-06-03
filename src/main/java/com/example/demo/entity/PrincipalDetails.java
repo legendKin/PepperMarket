@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
+    @Getter
     private Users users;
     private Map<String, Object> attributes;
 
@@ -21,10 +23,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     public PrincipalDetails(Users users, Map<String, Object> attributes) {
         this.users = users;
         this.attributes = attributes;
-    }
-
-    public Users getUsers() {
-        return users;
     }
 
     public Long getId() {

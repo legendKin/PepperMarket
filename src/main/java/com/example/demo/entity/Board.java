@@ -10,7 +10,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 import static com.example.demo.service.CategoryService.categoryList;
 
@@ -31,11 +30,16 @@ public class Board {
 
     private String title; // 게시글 제목
     private String content; // 게시글 내용
+    private String price; // 가격
     private String filename; // 파일 이름
     private String filepath; // 파일 경로
     private Integer viewcount; // 조회수
-    private Integer cateID; //카테고리ID
-    private String categName;
+    private Integer likecount; // 좋아요 수
+    private Integer cateID; // 카테고리 ID
+    private String categName; // 카테고리 이름
+    private Integer status; // 판매 상태 1:판매중, 2:예약중 3:판매완료
+
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -52,6 +56,12 @@ public class Board {
         categName = categoryList.get(cateID - 1);
         return categName;
     }
+
+    public Long getWriter(){
+        return user.getId();
+    }
+
+
 
 
 //    @ManyToOne

@@ -16,23 +16,25 @@
 }
 
 .main-content {
-  padding: 20px;
+  /*padding: 20px;*/
   overflow: hidden;
-  width: 100vh;
+  width: 100%;
   margin: 0 auto;
 }
 
 .category-popular,
 .categories {
-  /*width: 1200px;*/
+  width: 1200px;
   position: relative;
   margin: 40px auto;
   overflow: hidden;
 }
 
 .swiper-container {
-  width: 100%;
+  width: 1000px;
+  overflow: hidden;
   height: 100%;
+  margin: 0 auto;
 }
 
 .swiper-slide {
