@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chat")
-public class    ChatController {
+public class ChatController {
 
     private final ChatMessageService chatMessageService;
     private final UserRepository userRepository;
@@ -75,13 +75,13 @@ public class    ChatController {
         return chatRooms.stream().distinct().collect(Collectors.toList());
     }
 
-    @GetMapping("/myPage")
+    @GetMapping("/mypage")
     public String myPage(Model model, @RequestParam Long userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         List<String> chatRooms = getUserChatRooms(userId);
         model.addAttribute("user", user);
         model.addAttribute("chatRooms", chatRooms);
-        return "myPage";
+        return "mypage";
     }
 
     @GetMapping("/chatRoom")
