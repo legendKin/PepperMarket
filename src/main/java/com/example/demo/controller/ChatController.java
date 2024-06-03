@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chat")
-public class    ChatController {
+public class ChatController {
 
     private final ChatMessageService chatMessageService;
     private final UserRepository userRepository;
@@ -64,24 +66,27 @@ public class    ChatController {
     }
 
     @GetMapping("/chats")
-    public List<String> getUserChatRooms(@RequestParam Long userId) {
+    public List<Map<String, String>> getUserChatRooms(@RequestParam Long userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        String userEmail = user.getEmail();
-        List<ChatMessage> sentMessages = chatMessageService.getMessagesBySenderOrReceiver(user, user);
-        List<ChatMessage> receivedMessages = chatMessageService.getMessagesBySenderOrReceiver(user, user);
+        List<ChatMessage> chatMessages = chatMessageService.getChatRoomsAndLastMessagesByUser(user);
 
-        List<String> chatRooms = sentMessages.stream().map(ChatMessage::getChatRoomId).distinct().collect(Collectors.toList());
-        chatRooms.addAll(receivedMessages.stream().map(ChatMessage::getChatRoomId).distinct().collect(Collectors.toList()));
-        return chatRooms.stream().distinct().collect(Collectors.toList());
+        return chatMessages.stream().map(msg -> {
+            Map<String, String> chatRoomInfo = new HashMap<>();
+            chatRoomInfo.put("chatRoomId", msg.getChatRoomId());
+            chatRoomInfo.put("lastMessage", msg.getContent());
+            chatRoomInfo.put("senderNickname", msg.getSender().getNickname());
+            chatRoomInfo.put("senderId", msg.getSender().getId().toString()); // 추가
+            return chatRoomInfo;
+        }).collect(Collectors.toList());
     }
 
-    @GetMapping("/myPage")
+    @GetMapping("/mypage")
     public String myPage(Model model, @RequestParam Long userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        List<String> chatRooms = getUserChatRooms(userId);
+        List<Map<String, String>> chatRooms = getUserChatRooms(userId);
         model.addAttribute("user", user);
         model.addAttribute("chatRooms", chatRooms);
-        return "myPage";
+        return "mypage";
     }
 
     @GetMapping("/chatRoom")
@@ -100,3 +105,5 @@ public class    ChatController {
         return "chatter";
     }
 }
+
+

@@ -17,8 +17,13 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class BoardService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 
     @Autowired
     private BoardRepository boardRepository;
@@ -28,10 +33,10 @@ public class BoardService {
 
     @Autowired
     private NotificationRepository notificationRepository;
-//    @Autowired
-//    private CategoryRepository categoryRepository;
+
     @Autowired
     private KeywordRepository keywordRepository;
+
     @Autowired
     public BoardService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -44,48 +49,43 @@ public class BoardService {
 
         board.setUser(user);
         board.setCreateDate(LocalDateTime.now());
-        if (!file.isEmpty()) {
-            String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-            UUID uuid = UUID.randomUUID();
-            String fileName = uuid + "_" + file.getOriginalFilename();
-            File saveFile = new File(projectPath, fileName);
-            file.transferTo(saveFile);
-            board.setFilename(fileName);
-            board.setFilepath("/files/" + fileName);
-        }
-        Board savedBoard = boardRepository.save(board);
-        checkForKeywords(savedBoard);  // 키워드 체크 및 알림 생성 호출
-        return savedBoard;
 
+        try {
+            if (!file.isEmpty()) {
+                String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+                UUID uuid = UUID.randomUUID();
+                String fileName = uuid + "_" + file.getOriginalFilename();
+                File saveFile = new File(projectPath, fileName);
+                logger.info("파일 저장 경로: " + saveFile.getPath());
+                file.transferTo(saveFile);
+                board.setFilename(fileName);
+                board.setFilepath("/files/" + fileName);
+                logger.info("파일 업로드 성공: " + fileName);
+            }
+
+            Board savedBoard = boardRepository.save(board);
+            logger.info("게시글 저장 성공: " + savedBoard.getId());
+            return savedBoard;
+        } catch (Exception e) {
+            logger.error("파일 업로드 중 오류 발생", e);
+            throw new Exception("파일 업로드 중 오류가 발생했습니다.");
+        }
     }
 
     public Page<Board> boardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
+    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
+        return boardRepository.findByTitleContaining(searchKeyword, pageable);
+    }
+
     public Board boardView(Integer id) {
-        Optional<Board> boardOptional = boardRepository.findById(id);
-        if (boardOptional.isPresent()) {
-            return boardOptional.get();
-        } else {
-            throw new NoSuchElementException("Board not found with id: " + id);
-        }
+        return boardRepository.findById(id).orElseThrow();
     }
 
     public void boardDelete(Integer id) {
         boardRepository.deleteById(id);
-    }
-
-    public void boardViewCount(Integer id) {
-        Board board = boardRepository.findById(id).orElse(null);
-        if (board != null) {
-            board.setViewcount(board.getViewcount() + 1);
-            boardRepository.save(board);
-        }
-    }
-
-    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
-        return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
     public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable) {
@@ -100,54 +100,41 @@ public class BoardService {
         List<Keyword> keywords = keywordRepository.findAll();
         for (Keyword keyword : keywords) {
             if (board.getTitle().contains(keyword.getKeyword()) || board.getContent().contains(keyword.getKeyword())) {
-                System.out.println("Keyword matched: " + keyword.getKeyword()); // 로그 추가
+                logger.info("Keyword matched: " + keyword.getKeyword());
                 Notification notification = new Notification();
                 notification.setMessage("새 게시글에 당신의 키워드 '" + keyword.getKeyword() + "'가 포함되어 있습니다.");
                 notification.setUser(keyword.getUser());
-                notification.setBoard(board);  // 게시글 정보 추가
+                notification.setBoard(board);
                 notification.setRead(false);
                 notificationRepository.save(notification);
-                System.out.println("Notification saved for user ID: " + keyword.getUser().getId() + " for board ID: " + board.getId()); // 로그 추가
+                logger.info("Notification saved for user ID: " + keyword.getUser().getId() + " for board ID: " + board.getId());
             }
         }
     }
 
-//    public List<Board> boardListByCategory(Board cateID) {
-//        Board category = boardRepository.findByCategoryIDX(cateID)
-//                .orElseThrow(() -> new NoSuchElementException("Category not found with id: " + cateID));
-//        return boardRepository.findByCategoryIDX(category);
-//    }
     public Board saveBoard(Board board) {
-        System.out.println("Saving board: " + board.getTitle()); // 로그 추가
+        logger.info("Saving board: " + board.getTitle());
         Board savedBoard = boardRepository.save(board);
-        checkForKeywords(savedBoard);  // 키워드 체크 및 알림 생성 호출
+        checkForKeywords(savedBoard);
         return savedBoard;
     }
 
-
-//    조회수로 정렬
     public List<Board> getPostsByViewcount() {
         return boardRepository.findByOrderByViewcountDesc();
     }
-// 조회수 상위 10 게시글만 출력
+
     public List<Board> getTop10PostsByViewcount() {
         return boardRepository.findTop10ByOrderByViewcountDesc();
-
-
     }
-//카테고리별 글 갯수
-public Map<Integer, Long> getCategoryPostCounts() {
-    List<Object[]> results = boardRepository.findCategoryPostCounts();
-    Map<Integer, Long> categoryPostCounts = new HashMap<>();
-    for (Object[] result : results) {
-        Integer cateID = (Integer) result[0];
-        Long count = (Long) result[1];
-        categoryPostCounts.put(cateID, count);
+
+    public Map<Integer, Long> getCategoryPostCounts() {
+        List<Object[]> results = boardRepository.findCategoryPostCounts();
+        Map<Integer, Long> categoryPostCounts = new HashMap<>();
+        for (Object[] result : results) {
+            Integer cateID = (Integer) result[0];
+            Long count = (Long) result[1];
+            categoryPostCounts.put(cateID, count);
+        }
+        return categoryPostCounts;
     }
-    return categoryPostCounts;
-}
-
-
-
-
 }

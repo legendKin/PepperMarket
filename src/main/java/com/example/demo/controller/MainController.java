@@ -29,6 +29,7 @@ public class MainController {
         return "main"; // main.html 템플릿 반환
     }
 
+
     @GetMapping("/chat")
     public String chat() {
         return "chatter";
