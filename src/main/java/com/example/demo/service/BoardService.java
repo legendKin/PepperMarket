@@ -20,7 +20,7 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Service
+@Service // 서비스 클래스임을 나타냄
 public class BoardService {
 
     private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
@@ -42,15 +42,19 @@ public class BoardService {
         this.userRepository = userRepository;
     }
 
+    // 게시글 작성 및 파일 업로드를 처리하는 메서드
     public Board write(Board board, MultipartFile file) throws Exception {
+        // 현재 인증된 사용자 정보를 가져옴
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
         Users user = userRepository.findByEmail(username).orElseThrow();
 
+        // 게시글에 사용자 정보와 작성 시간을 설정
         board.setUser(user);
         board.setCreateDate(LocalDateTime.now());
 
         try {
+            // 파일이 비어있지 않으면 파일을 저장
             if (!file.isEmpty()) {
                 String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
                 UUID uuid = UUID.randomUUID();
@@ -63,6 +67,7 @@ public class BoardService {
                 logger.info("파일 업로드 성공: " + fileName);
             }
 
+            // 게시글을 저장하고 저장된 게시글 반환
             Board savedBoard = boardRepository.save(board);
             logger.info("게시글 저장 성공: " + savedBoard.getId());
             return savedBoard;
@@ -72,30 +77,37 @@ public class BoardService {
         }
     }
 
+    // 페이징을 지원하는 모든 게시글 리스트를 가져오는 메서드
     public Page<Board> boardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
+    // 특정 키워드를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
         return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
+    // 특정 ID의 게시글을 조회하는 메서드
     public Board boardView(Integer id) {
         return boardRepository.findById(id).orElseThrow();
     }
 
+    // 특정 ID의 게시글을 삭제하는 메서드
     public void boardDelete(Integer id) {
         boardRepository.deleteById(id);
     }
 
+    // 특정 카테고리 ID의 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable) {
         return boardRepository.findByCateID(searchCateID, pageable);
     }
 
+    // 특정 키워드와 카테고리 ID를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable) {
         return boardRepository.findByTitleContainingAndCateID(searchKeyword, searchCateID, pageable);
     }
 
+    // 게시글의 제목과 내용을 확인하여 키워드 알림을 생성하는 메서드
     private void checkForKeywords(Board board) {
         List<Keyword> keywords = keywordRepository.findAll();
         for (Keyword keyword : keywords) {
@@ -112,6 +124,7 @@ public class BoardService {
         }
     }
 
+    // 게시글을 저장하고 키워드 알림을 확인하는 메서드
     public Board saveBoard(Board board) {
         logger.info("Saving board: " + board.getTitle());
         Board savedBoard = boardRepository.save(board);
@@ -119,14 +132,17 @@ public class BoardService {
         return savedBoard;
     }
 
+    // 조회수가 높은 순서로 모든 게시글을 가져오는 메서드
     public List<Board> getPostsByViewcount() {
         return boardRepository.findByOrderByViewcountDesc();
     }
 
+    // 조회수가 높은 상위 10개의 게시글을 가져오는 메서드
     public List<Board> getTop10PostsByViewcount() {
         return boardRepository.findTop10ByOrderByViewcountDesc();
     }
 
+    // 카테고리별 게시글 수를 가져오는 메서드
     public Map<Integer, Long> getCategoryPostCounts() {
         List<Object[]> results = boardRepository.findCategoryPostCounts();
         Map<Integer, Long> categoryPostCounts = new HashMap<>();

@@ -13,40 +13,45 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
-
-@Service
+@Service // 서비스 클래스임을 나타냄
 public class NotificationService {
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
-    private NotificationRepository notificationRepository;
+    private NotificationRepository notificationRepository; // 알림 관련 데이터 처리를 위한 리포지토리
 
     @Autowired
-    private KeywordService keywordService;
+    private KeywordService keywordService; // 키워드 관련 서비스
 
     @Autowired
-    private UserRepository userRepository;  // UserRepository 주입
+    private UserRepository userRepository; // 사용자 관련 데이터 처리를 위한 리포지토리
 
+    // 모든 알림을 조회하는 메서드
     public List<Notification> findAll() {
         return notificationRepository.findAll();
     }
 
+    // 특정 사용자의 알림을 조회하는 메서드
     public List<Notification> findByUser(Users user) {
         return notificationRepository.findByUser(user);
     }
 
+    // 게시글과 관련된 키워드 알림을 생성하는 메서드
     public void notify(Board board) {
+        // 모든 사용자를 조회
         List<Users> usersList = userRepository.findAll();
 
+        // 각 사용자에 대해 키워드를 확인
         for (Users user : usersList) {
             List<Keyword> userKeywords = keywordService.findByUser(user);
             logger.info("Checking keywords for user ID: " + user.getId());
 
+            // 각 키워드에 대해 게시글 제목에 포함되어 있는지 확인
             for (Keyword keyword : userKeywords) {
                 logger.info("Checking keyword: " + keyword.getKeyword());
                 if (board.getTitle().contains(keyword.getKeyword())) {
+                    // 키워드가 포함된 경우 알림 생성 및 저장
                     Notification notification = new Notification();
                     notification.setUser(user);
                     notification.setBoard(board);
@@ -59,9 +64,10 @@ public class NotificationService {
         }
     }
 
+    // 특정 알림을 읽음 상태로 표시하는 메서드
     public void markAsRead(Long id) {
         Notification notification = notificationRepository.findById(id).orElseThrow();
-        notification.setRead(true);
-        notificationRepository.save(notification);
+        notification.setRead(true); // 알림을 읽음 상태로 설정
+        notificationRepository.save(notification); // 알림 저장
     }
 }

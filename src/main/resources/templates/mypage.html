@@ -2,18 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>My Page</title>
+    <title>내 페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<h1>My Page</h1>
+<h1>내 페이지</h1>
 <p>닉네임: <span th:text="${user.nickname}"></span></p>
 <p>이메일: <span th:text="${user.email}"></span></p>
 <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
 <p>제공자: <span th:text="${user.provider}"></span></p>
 <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
 <!-- 사용자 ID를 숨겨진 필드로 추가 -->
-<input id="userId" th:value="${user.id}" type="hidden">
+<input id="userId" th:value="${user.id}" type="hidden" />
 
 <!-- 프로필 정보 변경 섹션 -->
 <section id="profile-info-section">
@@ -21,13 +21,13 @@
     <form enctype="multipart/form-data" method="post" th:action="@{/mypage/change-profile-info}">
         <label for="file">프로필 사진:</label>
         <img alt="프사" class="profile-img" th:src="@{${profilepic}}" />
-        <input id="file" name="file" type="file"><br>
+        <input id="file" name="file" type="file" /><br />
 
         <label for="nickname">닉네임:</label>
-        <input id="nickname" name="nickname" th:value="${user.nickname}" type="text"><br>
+        <input id="nickname" name="nickname" th:value="${user.nickname}" type="text" /><br />
 
         <label for="email">이메일:</label>
-        <input id="email" name="email" th:value="${user.email}" type="email"><br>
+        <input id="email" name="email" th:value="${user.email}" type="email" /><br />
 
         <button type="submit">프로필 정보 변경</button>
     </form>
@@ -36,23 +36,21 @@
 <!-- 키워드 관리 섹션 -->
 <section id="keywords-section">
     <h2>키워드 목록</h2>
-    <input id="new-keyword" placeholder="Enter new keyword" type="text">
-    <button onclick="addKeyword()">Add Keyword</button>
+    <input id="new-keyword" placeholder="새 키워드를 입력하세요" type="text">
+    <button onclick="addKeyword()">추가</button>
     <ul id="keyword-list"></ul>
 </section>
 
 <!-- 알림 섹션 -->
 <section id="notifications-section">
-    <h2>알림목록</h2>
+    <h2>알림 목록</h2>
     <ul id="notification-list"></ul>
 </section>
 
 <!-- 채팅 목록 섹션 -->
 <section id="chat-list-section">
-    <h2>My Chats</h2>
-    <ul id="chatList">
-        <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
-    </ul>
+    <h2>내 채팅</h2>
+    <ul id="chatList"></ul>
 </section>
 
 <script th:inline="javascript">
@@ -74,7 +72,7 @@
                 $('#new-keyword').val('');
             },
             error: function(error) {
-                console.error('Error adding keyword:', error);
+                console.error('키워드 추가 중 오류 발생:', error);
             }
         });
     }
@@ -88,7 +86,7 @@
                 loadKeywords();
             },
             error: function(error) {
-                console.error('Error deleting keyword:', error);
+                console.error('키워드 삭제 중 오류 발생:', error);
             }
         });
     }
@@ -102,11 +100,11 @@
                 const keywordList = $('#keyword-list');
                 keywordList.empty();
                 keywords.forEach(keyword => {
-                    keywordList.append(`<li>${keyword.keyword} <button onclick="deleteKeyword(${keyword.id})">Delete</button></li>`);
+                    keywordList.append(`<li>${keyword.keyword} <button onclick="deleteKeyword(${keyword.id})">삭제</button></li>`);
                 });
             },
             error: function(error) {
-                console.error('Error loading keywords:', error);
+                console.error('키워드 목록 불러오기 중 오류 발생:', error);
             }
         });
     }
@@ -114,23 +112,23 @@
     // 알림 목록 불러오기 함수
     function loadNotifications() {
         const userId = $('#userId').val(); // 사용자 ID 가져오기
-        console.log('Loading notifications for user ID:', userId); // 디버깅 로그 추가
+        console.log('사용자 ID의 알림 로딩 중:', userId); // 디버깅 로그 추가
 
         $.ajax({
             type: 'GET',
             url: `${NOTIFICATION_API_URL}?userId=${userId}`,
             success: function(notifications) {
-                console.log('Notifications fetched:', notifications); // 디버깅 로그 추가
+                console.log('알림 가져옴:', notifications); // 디버깅 로그 추가
 
                 const notificationList = $('#notification-list');
                 notificationList.empty();
                 notifications.forEach(notification => {
-                    const readStatus = notification.read ? 'Read' : 'Unread';
-                    notificationList.append(`<li>${notification.message} - ${readStatus} <button onclick="markAsRead(${notification.id})">Mark as read</button></li>`);
+                    const readStatus = notification.read ? '읽음' : '읽지 않음';
+                    notificationList.append(`<li>${notification.message} - ${readStatus} <button onclick="markAsRead(${notification.id})">읽음 표시</button></li>`);
                 });
             },
             error: function(error) {
-                console.error('Error loading notifications:', error);
+                console.error('알림 목록 불러오기 중 오류 발생:', error);
             }
         });
     }
@@ -144,40 +142,39 @@
                 loadNotifications();
             },
             error: function(error) {
-                console.error('Error marking notification as read:', error);
+                console.error('알림 읽음 표시 중 오류 발생:', error);
             }
         });
     }
 
-// 채팅 목록 불러오기 함수
-function loadChatRooms() {
-    const userId = $('#userId').val(); // 사용자 ID 가져오기
-    $.ajax({
-        type: 'GET',
-        url: `/chat/chats?userId=${userId}`,
-        success: function(chatRooms) {
-            const chatList = $('#chatList');
-            chatList.empty();
-            chatRooms.forEach(chatRoom => {
-                const { chatRoomId, lastMessage, senderNickname, senderId } = chatRoom;
-                if (senderId != userId) {
-                    chatList.append(`<li>${senderNickname}님이 메시지를 보냈습니다: "${lastMessage}" <a href="/chat/room/${chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
-                }
-            });
-        },
-        error: function(error) {
-            console.error('Error loading chat rooms:', error);
-        }
+    // 채팅 목록 불러오기 함수
+    function loadChatRooms() {
+        const userId = $('#userId').val(); // 사용자 ID 가져오기
+        $.ajax({
+            type: 'GET',
+            url: `/chat/chats?userId=${userId}`,
+            success: function(chatRooms) {
+                const chatList = $('#chatList');
+                chatList.empty();
+                chatRooms.forEach(chatRoom => {
+                    const { chatRoomId, lastMessage, senderNickname, senderId } = chatRoom;
+                    if (senderId != userId) {
+                        chatList.append(`<li>${senderNickname}님이 메시지를 보냈습니다: "${lastMessage}" <a href="/chat/room/${chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
+                    }
+                });
+            },
+            error: function(error) {
+                console.error('채팅 방 목록 로딩 중 오류 발생:', error);
+            }
+        });
+    }
+
+    // 페이지 로드 시 데이터 불러오기
+    $(document).ready(function() {
+        loadKeywords();
+        loadNotifications();
+        loadChatRooms();
     });
-}
-
-// 페이지 로드 시 데이터 불러오기
-$(document).ready(function() {
-    loadKeywords();
-    loadNotifications();
-    loadChatRooms();
-});
 </script>
-
 </body>
 </html>

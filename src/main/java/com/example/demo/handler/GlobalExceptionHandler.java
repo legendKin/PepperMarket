@@ -11,12 +11,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleMaxSizeException(MaxUploadSizeExceededException exc, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message", "File too large!");
-        return "redirect:/mypage";
+        return "error";
     }
     // 일반 예외 처리
     @ExceptionHandler(Exception.class)
     public String handleException(Exception exc, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message", "An error occurred: " + exc.getMessage());
-        return "redirect:/mypage";
+        return "error";
     }
 }

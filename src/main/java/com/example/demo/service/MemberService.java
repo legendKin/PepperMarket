@@ -23,6 +23,7 @@ public class MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 사용자 이메일로 사용자 찾기
     public Users findByEmail(String email) throws Exception {
         Optional<Users> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
@@ -32,17 +33,20 @@ public class MemberService {
         }
     }
 
+    // 파일 저장 로직
     public String storeFile(MultipartFile file) throws IOException {
         // 파일 저장 로직 구현
         return file.getOriginalFilename();
     }
 
+    // 프로필 사진 업데이트
     public void updateUserProfilePicture(String username, String fileName) throws Exception {
         Users user = findByEmail(username);
         user.setProfilePictureUrl(fileName);
         userRepository.save(user);
     }
 
+    // 프로필 정보 업데이트
     public void updateUserProfileInfo(String username, MultipartFile file, String nickname, String email, String name, Integer age, Date birthdate) throws IOException, Exception {
         Users user = findByEmail(username);
         if (!file.isEmpty()) {
@@ -56,4 +60,6 @@ public class MemberService {
         user.setBirthdate(birthdate);
         userRepository.save(user);
     }
+
+
 }
