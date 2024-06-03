@@ -44,14 +44,17 @@ public class BoardController {
     @Autowired
     private NotificationService notificationService;
 
+    // 게시글 작성 폼을 보여주는 메서드
     @GetMapping("/board/write")
     public String boardWriteForm(Model model, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername(); // 이메일을 사용
-        model.addAttribute("username", email);
-        return "BoardWrite";
+        String email = userDetails.getUsername(); // 로그인된 사용자의 이메일을 가져옴
+        model.addAttribute("username", email); // 이메일을 모델에 추가하여 View에서 사용
+
+        return "BoardWrite"; // 게시글 작성 페이지로 이동
     }
 
+    // 게시글 리스트를 보여주는 메서드
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -59,116 +62,122 @@ public class BoardController {
         logger.info("boardList method called");
         Page<Board> list;
 
+        // 검색어와 카테고리 ID가 모두 있는 경우
         if (searchKeyword != null && searchCateID != null) {
             list = boardService.searchByKeywordAndCateID(searchKeyword, searchCateID, pageable);
+            // 검색어만 있는 경우
         } else if (searchKeyword != null) {
             list = boardService.boardSearchList(searchKeyword, pageable);
+            // 카테고리 ID만 있는 경우
         } else if (searchCateID != null) {
             list = boardService.searchByCateID(searchCateID, pageable);
+            // 검색어와 카테고리 ID가 모두 없는 경우
         } else {
             list = boardService.boardList(pageable);
         }
 
-        model.addAttribute("list", list);
+        model.addAttribute("list", list); // 게시글 리스트를 모델에 추가
         logger.info("List size: " + list.getTotalElements());
 
+        // 페이지 정보 계산
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
 
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("nowPage", nowPage); // 현재 페이지 번호를 모델에 추가
+        model.addAttribute("startPage", startPage); // 시작 페이지 번호를 모델에 추가
+        model.addAttribute("endPage", endPage); // 끝 페이지 번호를 모델에 추가
+        model.addAttribute("totalPage", list.getTotalPages()); // 총 페이지 수를 모델에 추가
 
-        List<String> categList = categoryService.getCategoryList();
-        Map<Integer, Long> categoryPostCounts = boardService.getCategoryPostCounts();
+        List<String> categList = categoryService.getCategoryList(); // 카테고리 리스트를 가져옴
+        Map<Integer, Long> categoryPostCounts = boardService.getCategoryPostCounts(); // 각 카테고리별 게시글 수를 가져옴
         String categNow;
         if (searchCateID == null) {
-            categNow = "전체 상품";
+            categNow = "전체 상품"; // 검색 카테고리가 없으면 "전체 상품"으로 설정
         } else {
-            categNow = categList.get(searchCateID - 1);
+            categNow = categList.get(searchCateID - 1); // 카테고리 ID에 해당하는 카테고리 이름을 설정
         }
-        model.addAttribute("categNow", categNow);
-        model.addAttribute("categList", categList);
-        model.addAttribute("categoryPostCounts", categoryPostCounts);
+        model.addAttribute("categNow", categNow); // 현재 카테고리를 모델에 추가
+        model.addAttribute("categList", categList); // 카테고리 리스트를 모델에 추가
+        model.addAttribute("categoryPostCounts", categoryPostCounts); // 카테고리별 게시글 수를 모델에 추가
 
         logger.info("Rendering boardList template");
-        return "boardLists";
+        return "boardLists"; // 게시글 리스트 페이지로 이동
     }
 
+    // 특정 게시글을 보여주는 메서드
     @GetMapping("/board/view")
     public String boardView(Model model, Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        Board board = boardService.boardView(id);
-        List<Comment> comments = commentService.getCommentsByBoardId(id);
-        model.addAttribute("board", board);
-        model.addAttribute("comments", comments);
-        model.addAttribute("loggedInUser", userDetails); // 로그인한 사용자 정보 추가
-        return "boardView";
+        Board board = boardService.boardView(id); // 게시글 ID로 게시글을 가져옴
+        List<Comment> comments = commentService.getCommentsByBoardId(id); // 게시글 ID로 댓글 리스트를 가져옴
+        model.addAttribute("board", board); // 게시글 정보를 모델에 추가
+        model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가
+        model.addAttribute("loggedInUser", userDetails); // 로그인된 사용자 정보를 모델에 추가
+        return "boardView"; // 게시글 상세 페이지로 이동
     }
 
-
+    // 게시글 수정 폼을 보여주는 메서드
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {
-        model.addAttribute("board", boardService.boardView(id));
-        return "boardmodify";
+        model.addAttribute("board", boardService.boardView(id)); // 수정할 게시글 정보를 모델에 추가
+        return "boardmodify"; // 게시글 수정 페이지로 이동
     }
 
+    // 게시글 작성 처리 메서드
     @PostMapping("/board/writepro")
     public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception {
         logger.info("게시글 작성 시작");
 
-        board.setViewcount(0);
-        board.setCreateDate(LocalDateTime.now());
+        board.setViewcount(0); // 조회수 초기화
+        board.setCreateDate(LocalDateTime.now()); // 게시글 작성 시간 설정
 
         try {
-            Board savedBoard = boardService.write(board, file);
+            Board savedBoard = boardService.write(board, file); // 게시글 저장
             logger.info("게시글 저장 완료: " + savedBoard.getId());
 
-            notificationService.notify(savedBoard);
+            notificationService.notify(savedBoard); // 알림 생성
             logger.info("알림 생성 완료");
 
-            model.addAttribute("message", "글 작성이 완료 되었습니다.");
-            model.addAttribute("searchUrl", "/board/view?id=" + savedBoard.getId());
-
-            logger.info("메시지 페이지로 이동 준비");
-
-            return "message";
+            // 게시글 상세 페이지로 리다이렉트
+            return "redirect:/board/view?id=" + savedBoard.getId();
         } catch (Exception e) {
             logger.error("게시글 작성 중 오류 발생", e);
-            model.addAttribute("message", "게시글 작성 중 오류가 발생했습니다.");
-            model.addAttribute("searchUrl", "/board/write");
-            return "message";
+            model.addAttribute("message", "게시글 작성 중 오류가 발생했습니다."); // 오류 메시지를 모델에 추가
+            model.addAttribute("searchUrl", "/board/write"); // 게시글 작성 페이지 URL을 모델에 추가
+            return "message"; // 메시지 페이지로 이동
         }
     }
 
+    // 게시글 수정 처리 메서드
     @PostMapping("/board/update/{id}")
     public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model, MultipartFile file) throws Exception {
-        Board boardTemp = boardService.boardView(id);
+        Board boardTemp = boardService.boardView(id); // 기존 게시글 정보를 가져옴
 
-        boardTemp.setTitle(board.getTitle());
-        boardTemp.setContent(board.getContent());
-        boardTemp.setModifyDate(LocalDateTime.now());
+        boardTemp.setTitle(board.getTitle()); // 게시글 제목 수정
+        boardTemp.setContent(board.getContent()); // 게시글 내용 수정
+        boardTemp.setModifyDate(LocalDateTime.now()); // 게시글 수정 시간 설정
 
-        boardService.write(boardTemp, file);
+        boardService.write(boardTemp, file); // 수정된 게시글 저장
 
-        model.addAttribute("message", "글 수정이 완료 되었습니다.");
-        model.addAttribute("searchUrl", "redirect:/board/view?id=" + id);
+        model.addAttribute("message", "글 수정이 완료 되었습니다."); // 성공 메시지를 모델에 추가
+        model.addAttribute("searchUrl", "redirect:/board/view?id=" + id); // 게시글 상세 페이지 URL을 모델에 추가
 
-        return "message";
+        return "message"; // 메시지 페이지로 이동
     }
 
+    // 댓글 추가 처리 메서드
     @PostMapping("/board/add-comment/{boardId}")
     public String addComment(@PathVariable Integer boardId, @AuthenticationPrincipal UserDetails userDetails, @RequestParam String content) {
-        commentService.addComment(boardId, content, userDetails);
-        return "redirect:/board/view?id=" + boardId;
+        commentService.addComment(boardId, content, userDetails); // 댓글 추가
+        return "redirect:/board/view?id=" + boardId; // 게시글 상세 페이지로 리다이렉트
     }
 
-
+    // 파일 업로드 크기 초과 예외 처리 메서드
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleMaxUploadSizeExceeded(MaxUploadSizeExceededException e, RedirectAttributes redirectAttributes) {
         logger.warn("파일 업로드 크기 초과", e);
-        redirectAttributes.addFlashAttribute("message", "파일 업로드 크기를 초과했습니다. 최대 파일 크기는 10MB입니다.");
-        return "redirect:/board/write";
+        redirectAttributes.addFlashAttribute("message", "파일 업로드 크기를 초과했습니다. 최대 파일 크기는 10MB입니다."); // 오류 메시지를 리다이렉트 속성에 추가
+        return "redirect:/board/write"; // 게시글 작성 페이지로 리다이렉트
     }
 }
+

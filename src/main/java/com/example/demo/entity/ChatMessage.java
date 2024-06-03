@@ -37,4 +37,8 @@ public class ChatMessage {
 
     @Transient
     private Long receiverId;
+
+    public String getSenderNickname() {
+        return sender.getNickname();
+    }
 }

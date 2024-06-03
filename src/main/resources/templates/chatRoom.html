@@ -50,16 +50,14 @@
       <script th:inline="javascript">
         $(document).ready(function () {
           function displayMessage(message) {
+            var senderName = message.sender.nickname; // 보낸 사람의 닉네임
+            var timestamp = new Date(message.timestamp);
+            var options = { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul' };
+            var formattedTime = timestamp.toLocaleTimeString('ko-KR', options);
+
             var str = "<div class='col-6'>";
             str += "<div class='alert alert-info'>";
-            str +=
-              "<b>" +
-              message.sender +
-              " : " +
-              message.content +
-              " [" +
-              message.timestamp +
-              "]</b>";
+            str += "<b>" + senderName + " : " + message.content + " [" + formattedTime + "]</b>";
             str += "</div></div>";
             $("#msgArea").append(str);
           }
@@ -80,10 +78,7 @@
                 }
               })
               .catch((error) => {
-                console.error(
-                  "There has been a problem with your fetch operation:",
-                  error,
-                );
+                console.error("There has been a problem with your fetch operation:", error);
               });
           }
 
@@ -116,11 +111,7 @@
               content: document.getElementById("msg").value,
               chatRoomId: chatRoomId,
             };
-            stompClient.send(
-              "/app/chat.sendMessage",
-              {},
-              JSON.stringify(message),
-            );
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message));
 
             document.getElementById("msg").value = "";
           }
@@ -134,6 +125,7 @@
           };
         });
       </script>
+
     </div>
   </body>
 </html>
