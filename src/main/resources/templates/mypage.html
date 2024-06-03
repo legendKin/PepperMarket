@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>My Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <h1>My Page</h1>
@@ -16,7 +17,7 @@
 <!-- 프로필 정보 변경 섹션 -->
 <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
-    <form th:action="@{/myPage/change-profile-info}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/mypage/change-profile-info}" method="post" enctype="multipart/form-data">
         <label for="file">프로필 사진:</label>
         <input type="file" name="file" id="file"><br>
 
@@ -24,7 +25,8 @@
         <input type="text" name="nickname" id="nickname" th:value="${user.nickname}"><br>
 
         <label for="email">이메일:</label>
-        <input type="email" name="email" id="email" th:value="${user.email}"><br>
+        <input type="email" name="email" id="email" th:value="${user.email}" readonly><br>
+
 
         <label for="name">이름:</label>
         <input type="text" name="name" id="name" th:value="${user.name}"><br>
@@ -179,6 +181,23 @@
         loadNotifications();
         loadChatRooms();
     });
+
+    // 닉네임 중복안되게 처리
+    function checkNickname() {
+        var nickname = $('#nickname').val();
+        $.ajax({
+            url: '/api/users/check-nickname',
+            type: 'GET',
+            data: { nickname: nickname },
+            success: function(response) {
+                if (response) {
+                    $('#nickname-check-result').text('이미 사용 중인 닉네임입니다.');
+                } else {
+                    $('#nickname-check-result').text('사용 가능한 닉네임입니다.');
+                }
+            }
+        });
+    }
 </script>
 
 </body>

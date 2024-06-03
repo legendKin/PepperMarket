@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Board;
+import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +18,15 @@ public class MainController {
     private BoardService boardService;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails != null) {
+            model.addAttribute("user", principalDetails.getUsers());
+        }
 
         List<Board> topPosts = boardService.getTop10PostsByViewcount();
         model.addAttribute("topPosts", topPosts);
 
-        return "main";
+        return "main"; // main.html 템플릿 반환
     }
 
     @GetMapping("/chat")
