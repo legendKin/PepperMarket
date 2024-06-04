@@ -2,6 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
+// 수정된 부분: import 구문 추가
+import com.example.demo.entity.ViewedPost;
+import com.example.demo.service.ViewedPostService;
+
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.CommentService;
@@ -44,6 +48,10 @@ public class BoardController {
     @Autowired
     private NotificationService notificationService;
 
+    // 수정된 부분: ViewedPostService 빈 주입
+    @Autowired
+    private ViewedPostService viewedPostService;
+
     // 게시글 작성 폼을 보여주는 메서드
     @GetMapping("/board/write")
     public String boardWriteForm(Model model, Authentication authentication) {
@@ -65,14 +73,11 @@ public class BoardController {
         // 검색어와 카테고리 ID가 모두 있는 경우
         if (searchKeyword != null && searchCateID != null) {
             list = boardService.searchByKeywordAndCateID(searchKeyword, searchCateID, pageable);
-            // 검색어만 있는 경우
-        } else if (searchKeyword != null) {
+        } else if (searchKeyword != null) { // 검색어만 있는 경우
             list = boardService.boardSearchList(searchKeyword, pageable);
-            // 카테고리 ID만 있는 경우
-        } else if (searchCateID != null) {
+        } else if (searchCateID != null) { // 카테고리 ID만 있는 경우
             list = boardService.searchByCateID(searchCateID, pageable);
-            // 검색어와 카테고리 ID가 모두 없는 경우
-        } else {
+        } else { // 검색어와 카테고리 ID가 모두 없는 경우
             list = boardService.boardList(pageable);
         }
 
@@ -113,7 +118,18 @@ public class BoardController {
         model.addAttribute("board", board); // 게시글 정보를 모델에 추가
         model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가
         model.addAttribute("loggedInUser", userDetails); // 로그인된 사용자 정보를 모델에 추가
+
+        //  최근 본 상품 추가
+        Long userId = getCurrentUserId();
+        viewedPostService.addViewedPost(userId, Long.valueOf(id));
+
         return "boardView"; // 게시글 상세 페이지로 이동
+    }
+
+    //  현재 사용자 ID를 가져오는 메서드 추가
+    private Long getCurrentUserId() {
+        // 실제 사용자 ID를 가져오는 로직으로 대체해야 합니다.
+        return 1L; // 예시로 1을 반환
     }
 
     // 게시글 수정 폼을 보여주는 메서드
@@ -193,5 +209,14 @@ public class BoardController {
         boardService.boardDelete(id); // 게시글 삭제
 
         return "redirect:/board/list";
+    }
+
+    //  최근 본 상품 목록 조회 메서드 추가
+    @GetMapping("/board/recentViewedPosts")
+    public String recentViewedPosts(Model model) {
+        Long userId = getCurrentUserId();
+        List<ViewedPost> viewedPosts = viewedPostService.getRecentViewedPosts(userId);
+        model.addAttribute("viewedPosts", viewedPosts);
+        return "recentViewedPosts";
     }
 }
