@@ -78,7 +78,7 @@
 }
 
 .search-cate {
-  width: 200px;
+  width: 200px !important;
 }
 
 .search-box {
