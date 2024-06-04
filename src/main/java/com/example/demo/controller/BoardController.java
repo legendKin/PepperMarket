@@ -130,6 +130,9 @@ public class BoardController {
         String writerPic = board.getUser().getProfilePictureUrl();
         model.addAttribute("writerPic", writerPic);
 
+        Long userPostCount = boardService.getBoardCountByUserId(board.getUser().getId());
+        model.addAttribute("userPostCount", userPostCount);
+
 
 
 

@@ -153,7 +153,9 @@ public class BoardService {
         }
         return categoryPostCounts;
     }
-
+    public long getBoardCountByUserId(Long userId) {
+        return boardRepository.countByUserId(userId);
+    }
 
 
 }

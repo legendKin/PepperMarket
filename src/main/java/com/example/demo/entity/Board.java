@@ -19,9 +19,10 @@ import static com.example.demo.service.CategoryService.categoryList;
 /**
  * 게시글을 나타내는 엔티티 클래스입니다.
  */
+
+@Entity
 @Getter
 @Setter
-@Entity
 @Data
 public class Board {
     @Id

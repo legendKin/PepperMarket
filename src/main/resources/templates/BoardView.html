@@ -43,10 +43,15 @@
                     class="profile-img"
                   />
                   <div class="profile-info">
-                    <div class="seller-name"></div>
+                    <div
+                      class="seller-name"
+                      th:text="${board.user.nickname}"
+                    ></div>
                     <div class="seller-items">
                       <div class="item-count-label">판매상품</div>
-                      <div class="item-count" th:text="${board}">####개</div>
+                      <div class="item-count" th:text="${userPostCount}">
+                        ####개
+                      </div>
                     </div>
                     <div class="rating">
                       <img
