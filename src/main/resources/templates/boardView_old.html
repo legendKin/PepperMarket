@@ -1,57 +1,61 @@
 <!doctype html>
 <html
-  layout:decorate="~{layouts/layout}"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{layouts/layout}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org"
 >
-  <head>
-    <title th:text="${board.title}">게시글 보기</title>
-  </head>
-  <body>
-    <div layout:fragment="content">
-      <div>
-        <h2 th:text="${board.title}">제목</h2>
-        <p th:text="${board.content}">내용</p>
-        <img alt="게시글 이미지" th:src="@{${board.filepath}}" />
-      </div>
+<head>
+  <title th:text="${board.title}">게시글 보기</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div>
+    <h2 th:text="${board.title}">제목</h2>
 
-      <div>
-        <h3>댓글</h3>
-        <div th:each="comment : ${comments}">
-          <p th:text="${comment.nickname}">Nickname</p>
-          <p th:text="${comment.content}">Content</p>
-        </div>
-      </div>
+    <img alt="게시글 이미지" th:src="@{${board.filepath}}" />
+    <br/>
+    <p th:text="${board.content}">내용</p>
+    <br/><br/>
+  </div>
 
-      <div>
-        <h3>댓글 작성</h3>
-        <form
-          method="post"
-          th:action="@{/board/add-comment/{boardId}(boardId=${board.id})}"
-        >
-          <textarea name="content" placeholder="댓글 내용" required></textarea>
-          <button type="submit">댓글 작성</button>
+  <div>
+    <h3>댓글</h3>
+    <br/>
+    <div th:each="comment : ${comments}">
+      <p th:text="${comment.nickname}">Nickname</p>
+      <p th:text="${comment.content}">Content</p>
+      <th:block th:if="${loggedInUser != null && loggedInUser.username == comment.user.email}">
+        <form method="post" style="display:inline;" th:action="@{/comment/delete/{id}(id=${comment.id})}">
+          <input name="_method" type="hidden" value="DELETE"/>
+          <button type="submit">댓글 삭제</button>
         </form>
-      </div>
-
-      <div>
-        <a th:href="@{/board/list}">목록으로 돌아가기</a>
-        <th:block
-          th:if="${loggedInUser != null && loggedInUser.username == board.user.email}"
-        >
-          <a th:href="@{/board/delete/{id}(id=${board.id})}">글 삭제</a>
-          <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
-        </th:block>
-        <th:block
-          th:if="${board.user != null && loggedInUser != null && loggedInUser.username != board.user.email}"
-        >
-          <a
-            class="btn btn-primary"
-            th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
-            >1:1 채팅</a
-          >
-        </th:block>
-      </div>
+      </th:block>
+      <br/>
     </div>
-  </body>
+  </div>
+
+  <div>
+    <h3>댓글 작성</h3>
+    <form method="post" th:action="@{/board/add-comment/{boardId}(boardId=${board.id})}">
+      <textarea name="content" placeholder="댓글 내용" required></textarea>
+      <button type="submit">댓글 작성</button>
+    </form>
+  </div>
+
+  <div>
+    <a th:href="@{/board/list}">목록으로 돌아가기</a>
+    <th:block th:if="${loggedInUser != null && loggedInUser.username == board.user.email}">
+      <a th:href="@{/board/delete/{id}(id=${board.id})}">글 삭제</a>
+      <a th:href="@{/board/modify/{id}(id=${board.id})}">글 수정</a>
+    </th:block>
+    <th:block th:if="${board.user != null && loggedInUser != null && loggedInUser.username != board.user.email}">
+      <a
+              class="btn btn-primary"
+              th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
+      >1:1 채팅</a
+      >
+    </th:block>
+  </div>
+</div>
+</body>
 </html>

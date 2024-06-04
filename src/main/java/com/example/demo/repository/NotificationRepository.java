@@ -10,5 +10,5 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findByUser(Users user);
     @Transactional
-    void deleteByBoardId(Long boardId);
+    void deleteByBoardId(Integer boardId);
 }
