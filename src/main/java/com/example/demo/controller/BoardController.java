@@ -52,6 +52,13 @@ public class BoardController {
     @Autowired
     private ViewedPostService viewedPostService;
 
+    @Autowired
+    public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService) {
+        this.boardService = boardService;
+        this.commentService = commentService;
+        this.notificationService = notificationService;
+    }
+
     // 게시글 작성 폼을 보여주는 메서드
     @GetMapping("/board/write")
     public String boardWriteForm(Model model, Authentication authentication) {
@@ -205,6 +212,7 @@ public class BoardController {
             return "redirect:/board/list";
         }
 
+        notificationService.deleteNotificationsByBoardId(id); // 게시글의 알림 삭제
         commentService.deleteCommentsByBoardId(id); // 게시글의 댓글 삭제
         boardService.boardDelete(id); // 게시글 삭제
 

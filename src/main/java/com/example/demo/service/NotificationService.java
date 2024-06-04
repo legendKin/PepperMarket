@@ -70,4 +70,9 @@ public class NotificationService {
         notification.setRead(true); // 알림을 읽음 상태로 설정
         notificationRepository.save(notification); // 알림 저장
     }
+
+    // 특정 게시글과 관련된 알림을 삭제하는 메서드 추가
+    public void deleteNotificationsByBoardId(Integer boardId) {
+        notificationRepository.deleteByBoardId(boardId);
+    }
 }
