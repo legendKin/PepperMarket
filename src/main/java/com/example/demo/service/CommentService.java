@@ -54,4 +54,21 @@ public class CommentService {
     public void deleteCommentsByBoardId(Integer boardId) {
         commentRepository.deleteByBoardId(boardId);
     }
+
+    // 특정 댓글을 ID로 삭제하는 메서드
+    public void deleteCommentById(Integer commentId) {
+        commentRepository.deleteById(commentId);
+    }
+
+    // 댓글 작성자 확인 메서드
+    public boolean isCommentOwner(Integer commentId, String username) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
+        return comment.getUser().getEmail().equals(username);
+    }
+
+    // 댓글 ID로 게시글 ID를 가져오는 메서드 추가
+    public Integer getBoardIdByCommentId(Integer commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
+        return comment.getBoard().getId();
+    }
 }

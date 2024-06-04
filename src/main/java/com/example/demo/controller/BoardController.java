@@ -195,6 +195,9 @@ public class BoardController {
         return "redirect:/board/view?id=" + boardId; // 게시글 상세 페이지로 리다이렉트
     }
 
+
+
+
     // 파일 업로드 크기 초과 예외 처리 메서드
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleMaxUploadSizeExceeded(MaxUploadSizeExceededException e, RedirectAttributes redirectAttributes) {
