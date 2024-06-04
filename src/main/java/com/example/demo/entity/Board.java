@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 
 import static com.example.demo.service.CategoryService.categoryList;
 
@@ -38,6 +40,7 @@ public class Board {
     private Integer likecount; // 좋아요 수
     private Integer cateID; // 카테고리 ID
     private String categName; // 카테고리 이름
+    private String quality;
     private Integer status; // 판매 상태 1:판매중, 2:예약중 3:판매완료
 
 
@@ -57,6 +60,15 @@ public class Board {
         categName = categoryList.get(cateID - 1);
         return categName;
     }
+    public String qualityHangul(){
+        if(quality.equals("perfect")){
+            return "매우 좋음";
+        }else if(quality.equals("good")){
+            return "좋음";
+        }else{
+            return "보통";
+        }
+    }
 
     public Long getWriter(){
         return user.getId();
@@ -66,7 +78,18 @@ public class Board {
         return user.getProfilePictureUrl();
     }
 
-
+    public String getFormattedPrice() {
+        if (price == null || price.isEmpty()) {
+            return "가격 정보 없음";
+        }
+        try {
+            double priceValue = Double.parseDouble(price);
+            DecimalFormat decimalFormat = new DecimalFormat("#,###");
+            return decimalFormat.format(priceValue);
+        } catch (NumberFormatException e) {
+            return "잘못된 가격 형식";
+        }
+    }
 
 
 

@@ -1,214 +1,136 @@
 <!doctype html>
 <html
-  lang="ko"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layouts/layout}"
+        lang="ko"
+        layout:decorate="~{layouts/layout}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org"
 >
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title th:text="${board.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/boardview.css}" />
-  </head>
-  <body>
-    <div layout:fragment="content">
-      <section>
+    <link rel="stylesheet" th:href="@{/css/boardview.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="wrapper">
         <div class="product-container">
-          <div class="left-section">
-            <div id="swiper-wrap">
-              <div class="swiper-container swiper-content">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <div class="ev_detail"></div>
-                  </div>
+            <div class="left-section">
+                <div class="product-image">
+                    <img alt="게시글 이미지" th:src="@{${board.filepath}}"/>
                 </div>
-              </div>
-
-              <!--              <div class="swiper-container swiper-nav">-->
-              <!--                <div class="swiper-wrapper">-->
-              <!--                  <div class="swiper-slide active-nav">-->
-              <!--                    <img src="img/1.webp" alt="썸네일 1" />-->
-              <!--                    <div class="cover"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </div>-->
-            </div>
-
-            <div class="seller-info">
-              <div class="seller-profile">
-                <a href="" class="seller-link">
-                  <img
-                    th:src="${board.writerPic}"
-                    alt="프로필 이미지"
-                    class="profile-img"
-                  />
-                  <div class="profile-info">
-                    <div
-                      class="seller-name"
-                      th:text="${board.user.nickname}"
-                    ></div>
-                    <div class="seller-items">
-                      <div class="item-count-label">판매상품</div>
-                      <div class="item-count" th:text="${userPostCount}">
-                        ####개
-                      </div>
+                
+                <div class="seller-info">
+                    <div class="seller-profile">
+                        <a class="seller-link" href="">
+                            <img
+                                    alt="프로필 이미지"
+                                    class="profile-img"
+                                    th:src="${board.writerPic}"
+                            />
+                            <div class="profile-info">
+                                <div
+                                        class="seller-name"
+                                        th:text="${board.user.nickname}"
+                                ></div>
+                                <div class="seller-items">
+                                    <div class="item-count-label">판매상품</div>
+                                    <div class="item-count" th:text="${userPostCount}">
+                                    </div>
+                                </div>
+                                <div class="rating">
+                                    <img
+                                            alt="rating"
+                                            class="star"
+                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                                    />
+                                    <img
+                                            alt="rating"
+                                            class="star"
+                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                                    />
+                                    <img
+                                            alt="rating"
+                                            class="star"
+                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                                    />
+                                    <img
+                                            alt="rating"
+                                            class="star"
+                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                                    />
+                                    <img
+                                            alt="rating"
+                                            class="star"
+                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                                    />
+                                    <div class="rating-count">(0)</div>
+                                </div>
+                            </div>
+                        </a
+                        >
                     </div>
-                    <div class="rating">
-                      <img
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                        class="star"
-                      />
-                      <img
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                        class="star"
-                      />
-                      <img
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                        class="star"
-                      />
-                      <img
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                        class="star"
-                      />
-                      <img
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                        class="star"
-                      />
-                      <div class="rating-count">(0)</div>
+                    <!--              <img-->
+                    <!--                src="https://ccimage.hellomarket.com/img/web/common/not_following.png"-->
+                    <!--                alt="팔로우 버튼 이미지"-->
+                    <!--                class="follow-btn"-->
+                    <!--              />-->
+                </div>
+            </div>
+            <div class="right-section">
+                
+                <div class="product-info">
+                    <div class="category-box" th:text="${board.categName}">카테고리명</div>
+                    <div class="product-name" th:text="${board.title}">상품명</div>
+                    <div class="price" th:text="${board.getFormattedPrice} + 원">###,###원</div>
+                </div>
+                
+                <div class="product-status">
+                    <div class="view-count" th:text="|조회수 ${board.viewcount}|">
+                    
                     </div>
-                  </div></a
-                >
-              </div>
-              <img
-                src="https://ccimage.hellomarket.com/img/web/common/not_following.png"
-                alt="팔로우 버튼 이미지"
-                class="follow-btn"
-              />
+                    <div class="additional-info">
+                        <div class="condition" th:text="|제품 상태: ${board.qualityHangul()}|"></div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <div class="like-chat">
+                        <div class="like-button">
+                            <img
+                                    alt="좋아요 아이콘"
+                                    class="like-icon"
+                                    src="https://ccimage.hellomarket.com/img/web/item/detail/ico_wish_default.png"
+                            />
+                            <div class="like-count">1</div>
+                        </div>
+                        <div class="chat-button">
+                            <img
+                                    alt="채팅 아이콘"
+                                    class="chat-icon"
+                                    src="https://ccimage.hellomarket.com/img/web/item/detail/ico_hellotalk.svg"
+                            />
+                            <div class="chat-text">채팅하기</div>
+                        </div>
+                        <!--              <div class="secure-payment-button">-->
+                        <!--                <img-->
+                        <!--                  src="https://ccimage.hellomarket.com/img/web/item/detail/ico_purchase_default.svg"-->
+                        <!--                  alt="안전결제 아이콘"-->
+                        <!--                  class="payment-icon"-->
+                        <!--                />-->
+                        <!--                <div class="payment-text">안전결제</div>-->
+                        <!--              </div>-->
+                    </div>
+                </div>
+                
+                <div class="product-description" th:text="${board.content}">상품"description"</div>
+            
             </div>
-          </div>
         </div>
-
-        <div class="right-section">
-          <div class="icon-bar">
-            <img
-              src="https://ccimage.hellomarket.com/img/web/item/detail/ico_report.png"
-              alt="신고하기"
-              class="icon"
-            />
-            <img
-              src="https://ccimage.hellomarket.com/img/web/item/detail/ico_share.png"
-              alt="공유하기"
-              class="icon"
-            />
-          </div>
-
-          <div class="product-info">
-            <div class="brand-name" th:text="${board.categName}">브랜드명</div>
-            <div class="product-name" th:text="${board.title}">상품명</div>
-            <div class="price" th:text="${board.price} + 원">###,###원</div>
-          </div>
-
-          <div class="product-status">
-            <div class="view-count" th:text="${board.viewcount} + 조회">
-              ##조회
-            </div>
-            <div class="additional-info">
-              <div class="size">### Size</div>
-              <div class="condition">상품 상태</div>
-            </div>
-          </div>
-
-          <div class="action-buttons">
-            <div class="like-chat">
-              <div class="like-button">
-                <img
-                  src="https://ccimage.hellomarket.com/img/web/item/detail/ico_wish_default.png"
-                  alt="좋아요 아이콘"
-                  class="like-icon"
-                />
-                <div class="like-count">1</div>
-              </div>
-              <div class="chat-button">
-                <img
-                  src="https://ccimage.hellomarket.com/img/web/item/detail/ico_hellotalk.svg"
-                  alt="채팅 아이콘"
-                  class="chat-icon"
-                />
-                <div class="chat-text">채팅하기</div>
-              </div>
-              <div class="secure-payment-button">
-                <img
-                  src="https://ccimage.hellomarket.com/img/web/item/detail/ico_purchase_default.svg"
-                  alt="안전결제 아이콘"
-                  class="payment-icon"
-                />
-                <div class="payment-text">안전결제</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-description">
-            <div class="description-text">
-              제목: ######### <br />
-              사이즈:###<br /><br />
-              ex) 2번 신어서 신발 향기 매우 좋습니다. 너무 아까워서 싸게
-              올려봅니다. ㅜ 상태 보고 결정 하셔도 됩니다. 많은 연락 부탁드려요
-            </div>
-          </div>
-
-          <div class="product-category">
-            <div class="category-label">카테고리</div>
-            <div class="category-path">
-              <div class="main-category">대분류</div>
-              <img
-                src="https://ccimage.hellomarket.com/img/web/item/detail/ico_arrow_right_category.png"
-                alt="오른쪽 화살표 아이콘"
-                class="arrow-icon"
-              />
-              <div class="sub-category">중분류</div>
-            </div>
-          </div>
-
-          <div class="shipping-info">
-            <div class="shipping-label">배송정보</div>
-            <div class="shipping-method">
-              <img
-                src="https://ccimage.hellomarket.com/img/web/item/detail/img_delivery_method.png"
-                alt="배송방법 이미지"
-                class="method-icon"
-              />
-              <div class="method-text">배송방법</div>
-              <div class="method-detail">판매자가 알아서 배송</div>
-            </div>
-            <div class="shipping-fee">
-              <img
-                src="https://ccimage.hellomarket.com/img/web/item/detail/img_delivery_fee.png"
-                alt="배송비 이미지"
-                class="fee-icon"
-              />
-              <div class="fee-text">배송비</div>
-              <div class="fee-detail">무료배송</div>
-            </div>
-          </div>
-
-          <div class="secure-payment-notice">
-            <img
-              src="https://ccimage.hellomarket.com/img/web/item/detail/ico_safe_payment.svg"
-              alt="안전결제 노티스 아이콘"
-              class="notice-icon"
-            />
-            <div class="notice-text">
-              <div class="notice-title">안전결제</div>
-              외 거래는 사기피해 보호를 받을 수 없습니다.
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </body>
+    
+    
+    </section>
+</div>
+</section>
+</div>
+</body>
 </html>
