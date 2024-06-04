@@ -3,13 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 // 수정된 부분: import 구문 추가
+import com.example.demo.entity.Users;
 import com.example.demo.entity.ViewedPost;
-import com.example.demo.service.ViewedPostService;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.*;
 
-import com.example.demo.service.BoardService;
-import com.example.demo.service.CategoryService;
-import com.example.demo.service.CommentService;
-import com.example.demo.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +49,10 @@ public class BoardController {
     // 수정된 부분: ViewedPostService 빈 주입
     @Autowired
     private ViewedPostService viewedPostService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     // 게시글 작성 폼을 보여주는 메서드
     @GetMapping("/board/write")
@@ -112,7 +114,7 @@ public class BoardController {
 
     // 특정 게시글을 보여주는 메서드
     @GetMapping("/board/view")
-    public String boardView(Model model, Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+    public String boardView(Model model, Integer id, @AuthenticationPrincipal UserDetails userDetails, Users user) {
         Board board = boardService.boardView(id); // 게시글 ID로 게시글을 가져옴
         List<Comment> comments = commentService.getCommentsByBoardId(id); // 게시글 ID로 댓글 리스트를 가져옴
         model.addAttribute("board", board); // 게시글 정보를 모델에 추가
@@ -123,7 +125,15 @@ public class BoardController {
         Long userId = getCurrentUserId();
         viewedPostService.addViewedPost(userId, Long.valueOf(id));
 
-        return "boardView"; // 게시글 상세 페이지로 이동
+        String writer = board.getUser().getName();
+        model.addAttribute("writer", writer);
+        String writerPic = board.getUser().getProfilePictureUrl();
+        model.addAttribute("writerPic", writerPic);
+
+
+
+
+        return "BoardView"; // 게시글 상세 페이지로 이동
     }
 
     //  현재 사용자 ID를 가져오는 메서드 추가

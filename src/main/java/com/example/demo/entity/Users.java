@@ -66,4 +66,5 @@ public class Users {
     @Temporal(TemporalType.DATE)
     private Date birthdate; // 생년월일
 
+
 }

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor // Lombok을 사용하여 필요한 생성자를 자동으로 생성
@@ -38,4 +41,6 @@ public class UserService {
     public Optional<Users> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+
 }

@@ -153,4 +153,7 @@ public class BoardService {
         }
         return categoryPostCounts;
     }
+
+
+
 }

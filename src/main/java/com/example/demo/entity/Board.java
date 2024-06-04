@@ -61,6 +61,13 @@ public class Board {
         return user.getId();
     }
 
+    public String getWriterPic(){
+        return user.getProfilePictureUrl();
+    }
+
+
+
+
 
 
 
