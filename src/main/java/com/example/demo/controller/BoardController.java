@@ -161,15 +161,17 @@ public class BoardController {
             notificationService.notify(savedBoard); // 알림 생성
             logger.info("알림 생성 완료");
 
-            // 게시글 상세 페이지로 리다이렉트
-            return "redirect:/board/view?id=" + savedBoard.getId();
+            model.addAttribute("message", "게시글 작성 완료했습니다.");
+            model.addAttribute("redirectUrl", "/board/view?id=" + savedBoard.getId());
+            return "message";
         } catch (Exception e) {
             logger.error("게시글 작성 중 오류 발생", e);
             model.addAttribute("message", "게시글 작성 중 오류가 발생했습니다."); // 오류 메시지를 모델에 추가
-            model.addAttribute("searchUrl", "/board/write"); // 게시글 작성 페이지 URL을 모델에 추가
+            model.addAttribute("redirectUrl", "/board/write"); // 게시글 작성 페이지 URL을 모델에 추가
             return "message"; // 메시지 페이지로 이동
         }
     }
+
 
     // 게시글 수정 처리 메서드
     @PostMapping("/board/update/{id}")
@@ -182,10 +184,9 @@ public class BoardController {
 
         boardService.write(boardTemp, file); // 수정된 게시글 저장
 
-        model.addAttribute("message", "글 수정이 완료 되었습니다."); // 성공 메시지를 모델에 추가
-        model.addAttribute("searchUrl", "redirect:/board/view?id=" + id); // 게시글 상세 페이지 URL을 모델에 추가
-
-        return "message"; // 메시지 페이지로 이동
+        model.addAttribute("message", "글 수정이 완료되었습니다.");
+        model.addAttribute("redirectUrl", "/board/view?id=" + id);
+        return "message";
     }
 
     // 댓글 추가 처리 메서드
@@ -208,21 +209,24 @@ public class BoardController {
 
     // 게시글 삭제 처리 메서드
     @GetMapping("/board/delete/{id}")
-    public String boardDelete(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
+    public String boardDelete(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
         Board board = boardService.boardView(id);
         if (!board.getUser().getEmail().equals(userDetails.getUsername())) {
-            redirectAttributes.addFlashAttribute("message", "작성자만 글을 삭제할 수 있습니다.");
-            return "redirect:/board/list";
+            model.addAttribute("message", "작성자만 글을 삭제할 수 있습니다.");
+            model.addAttribute("redirectUrl", "/board/list");
+            return "message";
         }
 
         notificationService.deleteNotificationsByBoardId(id); // 게시글의 알림 삭제
         commentService.deleteCommentsByBoardId(id); // 게시글의 댓글 삭제
         boardService.boardDelete(id); // 게시글 삭제
 
-        return "redirect:/board/list";
+        model.addAttribute("message", "게시글 삭제 완료했습니다.");
+        model.addAttribute("redirectUrl", "/board/list");
+        return "message";
     }
 
-    //  최근 본 상품 목록 조회 메서드 추가
+        //  최근 본 상품 목록 조회 메서드 추가
     @GetMapping("/board/recentViewedPosts")
     public String recentViewedPosts(Model model) {
         Long userId = getCurrentUserId();
