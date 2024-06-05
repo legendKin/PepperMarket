@@ -16,7 +16,7 @@
         <div class="product-container">
             <div class="left-section">
                 <div class="product-image">
-                    <img alt="게시글 이미지" th:src="@{${board.filepath}}"/>
+                        <img alt="게시글 이미지" th:src="@{${board.filepath}}"/>
                 </div>
                 
                 <div class="seller-info">
@@ -85,10 +85,12 @@
                 </div>
                 
                 <div class="product-status">
-                    <div class="view-count" th:text="|조회수 ${board.viewcount}|">
-                    
+                    <div class="left">
+                        <div class="view-count" th:text="|조회수 ${board.viewcount}|"></div>
+<!--                        <div class="written-date" th:text="|시간 ${board.}|"></div>-->
                     </div>
-                    <div class="additional-info">
+                    
+                    <div class="additional-info right">
                         <div class="condition" th:text="|제품 상태: ${board.qualityHangul()}|"></div>
                         <div class="time-ago" th:text="|${board.timeAgo}|"></div>
                     </div>
@@ -104,13 +106,19 @@
                             />
                             <div class="like-count">1</div>
                         </div>
-                        <div class="chat-button">
-                            <img
-                                    alt="채팅 아이콘"
-                                    class="chat-icon"
-                                    src="https://ccimage.hellomarket.com/img/web/item/detail/ico_hellotalk.svg"
-                            />
-                            <div class="chat-text">판매자와 채팅하기</div>
+                        <div class="chat-button edit-button">
+                            <th:block th:if="${board.user != null && loggedInUser != null && loggedInUser.username != board.user.email}">
+                                <a
+                                        class="chat-text"
+                                        th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
+                                ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>판매자와 채팅하기</a
+                                >
+                            </th:block>
+                            <th:block th:if="${board.user != null && loggedInUser != null && board.writer ==  loggedUserId}">
+                                <a class="edit-text"
+                                        th:href="@{/board/modify/{id}(id=${board.id})}">
+                                    <i class="far fa-edit edit-icon fa-lg btn-icon"></i>글 수정</a>
+                            </th:block>
                         </div>
                         <!--              <div class="secure-payment-button">-->
                         <!--                <img-->

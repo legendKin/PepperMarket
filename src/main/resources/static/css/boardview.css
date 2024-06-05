@@ -139,7 +139,7 @@ body {
 
 .view-count,
 .additional-info {
-  font-size: 20px;
+  font-size: 15px;
   color: #666;
 }
 
@@ -193,18 +193,24 @@ body {
   border-radius: 10px;
 }
 
-.like-icon,
-.chat-icon,
-.payment-icon {
+.like-icon{
   width: 24px;
   height: 24px;
   margin-right: 5px;
+  font-size: 20px;
+}
+.chat-icon,
+.edit-icon{
+  margin-right: 10px;
 }
 
 .like-count,
 .chat-text,
-.payment-text {
+.payment-text,
+.edit-text{
   font-size: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .product-description {

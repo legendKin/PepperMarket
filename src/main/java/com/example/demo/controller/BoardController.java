@@ -196,6 +196,7 @@ public class BoardController {
         boardTemp.setTitle(board.getTitle()); // 게시글 제목 수정
         boardTemp.setContent(board.getContent()); // 게시글 내용 수정
         boardTemp.setModifyDate(LocalDateTime.now()); // 게시글 수정 시간 설정
+        boardTemp.setStatus(board.getStatus());
 
         boardService.write(boardTemp, file); // 수정된 게시글 저장
 

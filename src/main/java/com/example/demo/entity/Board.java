@@ -61,13 +61,12 @@ public class Board {
         return categName;
     }
     public String qualityHangul(){
-        if(quality.equals("perfect")){
-            return "매우 좋음";
-        }else if(quality.equals("good")){
-            return "좋음";
-        }else{
-            return "보통";
-        }
+        return switch (quality) {
+            case "perfect" -> "매우 좋음";
+            case "good" -> "좋음";
+            case "bad" -> "보통";
+            default -> " ";
+        };
     }
 
     public Long getWriter(){

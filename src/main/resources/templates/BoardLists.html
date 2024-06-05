@@ -62,8 +62,8 @@
                 >
 
                 <div
-                  th:each="board, iterStat : ${categList}"
                   class="category-link-n"
+                  th:each="board, iterStat : ${categList}"
                 >
                   <a
                     class="category-link"
@@ -118,15 +118,18 @@
               <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" th:each="board : ${list}">
                   <div class="card shadow-sm">
+                    <div th:classappend="${board.status != 3 ? 'available' : 'unavailable'}" >
+                    
+                    </div>
                     <a th:href="@{/board/view(id=${board.id})}">
                       <img
+                        alt="상품이미지"
                         class="card-img-top goods-img"
-                        weight="225"
                         height="300"
                         onerror="this.src='/files/default.png'"
                         th:src="${board.filepath}"
+                        weight="225"
                         width="100%"
-                        alt="상품이미지"
                       />
                     </a>
                     <div class="card-body card-box">
@@ -147,16 +150,17 @@
                         <th:block th:unless="${board.writer !=  loggedUserId}">
                           <button
                             class="btn btn-sm btn-outline-secondary edit-button"
+                            
                             type="button"
-                          >
-                            Edit
+                          ><a th:href="@{/board/modify/{id}(id=${board.id})}">Edit</a>
+                          
                           </button>
                         </th:block>
                         <th:block th:if="${board.writer !=  loggedUserId}">
                           <button
                             class="btn btn-sm btn-outline-secondary edit-button"
-                            type="button"
                             style="visibility: hidden"
+                            type="button"
                           >
                             Edit
                           </button>
@@ -179,9 +183,9 @@
                 th:classappend="${nowPage == 1} ? 'disabled'"
               >
                 <a
+                  aria-label="Previous"
                   class="page-link"
                   th:href="@{/board/list(page=${startPage - 1}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
-                  aria-label="Previous"
                 >
                   <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -192,8 +196,8 @@
               >
                 <li
                   class="page-item"
-                  th:if="${page > 0}"
                   th:classappend="${page == nowPage} ? 'active'"
+                  th:if="${page > 0}"
                 >
                   <a
                     class="page-link"
@@ -208,9 +212,9 @@
                 th:classappend="${nowPage == totalPage} ? 'disabled'"
               >
                 <a
+                  aria-label="Next"
                   class="page-link"
                   th:href="@{/board/list(page=${endPage}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
-                  aria-label="Next"
                 >
                   <span aria-hidden="true">&raquo;</span>
                 </a>

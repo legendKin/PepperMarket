@@ -6,13 +6,13 @@
         <div class="header-1">
           <div class="header-notification">
             <a class="header1" href="#">
-              <i class="fa fa-bell-o icon"></i>
+              <i class="far fa-bell icon"></i>
               <div class="badg">나의 알림</div>
             </a>
           </div>
           <div class="header-chat">
             <a class="header1" href="/chat">
-              <i class="fa fa-comment-o icon"></i>
+              <i class="far fa-comment icon"></i>
               <div class="badg">채팅</div>
             </a>
           </div>
@@ -70,8 +70,8 @@
                   <option value=" ">전체 카테고리</option>
                   <th:block th:each="board, iterStat : ${categList}">
                     <option
-                      th:value="${iterStat.index + 1}"
                       th:text="${board}"
+                      th:value="${iterStat.index + 1}"
                     ></option>
                   </th:block>
                   <!--                <option value="none" selected>전체 검색</option>-->
@@ -88,16 +88,16 @@
               </div>
               <div class="search-box">
                 <button type="submit">
-                  <i class="fa fa-search dotbogi"></i>
+                  <i class="fas fa-search dotbogi"></i>
                 </button>
                 <!-- 검색어 입력 폼 -->
                 <input
                   class="search"
                   name="searchKeyword"
                   placeholder="어떤 상품을 찾으시나요?"
-                  type="text"
-                  th:value="${searchKeyword}"
                   required
+                  th:value="${searchKeyword}"
+                  type="text"
                 />
               </div>
             </form>
@@ -105,7 +105,7 @@
           <div class="upload-wrapper">
             <a class="btn btn-primary write" href="/board/write" role="button">
               <p>
-                <i aria-hidden="true" class="fa fa-pencil-square"> &nbsp; </i>
+                <i aria-hidden="true" class="fas fa-pen-square"> &nbsp; </i>
                 상품 올리기
               </p>
             </a>
