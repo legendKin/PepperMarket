@@ -123,6 +123,8 @@ public class BoardController {
     @GetMapping("/board/view")
     public String boardView(Model model, Integer id, @AuthenticationPrincipal UserDetails userDetails, Users user) {
         Board board = boardService.boardView(id); // 게시글 ID로 게시글을 가져옴
+        boardService.boardViewCount(id);
+        model.addAttribute("board", boardService.boardView(id));
         List<Comment> comments = commentService.getCommentsByBoardId(id); // 게시글 ID로 댓글 리스트를 가져옴
         model.addAttribute("board", board); // 게시글 정보를 모델에 추가
         model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가

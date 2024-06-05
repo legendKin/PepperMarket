@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
@@ -19,30 +19,13 @@ body {
   padding: 20px;
 }
 
-#swiper-wrap {
-  margin-bottom: 20px;
-}
 
-.swiper-container {
-  position: relative;
-}
-
-.swiper-wrapper {
-  display: flex;
-}
-
-.swiper-slide {
-  width: 100%;
-}
 
 .ev_detail img {
   width: 100%;
 }
 
-.swiper-nav .swiper-slide {
-  width: 25%;
-  position: relative;
-}
+
 
 .cover {
   position: absolute;
@@ -68,7 +51,7 @@ body {
   color: #000;
 }
 
-.profile-img {
+.seller-link .profile-img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -124,13 +107,30 @@ body {
   margin-bottom: 20px;
 }
 
-.brand-name,
-.product-name,
-.price {
-  font-size: 18px;
-  margin-bottom: 10px;
+.product-image>img {
+  max-width: 540px;
+  height: 400px;
+  object-fit: cover;
 }
 
+.category-box{
+  background-color: #000;
+  color: #fff;
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.product-name {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.price{
+  font-size: 35px;
+  font-weight: bold;
+}
 .product-status {
   display: flex;
   justify-content: space-between;
@@ -139,7 +139,7 @@ body {
 
 .view-count,
 .additional-info {
-  font-size: 14px;
+  font-size: 20px;
   color: #666;
 }
 
@@ -148,27 +148,49 @@ body {
 }
 
 .size,
-.condition {
+.condition,
+.time-ago {
   margin-left: 10px;
 }
 
 .action-buttons {
-  display: flex;
-  justify-content: space-between;
+  /*display: flex;*/
+  /*justify-content: space-between;*/
   margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+
+.action-buttons:after{
+  border-bottom: 1px solid #ccc;
+  content: "";
+  display: block;
+  margin-top: 30px;
+  width: 100%;
 }
 
 .like-chat {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-.like-button,
-.chat-button,
-.secure-payment-button {
+
+.chat-button{
   display: flex;
   align-items: center;
   cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+.like-button{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 10px 10px;
+  border-radius: 10px;
 }
 
 .like-icon,
@@ -182,7 +204,7 @@ body {
 .like-count,
 .chat-text,
 .payment-text {
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .product-description {

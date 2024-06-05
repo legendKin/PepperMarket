@@ -180,13 +180,16 @@
             success: function(notifications) {
                 console.log('알림 가져옴:', notifications); // 디버깅 로그 추가
 
-                const notificationList = $('#notification-list');
-                notificationList.empty();
-                notifications.forEach(notification => {
-                    const readStatus = notification.read ? '읽음' : '읽지 않음';
-                    notificationList.append(`<li>${notification.message} - ${readStatus} <button onclick="markAsRead(${notification.id})">읽음 표시</button></li>`);
-                });
+              const notificationList = $("#notification-list");
+              notificationList.empty();
+              notifications.forEach((notification) => {
+                const readStatus = notification.read ? "읽음" : "읽지 않음";
+                notificationList.append(
+                  `<li><a href="board/view?id=${notification.board.id}">${notification.message} - ${readStatus} <button onclick="markAsRead(${notification.id})">읽음 표시</button></a></li>`,
+                );
+              });
             },
+            
             error: function(error) {
                 console.error('알림 목록 불러오기 중 오류 발생:', error);
             }

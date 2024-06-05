@@ -131,6 +131,13 @@ public class BoardService {
         checkForKeywords(savedBoard);
         return savedBoard;
     }
+    public void boardViewCount(Integer id) {
+        Board board = boardRepository.findById(id).orElse(null);
+        if (board != null) {
+            board.setViewcount(board.getViewcount() + 1);
+            boardRepository.save(board);
+        }
+    }
 
     // 조회수가 높은 순서로 모든 게시글을 가져오는 메서드
     public List<Board> getPostsByViewcount() {
@@ -156,6 +163,7 @@ public class BoardService {
     public long getBoardCountByUserId(Long userId) {
         return boardRepository.countByUserId(userId);
     }
+
 
 
 }

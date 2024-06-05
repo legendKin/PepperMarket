@@ -17,8 +17,9 @@
                   onerror="this.src='/files/default.png'"
                 />
                 <span>
-                  <div th:text="${post.title}">상품명</div>
                   <div th:text="${post.categName}">카테고리</div>
+                  <div th:text="${post.title}">상품명</div>
+                   <div th:text="|${post.getFormattedPrice()}원|"></div>
                 </span>
               </a>
             </div>

@@ -141,7 +141,7 @@
                       >
                       <span
                         class="card-price"
-                        th:text="${board.price} + 원"
+                        th:text="${board.getFormattedPrice()} + 원"
                       ></span>
                       <div class="card-bottom">
                         <th:block th:unless="${board.writer !=  loggedUserId}">

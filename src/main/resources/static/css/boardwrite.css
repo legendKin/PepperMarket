@@ -28,6 +28,7 @@
   width: 80%;
   margin: 20px auto;
   align-items: center;
+  justify-content: center;
 }
 .form-label {
   width: 30%;
@@ -39,10 +40,24 @@
 }
 
 .form-control,
-.container .form-select {
+.container .form-select,
+.btn-group{
   width: 50%;
   height: 60px;
 }
+.quality-select{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: #000;
+  border: 1px solid #dee2e6;
+}
+#quality-button{
+
+}
+
 .price-box {
   width: 50%;
   display: flex;
