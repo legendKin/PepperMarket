@@ -1,20 +1,18 @@
-* {
-  box-sizing: content-box;
-}
+
 
 .header-box {
-  max-width: 1200px;
-  margin: 19px auto 0;
-  display: flex;
   -webkit-box-pack: center;
-  justify-content: center;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin: 19px auto 0;
+  max-width: 1200px;
 }
 
 .header-1 {
   display: flex;
-  margin-left: auto;
   margin-bottom: 14px;
+  margin-left: auto;
 }
 
 .header1 {
@@ -25,35 +23,35 @@
 
 .header1 .icon {
   font-size: 24px;
-  width: 24px;
   height: 24px;
   margin-right: 8px;
   vertical-align: top;
+  width: 24px;
 }
 
 .header1 .badg {
-  letter-spacing: 0px;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 154%;
-  cursor: pointer;
-  margin: auto 0px;
   color: rgb(25, 31, 40);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0px;
+  line-height: 154%;
+  margin: auto 0px;
 }
 
 .profile-img {
-  width: 30px;
-  height: 30px;
   border-radius: 50px;
+  height: 30px;
   margin: 0px 8px 0px;
+  width: 30px;
 }
 
 .header-notification,
 .header-chat,
 .header-profile {
   display: flex;
-  margin-left: 30px;
   flex-direction: row;
+  margin-left: 30px;
 }
 
 .header-profile > .dropdown > .dropdown-toggle {
@@ -62,16 +60,16 @@
 
 .header-2 {
   display: grid;
-  grid-template-columns: 300px 600px 240px;
-  grid-template-rows: 100px;
   grid-column-gap: 30px;
   grid-row-gap: 0px;
+  grid-template-columns: 300px 600px 240px;
+  grid-template-rows: 100px;
 }
 
 .logo {
-  width: 300px;
-  height: 100px;
   grid-area: 1 / 1 / 2 / 2;
+  height: 100px;
+  width: 300px;
 }
 .search-box-wrapper {
   grid-area: 1 / 2 / 2 / 3;
@@ -82,17 +80,17 @@
 }
 
 .search-box {
-  display: flex;
+  background: rgb(242, 245, 247);
   /*justify-content: space-between;*/
   /*width: 538px;*/
   /*height: 30px;*/
+  border: none;
+  -moz-border-radius: 62px;
+  -webkit-border-radius: 62px;
+  border-radius: 62px;
+  display: flex;
   margin: auto 0;
   padding: 10px 24px;
-  background: rgb(242, 245, 247);
-  -webkit-border-radius: 62px;
-  -moz-border-radius: 62px;
-  border-radius: 62px;
-  border: none;
 }
 .search-box > button {
   background-color: transparent;
@@ -101,13 +99,13 @@
 
 .search-box .search {
   /*color: rgb(176, 184, 193);*/
-  letter-spacing: -0.4px;
-  font-weight: 500;
+  background-color: transparent;
+  border: none;
   font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.4px;
   line-height: 150%;
   padding-top: 2px;
-  border: none;
-  background-color: transparent;
 }
 
 .search-box .search:focus {
@@ -116,55 +114,57 @@
 
 .dotbogi {
   color: rgb(176, 184, 193);
-  width: 30px;
-  height: 30px;
   font-size: 30px;
+  height: 30px;
   margin-right: 10px;
+  width: 30px;
 }
 .upload-wrapper {
-  position: relative;
-  grid-area: 1 / 3 / 2 / 4;
-}
-.write {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 150px;
-  height: 50px;
+  align-items: flex-end;
   display: flex;
-
+  grid-area: 1 / 3 / 2 / 4;
+  justify-content: flex-end;
+  }
+.write {
   align-items: center;
+  border: 2px solid rgb(176, 184, 193);
+  border-radius: 25px;
+  display: flex;
+  height: 50px;
   justify-content: center;
+  margin: 0px 0px 0px 10px;
+  padding: 0px 0px 0px 0px;
+  width: 150px;
 }
 .header-3 {
-  display: flex;
-  -webkit-box-align: center;
   align-items: center;
+  -webkit-box-align: center;
+  display: flex;
   margin-bottom: -5.6px;
 }
 
 .menu-box {
-  display: flex;
   -webkit-box-pack: start;
+  display: flex;
   justify-content: flex-start;
 }
 
 .menu {
-  letter-spacing: -0.2px;
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 134%;
-  cursor: pointer;
-  padding: 20px 0px;
-  margin-right: 40px;
-  color: rgb(25, 31, 40);
   box-shadow: none;
+  color: rgb(25, 31, 40);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 134%;
+  margin-right: 40px;
+  padding: 20px 0px;
 }
 
 .header-underline {
-  position: absolute;
-  z-index: 2;
-  width: 100%;
-  height: 4px;
   background: linear-gradient(rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+  height: 4px;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
 }

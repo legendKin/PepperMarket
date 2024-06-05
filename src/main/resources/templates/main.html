@@ -4,17 +4,20 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   xmlns:th="http://www.thymeleaf.org"
 >
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</th:block>
   <div layout:fragment="content">
     <div class="main-content">
       <div class="category-popular">
         <h2>카테고리 별 인기매물</h2>
         <div class="swiper-container upper-slider">
           <div class="swiper-wrapper">
-            <div th:each="post : ${topPosts}" class="pop swiper-slide">
+            <div class="pop swiper-slide" th:each="post : ${topPosts}">
               <a th:href="@{/board/view(id=${post.id})}">
                 <img
-                  th:src="${post.filepath}"
                   onerror="this.src='/files/default.png'"
+                  th:src="${post.filepath}"
                 />
                 <span>
                   <div th:text="${post.categName}">카테고리</div>
