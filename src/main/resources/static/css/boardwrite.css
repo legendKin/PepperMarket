@@ -1,12 +1,12 @@
 .main-content {
   /*padding: 20px;*/
+  margin: 0 auto;
   overflow: hidden;
   width: 100%;
-  margin: 0 auto;
 }
 .container {
-  width: 1200px;
   margin: 0 auto;
+  width: 1200px;
 }
 .box {
   margin: 0 auto;
@@ -24,16 +24,16 @@
 }
 
 .container .form-group {
-  display: flex;
-  width: 80%;
-  margin: 20px auto;
   align-items: center;
+  display: flex;
   justify-content: center;
+  margin: 20px auto;
+  width: 80%;
 }
 .form-label {
-  width: 30%;
   font-size: 20px;
   font-weight: bold;
+  width: 30%;
 }
 .form-control::placeholder {
   font-size: 20px;
@@ -42,30 +42,34 @@
 .form-control,
 .container .form-select,
 .btn-group{
-  width: 50%;
   height: 60px;
+  width: 50%;
 }
+.quality-btn-wrap>.btn{
+  flex:1
+  
+  }
 .quality-select{
-  display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 20px;
-  color: #000;
   border: 1px solid #dee2e6;
+  color: #000;
+  display: flex;
+  font-size: 20px;
+  font-weight: bold;
+  justify-content: center;
 }
 #quality-button{
 
 }
 
 .price-box {
-  width: 50%;
-  display: flex;
   align-items: center;
+  display: flex;
+  width: 50%;
 }
 .form-control#title {
-  font-weight: bold;
   font-size: 20px;
+  font-weight: bold;
 }
 .form-control#price {
   font-size: 20px;
@@ -79,14 +83,14 @@
 }
 .price-box > p {
   font-size: 20px;
-  margin-left: 10px;
   font-weight: bold;
+  margin-left: 10px;
 }
 
 .button-group {
   display: flex;
-  margin: 45px 0 21px;
   justify-content: center;
+  margin: 45px 0 21px;
 }
 .btn-cancel {
   background-color: #a1a8af;
@@ -94,12 +98,12 @@
 }
 .btn-cancel,
 .btn-submit {
-  width: 244px;
-  height: 64px;
+  border-radius: 12px;
+  color: #fff;
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  height: 64px;
   margin-right: 12px;
-  border-radius: 12px;
   padding: 16px 0;
+  width: 244px;
 }

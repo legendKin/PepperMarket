@@ -1,0 +1,235 @@
+* {
+	box-sizing: border-box;
+	}
+
+body, html {
+	font-family: 'Poppins', sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	}
+
+.container {
+	background: rgba(230, 243, 255, 0.75);
+	height: 100%;
+	position: relative;
+	width: 100%;
+	}
+
+.yellow-box-1 {
+	background: #F9ED32;
+	height: 661px;
+	left: 24px;
+	position: absolute;
+	top: 143px;
+	width: 526px;
+	}
+
+.yellow-box-2 {
+	background: #F2D335;
+	height: 607px;
+	left: 103px;
+	position: absolute;
+	top: 79px;
+	width: 530px;
+	}
+
+.yellow-box-3 {
+	background: #D9BD32;
+	height: 469px;
+	left: 0px;
+	position: absolute;
+	top: 488px;
+	width: 550px;
+	}
+
+.placeholder-image {
+	background: linear-gradient(0deg, #C4C4C4 0%, #C4C4C4 100%);
+	height: 613px;
+	left: 47px;
+	position: absolute;
+	top: 190px;
+	width: 419px;
+	}
+
+.form-container {
+	height: 1024px;
+	left: 595px;
+	position: absolute;
+	top: 0px;
+	width: 845px;
+	}
+
+.form-background {
+	background: #FCFEFF;
+	border-top-left-radius: 25px;
+	border-top-right-radius: 25px;
+	height: 1024px;
+	left: 0px;
+	position: absolute;
+	top: 0px;
+	width: 845px;
+	}
+
+.form-content {
+	height: 856px;
+	left: 123px;
+	position: absolute;
+	top: 124px;
+	width: 600px;
+	}
+
+.reserved-text {
+	color: #7C838A;
+	font-family: Roboto;
+	font-size: 20px;
+	font-weight: 400;
+	left: 152px;
+	position: absolute;
+	top: 833px;
+	word-wrap: break-word;
+	}
+
+.social-signup {
+	border: 1px #7C838A solid;
+	border-radius: 15px;
+	height: 55px;
+	position: absolute;
+	width: 220px;
+	}
+
+.github {
+	left: 332px;
+	top: 694px;
+	}
+
+.google {
+	left: 31px;
+	top: 694px;
+	}
+
+.social-signup img {
+	height: 50px;
+	left: 7px;
+	position: absolute;
+	top: 3px;
+	width: 50px;
+	}
+
+.social-text {
+	color: #7C838A;
+	font-size: 14px;
+	font-weight: 500;
+	height: 21px;
+	left: 66px;
+	position: absolute;
+	top: 17px;
+	word-wrap: break-word;
+	}
+
+.or-text {
+	color: #B0BAC3;
+	font-size: 26px;
+	font-weight: 500;
+	left: 251px;
+	position: absolute;
+	top: 640px;
+	word-wrap: break-word;
+	}
+
+.login-text {
+	font-size: 18px;
+	font-weight: 400;
+	left: 2px;
+	position: absolute;
+	top: 572px;
+	word-wrap: break-word;
+	}
+
+.login-text .login-link {
+	color: #F9ED32;
+	}
+
+.create-account-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	height: 60px;
+	left: 121px;
+	padding: 0;
+	position: absolute;
+	top: 497px;
+	width: 340px;
+	}
+
+.button-background {
+	background: #F9ED32;
+	border-radius: 10px;
+	height: 60px;
+	position: absolute;
+	width: 340px;
+	}
+
+.button-text {
+	color: black;
+	font-size: 26px;
+	font-weight: 500;
+	left: 70px;
+	position: absolute;
+	top: 10px;
+	width: 215px;
+	word-wrap: break-word;
+	}
+
+.input-group {
+	height: 95px;
+	position: absolute;
+	width: 600px;
+	}
+
+.input-label {
+	color: #7C838A;
+	font-size: 20px;
+	font-weight: 500;
+	left: 2px;
+	position: absolute;
+	top: 0px;
+	word-wrap: break-word;
+	}
+
+.input-field {
+	background: rgba(176, 186, 195, 0.40);
+	border: none;
+	border-radius: 20px;
+	color: rgba(0, 0, 0, 0.50);
+	font-size: 20px;
+	height: 65px;
+	left: 0px;
+	padding-left: 40px;
+	position: absolute;
+	top: 30px;
+	width: 100%;
+	}
+
+.input-group:nth-child(8) {
+	top: 227px;
+	}
+
+.input-group:nth-child(9) {
+	top: 362px;
+	}
+
+.input-group:nth-child(10) {
+	top: 497px;
+	}
+
+.form-title {
+	color: black;
+	font-size: 26px;
+	font-weight: 600;
+	left: 131px;
+	position: absolute;
+	top: 0px;
+	word-wrap: break-word;
+	}
