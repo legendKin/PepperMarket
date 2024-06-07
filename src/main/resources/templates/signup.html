@@ -47,6 +47,14 @@
                     type="email"
                   />
                 </div>
+	              <div class="mb-3">
+                  <label class="form-label text-white">닉네임</label>
+                  <input
+                    class="form-control"
+                    th:field="*{nickname}"
+                    type="text"
+                  />
+                </div>
                 <div class="mb-3">
                   <label class="form-label text-white">Password</label>
                   <input
@@ -63,24 +71,7 @@
                     type="password"
                   />
                 </div>
-                <!-- 성별 입력 폼 -->
-                <div class="mb-3">
-                  <label class="form-label text-white">Gender</label>
-                  <input
-                    class="form-control"
-                    th:field="*{gender}"
-                    type="text"
-                  />
-                </div>
-                <!-- 생년월일 입력 폼 -->
-                <div class="mb-3">
-                  <label class="form-label text-white">BirthDate</label>
-                  <input
-                    class="form-control"
-                    th:field="*{birthDate}"
-                    type="text"
-                  />
-                </div>
+           
                 <button class="btn btn-primary" type="submit">Submit</button>
               </form>
             </div>

@@ -62,29 +62,13 @@
               type="text"
       /><br />
 
-      <label for="age">나이:</label> <!-- *추가된 필드* -->
-      <input
-              id="age"
-              name="age"
-              th:value="${user.age}"
-              type="number"
-      /><br />
-
-      <label for="birthdate">생년월일:</label> <!-- *추가된 필드* -->
-      <input
-              id="birthdate"
-              name="birthdate"
-              th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}"
-              type="date"
-      /><br />
-
       <button type="submit">프로필 정보 변경</button>
     </form>
   </section>
 
   <!-- 키워드 관리 섹션 -->
   <section id="keywords-section">
-    <h2>키워드 목록</h2>
+    <label for="new-keyword">키워드 목록</label>
     <input id="new-keyword" placeholder="새 키워드를 입력하세요" type="text" />
     <button onclick="addKeyword()">추가</button>
     <ul id="keyword-list"></ul>
@@ -93,7 +77,11 @@
   <!-- 알림 섹션 -->
   <section id="notifications-section">
     <h2>알림 목록</h2>
+	  <div th:text="${unreadNotificationCount}">
+		 
+	  </div>
     <ul id="notification-list"></ul>
+	  
   </section>
 
   <!-- 채팅 목록 섹션 -->

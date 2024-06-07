@@ -75,4 +75,8 @@ public class NotificationService {
     public void deleteNotificationsByBoardId(Integer boardId) {
         notificationRepository.deleteByBoardId(boardId);
     }
+    
+    public int getUnreadNotificationCount(Long userId) {
+        return notificationRepository.countUnreadNotificationsByUser(userId);
+    }
 }

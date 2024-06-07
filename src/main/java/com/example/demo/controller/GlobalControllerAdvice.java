@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CategoryService;
+import com.example.demo.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -26,6 +27,9 @@ public class GlobalControllerAdvice {
 
     @Autowired
     private BoardService boardService;
+    
+    @Autowired
+    private NotificationService notificationService;
 
 
     @ModelAttribute
@@ -73,6 +77,15 @@ public class GlobalControllerAdvice {
 
 
 
+    }
+    
+    @ModelAttribute("unreadNotificationCount")
+    public int populateUnreadNotificationCount(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long userId = principalDetails.getId(); // 이 메서드를 구현해야 합니다.
+        if (userId != null) {
+            return notificationService.getUnreadNotificationCount(userId);
+        }
+        return 0;
     }
 
 
