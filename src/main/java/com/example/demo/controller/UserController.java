@@ -43,6 +43,10 @@ public class UserController {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup";
+        } catch (IllegalArgumentException e) {
+            // 닉네임이 'admin'일 경우 예외 처리
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "signup";
         } catch (Exception e) {
             // 그 외 예외가 발생하면 오류 메시지 추가 후 회원가입 페이지로 이동
             e.printStackTrace();

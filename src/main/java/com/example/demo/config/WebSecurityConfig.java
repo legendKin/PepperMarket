@@ -34,6 +34,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/login", "/signup", "/user", "/board/list", "/board/view/**", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**").permitAll()
                         // '/mypage/**' URL 패턴에 대한 요청은 인증된 사용자만 허용
                         .requestMatchers("/mypage/**").authenticated()
+                        // '/admin/**' URL 패턴에 대한 요청은 ADMIN 역할을 가진 사용자만 허용
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         // 그 외 모든 요청은 인증된 사용자만 허용
                         .anyRequest().authenticated()
                 )
