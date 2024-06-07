@@ -16,11 +16,11 @@
         <div class="product-container">
             <div class="left-section">
                 <div class="product-image">
-                        <img alt="게시글 이미지"
-                             onerror="this.src='/files/default.png'"
-                             th:src="@{${board.filepath}}"/>
+                    <img alt="게시글 이미지"
+                         onerror="this.src='/files/default.png'"
+                         th:src="@{${board.filepath}}"/>
                 </div>
-                
+
                 <div class="seller-info">
                     <div class="seller-profile">
                         <a class="seller-link" href="">
@@ -68,32 +68,30 @@
                                     <div class="rating-count">(0)</div>
                                 </div>
                             </div>
-                        </a
-                        >
+                        </a>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="right-section">
-                
+
                 <div class="product-info">
                     <div class="category-box" th:text="${board.categName}">카테고리명</div>
                     <div class="product-name" th:text="${board.title}">상품명</div>
                     <div class="price" th:text="${board.getFormattedPrice} + 원"></div>
                 </div>
-                
+
                 <div class="product-status">
                     <div class="left">
                         <div class="view-count" th:text="|조회수 ${board.viewcount}|"></div>
-<!--                        <div class="written-date" th:text="|시간 ${board.}|"></div>-->
                     </div>
-                    
+
                     <div class="additional-info right">
                         <div class="condition" th:text="|제품 상태: ${board.qualityHangul()}|"></div>
                         <div class="time-ago" th:text="|${board.timeAgo}|"></div>
                     </div>
                 </div>
-                
+
                 <div class="action-buttons">
                     <div class="like-chat">
                         <div class="like-button">
@@ -105,46 +103,37 @@
                             <div class="like-count">1</div>
                         </div>
                         <div class="chat-button edit-button">
-                            <th:block th:if="${board.user != null && loggedInUser != null && loggedInUser.id != board.writer}">
+                            <th:block th:if="${board.user != null && loggedInUser != null && board.user.id != loggedInUser.id}">
                                 <a
                                         class="chat-text"
                                         th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
-                                ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>판매자와 채팅하기</a
-                                >
+                                ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>판매자와 채팅하기</a>
                             </th:block>
-                            <th:block th:if="${board.user != null && loggedInUser != null && board.writer ==  loggedUserId}">
+                            <th:block th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}">
                                 <a class="edit-text"
-                                        th:href="@{/board/modify/{id}(id=${board.id})}">
+                                   th:href="@{/board/modify/{id}(id=${board.id})}">
                                     <i class="far fa-edit edit-icon fa-lg btn-icon"></i>글 수정</a>
                             </th:block>
-	                        <th:block th:if="${loggedInUser == null}">
-		                        <a
-			                        class="gologin-text"
-			                        href="/login"
-		                        ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>로그인하고 거래하기</a
-		                        >
-	                        </th:block>
+                            <th:block th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}">
+                                <a class="delete-text"
+                                   th:href="@{/board/delete/{id}(id=${board.id})}">
+                                    <i class="far fa-trash-alt delete-icon fa-lg btn-icon"></i>글 삭제</a>
+                            </th:block>
+                            <th:block th:if="${loggedInUser == null}">
+                                <a
+                                        class="gologin-text"
+                                        href="/login"
+                                ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>로그인하고 거래하기</a>
+                            </th:block>
                         </div>
-                        <!--              <div class="secure-payment-button">-->
-                        <!--                <img-->
-                        <!--                  src="https://ccimage.hellomarket.com/img/web/item/detail/ico_purchase_default.svg"-->
-                        <!--                  alt="안전결제 아이콘"-->
-                        <!--                  class="payment-icon"-->
-                        <!--                />-->
-                        <!--                <div class="payment-text">안전결제</div>-->
-                        <!--              </div>-->
                     </div>
                 </div>
-                
-                <div class="product-description" th:text="${board.content}">상품"description"</div>
-            
+
+                <div class="product-description" th:text="${board.content}">상품 설명</div>
+
             </div>
         </div>
-    
-    
     </section>
-</div>
-</section>
 </div>
 </body>
 </html>
