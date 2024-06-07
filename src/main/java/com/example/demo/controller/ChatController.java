@@ -107,6 +107,15 @@ public class ChatController {
         model.addAttribute("chatRooms", chatRooms); // 채팅방 정보를 모델에 추가
         return "mypage"; // 마이페이지로 이동
     }
+    
+    @GetMapping("/chat")
+    public String chatter(Model model, @RequestParam Long userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID")); // 사용자 확인
+        List<Map<String, String>> chatRooms = getUserChatRooms(userId); // 사용자의 채팅방 목록 가져옴
+        model.addAttribute("user", user); // 사용자 정보를 모델에 추가
+        model.addAttribute("chatRooms", chatRooms); // 채팅방 정보를 모델에 추가
+        return "chatter";
+    }
 
     // 특정 게시글 작성자와의 채팅방으로 이동하는 엔드포인트
     @GetMapping("/chatRoom")
@@ -116,4 +125,6 @@ public class ChatController {
         model.addAttribute("receiverId", postAuthor); // 게시글 작성자를 수신자로 설정
         return "chatRoom"; // 채팅방 페이지로 이동
     }
+    
+    
 }

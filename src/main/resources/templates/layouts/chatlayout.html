@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html
+	lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+	<meta charset="UTF-8"/>
+	<title>Pepper Market</title>
+	<meta content="width=device-width, initial-scale=1" name="viewport"/>
+	<!--    jQuery      -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	
+	
+	<!-- 공통 css -->
+	<th:block th:replace="~{fragments/common-styles::styles}"></th:block>
+	<!--    CSS     -->
+	<th:block layout:fragment="css"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/header::header}"></div>
+
+<div class="main-content">
+	<div class="chat-list">
+		<section id="chat-list-section">
+			<h2>My Chats</h2>
+			<ul id="chatList">
+				<!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
+			</ul>
+		
+		</section>
+		<th:block th:insert="~{fragments/chatscripts::script}"></th:block>
+	</div>
+	
+	<div class="chat-content" layout:fragment="chat-content"></div>
+</div>
+
+<div th:replace="~{fragments/footer::footer}"></div>
+
+
+</body>
+</html>

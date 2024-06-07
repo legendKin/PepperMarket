@@ -1,113 +1,153 @@
-<!DOCTYPE html>
-<html lang="en" layout:decorate="~{layouts/layout}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:th="http://www.thymeleaf.org">
-
+<!doctype html>
+<html
+	lang="en" layout:decorate="~{layouts/chatlayout}"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:th="http://www.thymeleaf.org"
+>
 <head>
-    <meta charset="UTF-8">
-    <title>Chatter</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+	<meta charset="UTF-8"/>
+	<title>Chat Room</title>
+	<link rel="stylesheet" th:href="@{/css/main.css}"/>
+	<link rel="stylesheet" th:href="@{/css/chat_page.css}"/>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
 <body>
-<div layout:fragment="content">
-    <div>
-        <div class="container">
-            <div class="col-6">
-                <label><b>채팅방</b></label>
-            </div>
-            <div>
-                <div class="col" id="msgArea"></div>
-                <div class="col-6">
-                    <div class="input-group mb-3">
-                        <input aria-describedby="button-addon2" aria-label="Recipient's username" class="form-control" id="msg" type="text">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" id="button-send" type="button">전송</button>
-                            <button class="btn btn-outline-secondary" id="button-send" type="button">전송</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            function displayMessage(message) {
-                var str = "<div class='col-6'>";
-                str += "<div class='alert alert-info'>";
-                str += "<b>" + message.sender + " : " + message.content + " [" + message.timestamp + "]</b>";
-                str += "</div></div>";
-                $("#msgArea").append(str);
-            }
-
-            function getPreviousChatMessages(chatRoomId) {
-                fetch('/chat/messages/' + chatRoomId)
-                    .then(response => response.json())
-                    .then(messages => {
-                        messages.forEach(displayMessage);
-                    });
-            }
-
-            const username = /*[[${#authentication.name}]]*/ 'anonymous'; // 로그인한 사용자
-            const chatRoomId = /*[[${chatRoomId}]]*/ 'defaultRoom'; // 채팅방 ID
-            const receiverId = /*[[${receiverId}]]*/ 'defaultReceiver'; // 수신자 ID
-
-            getPreviousChatMessages(chatRoomId);
-
-            $("#button-send").on("click", (e) => {
-                send();
-            });
-
-            const websocket = new WebSocket("ws://localhost:8080/ws/chat?userId=" + username + "&chatRoomId=" + chatRoomId); // 사용자 이름과 채팅방 ID를 포함하여 WebSocket 연결
-
-            websocket.onmessage = onMessage;
-            websocket.onopen = onOpen;
-            websocket.onclose = onClose;
-
-            function send() {
-                let msg = document.getElementById("msg").value;
-                websocket.send(username + ":" + msg);
-                document.getElementById("msg").value = '';
-            }
-
-            function onClose(evt) {
-                var str = username + " 님이 방을 나가셨습니다.";
-                websocket.send(str);
-            }
-
-            function onOpen(evt) {
-                var str = username + " 님이 입장하셨습니다.";
-                websocket.send(str);
-            }
-
-            function onMessage(msg) {
-                var data = msg.data;
-                var arr = data.split(":");
-
-                var sessionId = arr[0];
-                var message = arr[1];
-
-                if (sessionId === username) {
-                    var str = "<div class='col-6'>";
-                    str += "<div class='alert alert-secondary'>";
-                    str += "<b>" + sessionId + " : " + message + "</b>";
-                    str += "</div></div>";
-                    $("#msgArea").append(str);
-                } else {
-                    var str = "<div class='col-6'>";
-                    str += "<div class='alert alert-warning'>";
-                    str += "<b>" + sessionId + " : " + message + "</b>";
-                    str += "</div></div>";
-                    $("#msgArea").append(str);
-                }
-            }
-        });
-    </script>
-
+<div layout:fragment="chat-content">
+	
+	<section class="chatSection">
+		<div class="chat-container chatWindow">
+			<div class="col-6">
+				<label><b>채팅방</b></label>
+			</div>
+			<div>
+				<div class="col" id="msgArea">
+					<!-- 채팅 내용이 여기에 표시됩니다 -->
+				</div>
+				<div class="col-6">
+					<div class="input-group mb-3">
+						<input
+							aria-describedby="button-addon2" aria-label="Recipient's username"
+							class="form-control messageInput" id="msg" type="text" placeholder="메세지를 입력해주세요."
+						/>
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary sendButton" id="button-send" type="button">전송
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			function displayMessage(message) {
+				var senderName = message.sender.nickname; // 보낸 사람의 닉네임
+				var timestamp = new Date(message.timestamp);
+				var options = {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul'};
+				var formattedTime = timestamp.toLocaleTimeString('ko-KR', options);
+				
+				var str = "<div class='col-6'>";
+				str += "<div class='alert alert-info'>";
+				str += "<b>" + senderName + " : " + message.content + " [" + formattedTime + "]</b>";
+				str += "</div></div>";
+				$("#msgArea").append(str);
+			}
+			
+			function getPreviousChatMessages(chatRoomId) {
+				fetch("/chat/messages/" + chatRoomId)
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error("Network response was not ok");
+						}
+						return response.json();
+					})
+					.then((messages) => {
+						if (Array.isArray(messages)) {
+							messages.forEach(displayMessage);
+						} else {
+							throw new Error("Invalid response format");
+						}
+					})
+					.catch((error) => {
+						console.error("There has been a problem with your fetch operation:", error);
+					});
+			}
+			
+			const userId = /*[[${#authentication.principal.id}]]*/ "anonymous"; // 로그인한 사용자의 ID
+			const chatRoomId = /*[[${chatRoomId}]]*/ "defaultRoom"; // 채팅방 ID
+			const receiverId = /*[[${receiverId}]]*/ "defaultReceiver"; // 수신자 ID
+			
+			getPreviousChatMessages(chatRoomId);
+			
+			$("#button-send").on("click", (e) => {
+				send();
+			});
+			
+			const socket = new SockJS("/ws/chat");
+			const stompClient = Stomp.over(socket);
+			
+			stompClient.connect({}, function (frame) {
+				console.log("Connected: " + frame);
+				
+				stompClient.subscribe("/topic/public", function (messageOutput) {
+					const message = JSON.parse(messageOutput.body);
+					displayMessage(message);
+				});
+			});
+			
+			function send() {
+				const message = {
+					senderId: userId, // 사용자 ID로 변경
+					receiverId: receiverId, // 수신자 ID 추가
+					content: document.getElementById("msg").value,
+					chatRoomId: chatRoomId,
+				};
+				stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message));
+				
+				document.getElementById("msg").value = "";
+			}
+			
+			socket.onclose = function (event) {
+				console.log("WebSocket closed: ", event);
+			};
+			
+			socket.onerror = function (event) {
+				console.error("WebSocket error: ", event);
+			};
+		});
+	</script>
+	<script th:inline="javascript">
+		
+		
+		// 채팅 목록 불러오기 함수
+		function loadChatRooms() {
+			const userId = $('#userId').val(); // 사용자 ID 가져오기
+			$.ajax({
+				type: 'GET',
+				url: `/chat/chats?userId=${userId}`,
+				success: function (chatRooms) {
+					const chatList = $('#chatList');
+					chatList.empty();
+					chatRooms.forEach(chatRoom => {
+						chatList.append(`<li> ${chatRoom.partnerName}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
+					});
+				},
+				error: function (error) {
+					console.error('채팅 방 목록 로딩 중 오류 발생:', error);
+				}
+			});
+		}
+		
+		// 페이지 로드 시 데이터 불러오기
+		$(document).ready(function () {
+			loadChatRooms();
+		});
+	</script>
 </div>
 </body>
 </html>

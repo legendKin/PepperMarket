@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="script">
+	<!-- Bootstrap core JS-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+	></script>
+	<script>
+		function loadChatRooms() {
+			const userId = $('#userId').val(); // 사용자 ID 가져오기
+			$.ajax({
+				type: 'GET',
+				url: `/chat/chats?userId=${userId}`,
+				success: function (chatRooms) {
+					const chatList = $('#chatList');
+					chatList.empty();
+					chatRooms.forEach(chatRoom => {
+						chatList.append(`<li> ${chatRoom.partnerName}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
+					});
+				},
+				error: function (error) {
+					console.error('채팅 방 목록 로딩 중 오류 발생:', error);
+				}
+			});
+		}
+		
+		// 페이지 로드 시 데이터 불러오기
+		$(document).ready(function () {
+			loadChatRooms();
+		});
+	</script>
+</th:block>
+</html>

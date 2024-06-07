@@ -18,14 +18,16 @@ public class NotificationService {
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
-    @Autowired
-    private NotificationRepository notificationRepository; // 알림 관련 데이터 처리를 위한 리포지토리
-
+    private final NotificationRepository notificationRepository; // 알림 관련 데이터 처리를 위한 리포지토리
     @Autowired
     private KeywordService keywordService; // 키워드 관련 서비스
-
     @Autowired
     private UserRepository userRepository; // 사용자 관련 데이터 처리를 위한 리포지토리
+
+    @Autowired
+    public NotificationService(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
 
     // 모든 알림을 조회하는 메서드
     public List<Notification> findAll() {
@@ -74,5 +76,8 @@ public class NotificationService {
     // 특정 게시글과 관련된 알림을 삭제하는 메서드 추가
     public void deleteNotificationsByBoardId(Integer boardId) {
         notificationRepository.deleteByBoardId(boardId);
+    }
+    public int getUnreadNotificationCount(Long userId) {
+        return notificationRepository.countUnreadNotificationsByUser(userId);
     }
 }

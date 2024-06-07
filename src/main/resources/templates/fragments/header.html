@@ -17,6 +17,13 @@
 						<i class="far fa-bell icon"></i>
 						<div class="badg">나의 알림</div>
 					</a>
+					<th:block th:unless="${unreadNotificationCount == 0}">
+						<span
+							class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+							th:text="${unreadNotificationCount}"
+						>
+					</th:block>
+	                </span>
 				</div>
 				<div class="header-chat">
 					<a class="header1" href="/chat">

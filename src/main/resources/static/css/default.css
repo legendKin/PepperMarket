@@ -32,5 +32,8 @@ body {
   }
 
 .container {
-  flex: 1;
+  margin:    0 auto;
+  max-width: 1200px;
+  overflow:  hidden;
+  position:  relative;
   }
