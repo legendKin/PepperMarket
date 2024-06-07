@@ -46,7 +46,7 @@ public class MemberService {
     }
 
     // 프로필 정보 업데이트
-    public void updateUserProfileInfo(String username, MultipartFile file, String nickname, String email, String name, Integer age, Date birthdate) throws IOException, Exception {
+    public void updateUserProfileInfo(String username, MultipartFile file, String nickname, String email, String name) throws Exception {
         Users user = findByEmail(username);
         if (!file.isEmpty()) {
             String fileName = storeFile(file);
@@ -55,8 +55,6 @@ public class MemberService {
         user.setNickname(nickname);
         user.setEmail(email);
         user.setName(name);
-        user.setAge(age);
-        user.setBirthdate(birthdate);
         userRepository.save(user);
     }
 

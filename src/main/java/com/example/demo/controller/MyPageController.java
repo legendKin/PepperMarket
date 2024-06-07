@@ -58,12 +58,10 @@ public class MyPageController {
                                     @RequestParam("nickname") String nickname,
                                     @RequestParam("email") String email,
                                     @RequestParam("name") String name,
-                                    @RequestParam("age") Integer age,
-                                    @RequestParam("birthdate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthdate,
                                     @AuthenticationPrincipal UserDetails userDetails,
                                     RedirectAttributes redirectAttributes) {
         try {
-            memberService.updateUserProfileInfo(userDetails.getUsername(), file, nickname, email, name, age, birthdate);
+            memberService.updateUserProfileInfo(userDetails.getUsername(), file, nickname, email, name);
             redirectAttributes.addFlashAttribute("message", "Profile updated successfully.");
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("message", "File upload failed: " + e.getMessage());
