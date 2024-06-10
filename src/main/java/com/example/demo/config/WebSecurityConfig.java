@@ -14,9 +14,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig {
-    public test{
-//        삭제알아서
-    }
+
 
     private final PrincipalOauth2UserService principalOauth2UserService;
 
