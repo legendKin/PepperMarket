@@ -1,6 +1,6 @@
 <!doctype html>
 <html
-	xmlns:th="http://www.thymeleaf.org"
+		xmlns:th="http://www.thymeleaf.org"
 >
 <th:block th:fragment="header">
 	<head>
@@ -8,7 +8,7 @@
 		<link rel="stylesheet" th:href="@{/css/footer.css}"/>
 		<title>페퍼마켓에 오신 것을 환영합니다</title>
 	</head>
-	
+
 	<div class="header-wrapper">
 		<div class="header-box">
 			<div class="header-1">
@@ -18,12 +18,12 @@
 						<div class="badg">나의 알림</div>
 					</a>
 					<th:block th:unless="${unreadNotificationCount == 0}">
-						<span
-							class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-							th:text="${unreadNotificationCount}"
-						>
+                  <span
+						  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+						  th:text="${unreadNotificationCount}"
+				  >
 					</th:block>
-	                </span>
+					</span>
 				</div>
 				<div class="header-chat">
 					<a class="header1" href="/chat">
@@ -34,22 +34,22 @@
 				<div class="header-profile">
 					<!--                            로그인시        -->
 					<div
-						class="dropdown"
-						th:unless="${#authentication.name == 'anonymousUser'}"
+							class="dropdown"
+							th:unless="${#authentication.name == 'anonymousUser'}"
 					>
 						<a
-							aria-expanded="false"
-							class="header1 dropdown-toggle"
-							data-bs-toggle="dropdown"
-							id="dropdownMenuButton"
-							type="button"
+								aria-expanded="false"
+								class="header1 dropdown-toggle"
+								data-bs-toggle="dropdown"
+								id="dropdownMenuButton"
+								type="button"
 						>
 							<img alt="프사" class="profile-img" th:src="@{${profilepic}}"/>
 							<p class="profile-name badg" th:text="${nickname}"></p>
 						</a>
 						<div
-							aria-labelledby="dropdownMenuButton"
-							class="dropdown-menu dropdown-menu-end"
+								aria-labelledby="dropdownMenuButton"
+								class="dropdown-menu dropdown-menu-end"
 						>
 							<a class="dropdown-item" href="/mypage">마이 페이지</a>
 							<a class="dropdown-item" href="#">메뉴2</a>
@@ -57,12 +57,12 @@
 							<a class="dropdown-item" href="/logout">로그아웃</a>
 						</div>
 					</div>
-					
+
 					<!--                            비로그인시       -->
 					<a
-						class="header1"
-						href="/login"
-						th:if="${#authentication.name == 'anonymousUser'}"
+							class="header1"
+							href="/login"
+							th:if="${#authentication.name == 'anonymousUser'}"
 					>
 						<div class="badg">로그인/회원가입</div>
 					</a>
@@ -77,16 +77,16 @@
 						<!--카테고리 -->
 						<div class="form-group mb-3 search-cate">
 							<select
-								class="form-select"
-								id="categ"
-								name="searchCateID"
-								required
+									class="form-select"
+									id="categ"
+									name="searchCateID"
+									required
 							>
 								<option value=" ">전체 카테고리</option>
 								<th:block th:each="board, iterStat : ${categList}">
 									<option
-										th:text="${board}"
-										th:value="${iterStat.index + 1}"
+											th:text="${board}"
+											th:value="${iterStat.index + 1}"
 									></option>
 								</th:block>
 							</select>
@@ -98,12 +98,12 @@
 							</button>
 							<!-- 검색어 입력 폼 -->
 							<input
-								class="search"
-								name="searchKeyword"
-								placeholder="어떤 상품을 찾으시나요?"
-								required
-								th:value="${searchKeyword}"
-								type="text"
+									class="search"
+									name="searchKeyword"
+									placeholder="어떤 상품을 찾으시나요?"
+									required
+									th:value="${searchKeyword}"
+									type="text"
 							/>
 						</div>
 					</form>

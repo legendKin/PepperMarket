@@ -146,7 +146,14 @@
 											>Edit
 											</button>
 										</th:block>
-										<small class="text-muted" th:text="${board.timeAgo}">timeago</small>
+										<small class="text-muted" th:text="${board.timeAgo}"
+										>timeago</small
+										>
+										<div class="like-section">
+											<button onclick="likePost(${board.id})">좋아요</button>
+											<span th:text="${board.likes}">0</span> Likes
+										</div>
+										
 									</div>
 								</div>
 							</div>

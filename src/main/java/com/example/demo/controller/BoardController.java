@@ -233,6 +233,11 @@ public class BoardController {
         model.addAttribute("viewedPosts", viewedPosts);
         return "recentViewedPosts";
     }
+
+    @PostMapping("/{id}/like")
+    public void likePost(@PathVariable Long id) {
+        boardService.likePost(id);
+    }
 }
     
 

@@ -15,6 +15,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @Configuration
 public class WebSecurityConfig {
 
+
     private final PrincipalOauth2UserService principalOauth2UserService;
 
     // 특정 요청을 무시하도록 웹 보안 설정을 사용자 정의하는 Bean

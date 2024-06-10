@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Board;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -38,6 +40,11 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Object[]> findCategoryPostCounts();
 
     long countByUserId(Long userId);
+
+    @Transactional
+    @Modifying
+    @Query("update Board b set b.likes = b.likes + 1 where b.id = :id")
+    void incrementLikes(Long id);
     
     
     Page<Board> findByStatusNotOrderByCreateDateDesc(Integer status, Pageable pageable);

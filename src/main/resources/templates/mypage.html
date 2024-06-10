@@ -61,6 +61,8 @@
               th:value="${user.name}"
               type="text"
       /><br />
+      <label for="birthdate">생년월일:</label> <!-- *** 생년월일 필드 추가 -->
+      <input type="date" name="birthdate" id="birthdate" th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}"><br>
 
       <button type="submit">프로필 정보 변경</button>
     </form>
@@ -212,7 +214,7 @@
                 });
             },
             error: function(error) {
-                console.error('채팅 방 목록 로딩 중 오류 발생:', error);
+                console.error('채팅 방 목록 로딩 중 오류 발생:',  error);
             }
         });
     }

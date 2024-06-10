@@ -42,7 +42,7 @@ public class Board {
     private String categName; // 카테고리 이름
     private String quality;
     private Integer status; // 판매 상태 1:판매중, 2:예약중 3:판매완료
-
+    private int likes; // 좋아요 갯수
 
 
     @ManyToOne
