@@ -134,7 +134,6 @@
 										width="100%"
 									/>
 								</a>
-								<p>이거 push받고 삭제 ㄱㄱ</p>
 								<div class="card-body card-box">
 									<div class="card-cate">
 										<p th:text="${board.categName}"></p>
@@ -171,6 +170,10 @@
 										<small class="text-muted" th:text="${board.timeAgo}"
 										>timeago</small
 										>
+										<div class="like-section">
+											<button onclick="likePost(${board.id})">좋아요</button>
+											<span th:text="${board.likes}">0</span> Likes
+										</div>
 									</div>
 								</div>
 							</div>

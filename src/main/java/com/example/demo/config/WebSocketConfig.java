@@ -9,7 +9,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker // WebSocket 메시지 브로커를 활성화하는 애노테이션
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
+    public test{
+//        삭제알아서
+    }
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 간단한 메세지 브로커를 활성화하고 "/topic"으로 시작하는 목적지에 메시지를 브로커가 처리하도록 설정

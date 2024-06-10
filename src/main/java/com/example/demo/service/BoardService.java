@@ -165,5 +165,8 @@ public class BoardService {
     }
 
 
+    public void likePost(Long id) {
+        boardRepository.incrementLikes(id);
+    }
 
 }
