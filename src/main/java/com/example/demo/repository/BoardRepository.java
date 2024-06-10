@@ -11,16 +11,18 @@ import java.util.List;
 
 @Repository // Spring Data JPA의 저장소로 사용
 public interface BoardRepository extends JpaRepository<Board, Integer> {
-
+    
+    
     // 특정 카테고리 ID로 게시글을 페이징하여 검색
-    Page<Board> findByCateID(Integer searchCateID, Pageable pageable);
+    Page<Board> findByCateIDAndStatusNot(Integer searchCateID, Pageable pageable, Integer status);
 
     // 제목에 특정 키워드를 포함하는 게시글을 페이징하여 검색
-    Page<Board> findByTitleContaining(String searchKeyword, Pageable pageable);
+    Page<Board> findByTitleContainingAndStatusNot(String searchKeyword, Pageable pageable, Integer status);
 
     // 제목에 특정 키워드를 포함하고 특정 카테고리 ID를 가진 게시글을 페이징하여 검색
-    Page<Board> findByTitleContainingAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable);
-
+    Page<Board> findByTitleContainingAndCateIDAndStatusNot(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status);
+    
+    
     // ID를 사용하여 게시글 삭제
     void deleteById(Long id);
 
@@ -36,4 +38,9 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Object[]> findCategoryPostCounts();
 
     long countByUserId(Long userId);
+    
+    
+    Page<Board> findByStatusNotOrderByCreateDateDesc(Integer status, Pageable pageable);
+    
+    
 }

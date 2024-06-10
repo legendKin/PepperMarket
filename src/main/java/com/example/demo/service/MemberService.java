@@ -50,7 +50,7 @@ public class MemberService {
         Users user = findByEmail(username);
         if (!file.isEmpty()) {
             String fileName = storeFile(file);
-            user.setProfilePictureUrl(fileName);
+            user.setProfilePictureUrl(("/files/" + fileName));
         }
         user.setNickname(nickname);
         user.setEmail(email);

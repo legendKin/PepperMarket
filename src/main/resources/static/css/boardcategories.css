@@ -26,17 +26,30 @@
   margin-right: 8px;
   padding: 12px 28px;
   width: 202px;
-}
+  
+  }
 .category-toggle-content {
   display: flex;
   justify-content: space-between;
 }
 .filtername {
-  font-family: "Pretendard Variable";
+
   font-size: 0.938rem;
   font-weight: 700;
   line-height: 134%;
 }
+
+.isA-box {
+  align-items: flex-end;
+  display:     flex;
+  width:       202px;
+  }
+
+.is-available {
+  align-items: flex-end;
+  display:     flex;
+  width:       100%;
+  }
 
 /* 카테고리 하단 */
 .reset-filter {

@@ -81,10 +81,11 @@ public class BoardService {
     public Page<Board> boardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
-
+    
+    
     // 특정 키워드를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
-    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
-        return boardRepository.findByTitleContaining(searchKeyword, pageable);
+    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable, Integer status) {
+        return boardRepository.findByTitleContainingAndStatusNot(searchKeyword, pageable, status);
     }
 
     // 특정 ID의 게시글을 조회하는 메서드
@@ -98,13 +99,13 @@ public class BoardService {
     }
 
     // 특정 카테고리 ID의 게시글 리스트를 페이징하여 가져오는 메서드
-    public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable) {
-        return boardRepository.findByCateID(searchCateID, pageable);
+    public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable, Integer status) {
+        return boardRepository.findByCateIDAndStatusNot(searchCateID, pageable, status);
     }
 
     // 특정 키워드와 카테고리 ID를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
-    public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable) {
-        return boardRepository.findByTitleContainingAndCateID(searchKeyword, searchCateID, pageable);
+    public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status) {
+        return boardRepository.findByTitleContainingAndCateIDAndStatusNot(searchKeyword, searchCateID, pageable, status);
     }
 
     // 게시글의 제목과 내용을 확인하여 키워드 알림을 생성하는 메서드
@@ -163,7 +164,14 @@ public class BoardService {
     public long getBoardCountByUserId(Long userId) {
         return boardRepository.countByUserId(userId);
     }
-
-
-
+    
+    public Page<Board> getAvailableBoard8() {
+        return boardRepository.findByStatusNotOrderByCreateDateDesc(3, Pageable.ofSize(8));
+    }
+    
+    public Page<Board> getAvailableBoard(Pageable pageable) {
+        return boardRepository.findByStatusNotOrderByCreateDateDesc(3, pageable);
+    }
+    
+    
 }

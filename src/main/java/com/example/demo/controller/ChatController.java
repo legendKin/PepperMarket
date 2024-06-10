@@ -114,7 +114,7 @@ public class ChatController {
         List<Map<String, String>> chatRooms = getUserChatRooms(userId); // 사용자의 채팅방 목록 가져옴
         model.addAttribute("user", user); // 사용자 정보를 모델에 추가
         model.addAttribute("chatRooms", chatRooms); // 채팅방 정보를 모델에 추가
-        return "chatter";
+        return "fragments/chatlayout";
     }
 
     // 특정 게시글 작성자와의 채팅방으로 이동하는 엔드포인트

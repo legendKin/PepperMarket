@@ -35,6 +35,105 @@
 </div>
 
 <div th:replace="~{fragments/footer::footer}"></div>
+<script th:inline="javascript">
+	$(document).ready(function () {
+		
+		
+		function displayMessage(message) {
+			var senderName = message.sender.nickname; // 보낸 사람의 닉네임
+			var timestamp = new Date(message.timestamp);
+			var options = {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul'};
+			var formattedTime = timestamp.toLocaleTimeString('ko-KR', options);
+			
+			var str = "<div class='col-6'>";
+			str += "<div class='alert alert-info'>";
+			str += "<b>" + senderName + " : " + message.content + " [" + formattedTime + "]</b>";
+			str += "</div></div>";
+			$("#msgArea").append(str);
+		}
+		
+		function getPreviousChatMessages(chatRoomId) {
+			fetch("/chat/messages/" + chatRoomId)
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.json();
+				})
+				.then((messages) => {
+					if (Array.isArray(messages)) {
+						messages.forEach(displayMessage);
+					} else {
+						throw new Error("Invalid response format");
+					}
+				})
+				.catch((error) => {
+					console.error("There has been a problem with your fetch operation:", error);
+				});
+		}
+		
+		const userId = /*[[${#authentication.principal.id}]]*/ "anonymous"; // 로그인한 사용자의 ID
+		const chatRoomId = /*[[${chatRoomId}]]*/ "defaultRoom"; // 채팅방 ID
+		const receiverId = /*[[${receiverId}]]*/ "defaultReceiver"; // 수신자 ID
+		
+		getPreviousChatMessages(chatRoomId);
+		
+		$("#button-send").on("click", (e) => {
+			send();
+		});
+		
+		const socket = new SockJS("/ws/chat");
+		const stompClient = Stomp.over(socket);
+		
+		stompClient.connect({}, function (frame) {
+			console.log("Connected: " + frame);
+			
+			stompClient.subscribe("/topic/public", function (messageOutput) {
+				const message = JSON.parse(messageOutput.body);
+				displayMessage(message);
+			});
+		});
+		
+		function send() {
+			const message = {
+				senderId: userId, // 사용자 ID로 변경
+				receiverId: receiverId, // 수신자 ID 추가
+				content: document.getElementById("msg").value,
+				chatRoomId: chatRoomId,
+			};
+			stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message));
+			
+			document.getElementById("msg").value = "";
+		}
+		
+		socket.onclose = function (event) {
+			console.log("WebSocket closed: ", event);
+		};
+		
+		socket.onerror = function (event) {
+			console.error("WebSocket error: ", event);
+		};
+		
+		function loadChatRooms() {
+			const userId = $('#userId').val(); // 사용자 ID 가져오기
+			$.ajax({
+				type: 'GET',
+				url: `/chat/chats?userId=${userId}`,
+				success: function (chatRooms) {
+					const chatList = $('#chatList');
+					chatList.empty();
+					chatRooms.forEach(chatRoom => {
+						chatList.append(`<li> ${chatRoom.partnerName}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
+					});
+				},
+				error: function (error) {
+					console.error('채팅 방 목록 로딩 중 오류 발생:', error);
+				}
+			});
+		}
+		
+	});
+</script>
 
 
 </body>
