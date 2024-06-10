@@ -11,7 +11,5 @@ public class BCryptConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public class test{
-//        삭제알아서
-    }
+
 }

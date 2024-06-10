@@ -5,6 +5,7 @@ import com.example.demo.entity.Notification;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -176,8 +177,5 @@ public class BoardService {
     
 
 
-    public void likePost(Long id) {
-        boardRepository.incrementLikes(id);
-    }
 
 }

@@ -41,10 +41,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     long countByUserId(Long userId);
 
-    @Transactional
-    @Modifying
-    @Query("update Board b set b.likes = b.likes + 1 where b.id = :id")
-    void incrementLikes(Long id);
+
     
     
     Page<Board> findByStatusNotOrderByCreateDateDesc(Integer status, Pageable pageable);
