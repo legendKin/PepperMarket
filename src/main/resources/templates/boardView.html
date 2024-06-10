@@ -1,140 +1,165 @@
 <!doctype html>
 <html
-        lang="ko"
-        layout:decorate="~{layouts/layout}"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:th="http://www.thymeleaf.org"
+  lang="ko"
+  layout:decorate="~{layouts/layout}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
 >
-<head>
-    <meta charset="UTF-8"/>
+  <head>
+    <meta charset="UTF-8" />
     <title th:text="${board.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/boardview.css}"/>
-</head>
-<body>
-<div layout:fragment="content">
-    <section class="wrapper">
+    <link rel="stylesheet" th:href="@{/css/boardview.css}" />
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <section class="wrapper">
         <div class="product-container">
-            <div class="left-section">
-                <div class="product-image">
-                    <img alt="게시글 이미지지"
-                         onerror="this.src='/files/default.png'"
-                         th:src="@{${board.filepath}}"/>
-
-                </div>
-
-                <div class="seller-info">
-                    <div class="seller-profile">
-                        <a class="seller-link" href="">
-                            <img
-                                    alt="프로필 이미지"
-                                    class="profile-img"
-                                    th:src="${board.writerPic}"
-                            />
-                            <div class="profile-info">
-                                <div
-                                        class="seller-name"
-                                        th:text="${board.user.nickname}"
-                                ></div>
-                                <div class="seller-items">
-                                    <div class="item-count-label">판매상품</div>
-                                    <div class="item-count" th:text="${userPostCount}">
-                                    </div>
-                                </div>
-                                <div class="rating">
-                                    <img
-                                            alt="rating"
-                                            class="star"
-                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                                    />
-                                    <img
-                                            alt="rating"
-                                            class="star"
-                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                                    />
-                                    <img
-                                            alt="rating"
-                                            class="star"
-                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                                    />
-                                    <img
-                                            alt="rating"
-                                            class="star"
-                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                                    />
-                                    <img
-                                            alt="rating"
-                                            class="star"
-                                            src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                                    />
-                                    <div class="rating-count">(0)</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
+          <div class="left-section">
+            <div class="product-image">
+              <img
+                alt="게시글 이미지"
+                onerror="this.src='/files/default.png'"
+                th:src="@{${board.filepath}}"
+              />
             </div>
-            <div class="right-section">
 
-                <div class="product-info">
-                    <div class="category-box" th:text="${board.categName}">카테고리명</div>
-                    <div class="product-name" th:text="${board.title}">상품명</div>
-                    <div class="price" th:text="${board.getFormattedPrice} + 원"></div>
-                </div>
-
-                <div class="product-status">
-                    <div class="left">
-                        <div class="view-count" th:text="|조회수 ${board.viewcount}|"></div>
+            <div class="seller-info">
+              <div class="seller-profile">
+                <a class="seller-link" href="">
+                  <img
+                    class="profile-img"
+                    th:src="${board.writerPic}"
+                    alt="프로필 이미지"
+                  />
+                  <div class="profile-info">
+                    <div
+                      class="seller-name"
+                      th:text="${board.user.nickname}"
+                    ></div>
+                    <div class="seller-items">
+                      <div class="item-count-label">판매상품</div>
+                      <div class="item-count" th:text="${userPostCount}"></div>
                     </div>
-
-                    <div class="additional-info right">
-                        <div class="condition" th:text="|제품 상태: ${board.qualityHangul()}|"></div>
-                        <div class="time-ago" th:text="|${board.timeAgo}|"></div>
+                    <div class="rating">
+                      <img
+                        class="star"
+                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                        alt="rating"
+                      />
+                      <img
+                        class="star"
+                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                        alt="rating"
+                      />
+                      <img
+                        class="star"
+                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                        alt="rating"
+                      />
+                      <img
+                        class="star"
+                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                        alt="rating"
+                      />
+                      <img
+                        class="star"
+                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
+                        alt="rating"
+                      />
+                      <div class="rating-count">(0)</div>
                     </div>
-                </div>
-
-                <div class="action-buttons">
-                    <div class="like-chat">
-                        <div class="like-button">
-                            <img
-                                    alt="좋아요 아이콘"
-                                    class="like-icon"
-                                    src="https://ccimage.hellomarket.com/img/web/item/detail/ico_wish_default.png"
-                            />
-                            <div class="like-count">1</div>
-                        </div>
-                        <div class="chat-button edit-button">
-                            <th:block th:if="${board.user != null && loggedInUser != null && board.user.id != loggedInUser.id}">
-                                <a
-                                        class="chat-text"
-                                        th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
-                                ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>판매자와 채팅하기</a>
-                            </th:block>
-                            <th:block th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}">
-                                <a class="edit-text"
-                                   th:href="@{/board/modify/{id}(id=${board.id})}">
-                                    <i class="far fa-edit edit-icon fa-lg btn-icon"></i>글 수정</a>
-                            </th:block>
-                            <th:block th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}">
-                                <a class="delete-text"
-                                   th:href="@{/board/delete/{id}(id=${board.id})}">
-                                    <i class="far fa-trash-alt delete-icon fa-lg btn-icon"></i>글 삭제</a>
-                            </th:block>
-                            <th:block th:if="${loggedInUser == null}">
-                                <a
-                                        class="gologin-text"
-                                        href="/login"
-                                ><i class="far fa-comments fa-lg btn-icon chat-icon"></i>로그인하고 거래하기</a>
-                            </th:block>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-description" th:text="${board.content}">상품 설명</div>
-                <p>이것도 푸시받고 삭제</p>
+                  </div>
+                </a>
+              </div>
             </div>
+          </div>
+          <div class="right-section">
+            <div class="product-info">
+              <div class="category-box" th:text="${board.categName}">
+                카테고리명
+              </div>
+              <div class="product-name" th:text="${board.title}">상품명</div>
+              <div
+                class="price"
+                th:text="${board.getFormattedPrice()} + '원'"
+              ></div>
+            </div>
+            <div class="product-status">
+              <div class="left">
+                <div
+                  class="view-count"
+                  th:text="|조회수 ${board.viewcount}|"
+                ></div>
+              </div>
+              <div class="additional-info right">
+                <div
+                  class="condition"
+                  th:text="|제품 상태: ${board.qualityHangul() != null ? board.qualityHangul() : '정보 없음'}|"
+                ></div>
+                <div class="time-ago" th:text="|${board.getTimeAgo()}|"></div>
+              </div>
+            </div>
+            <div class="action-buttons">
+              <div class="like-chat">
+                <form method="post" th:action="@{/board/like}">
+                  <input type="hidden" name="boardId" th:value="${board.id}" />
+                  <button
+                    type="submit"
+                    th:classappend="${liked ? ' liked' : ''}"
+                  >
+                    좋아요
+                  </button>
+                  <span th:text="${likeCount}">0</span>
+                </form>
+                <div class="chat-button edit-button">
+                  <th:block
+                    th:if="${board.user != null && loggedInUser != null && board.user.id != loggedInUser.id}"
+                  >
+                    <a
+                      class="chat-text"
+                      th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
+                    >
+                      <i class="far fa-comments fa-lg btn-icon chat-icon"></i
+                      >판매자와 채팅하기
+                    </a>
+                  </th:block>
+                  <th:block
+                    th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}"
+                  >
+                    <a
+                      class="edit-text"
+                      th:href="@{/board/modify/{id}(id=${board.id})}"
+                    >
+                      <i class="far fa-edit edit-icon fa-lg btn-icon"></i>글
+                      수정
+                    </a>
+                  </th:block>
+                  <th:block
+                    th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}"
+                  >
+                    <a
+                      class="delete-text"
+                      th:href="@{/board/delete/{id}(id=${board.id})}"
+                    >
+                      <i class="far fa-trash-alt delete-icon fa-lg btn-icon"></i
+                      >글 삭제
+                    </a>
+                  </th:block>
+                  <th:block th:if="${loggedInUser == null}">
+                    <a class="gologin-text" href="/login">
+                      <i class="far fa-comments fa-lg btn-icon chat-icon"></i
+                      >로그인하고 거래하기
+                    </a>
+                  </th:block>
+                </div>
+              </div>
+            </div>
+            <div class="product-description" th:text="${board.content}">
+              상품 설명
+            </div>
+          </div>
         </div>
-    </section>
-</div>
-</body>
+      </section>
+    </div>
+  </body>
 </html>

@@ -19,6 +19,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     Page<Board> findByCateIDAndStatusNot(Integer searchCateID, Pageable pageable, Integer status);
     
     Page<Board> findByCateID(Integer searchCateID, Pageable pageable);
+    
+    
 
     // 제목에 특정 키워드를 포함하는 게시글을 페이징하여 검색
     Page<Board> findByTitleContainingAndStatusNot(String searchKeyword, Pageable pageable, Integer status);

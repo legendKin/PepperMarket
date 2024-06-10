@@ -1,12 +1,13 @@
 package com.example.demo.controller;
 
+
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.ViewedPost;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.*;
-
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 public class BoardController {
@@ -48,11 +49,17 @@ public class BoardController {
     
     @Autowired
     private ViewedPostService viewedPostService;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserRepository userRepository;
     
+
+    @Autowired
+    private LikeService likeService;
+
     @Autowired
     public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService) {
         this.boardService = boardService;
@@ -68,11 +75,11 @@ public class BoardController {
         return "boardWrite";
     }
     
-    
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                            String searchKeyword, @RequestParam(required = false) Integer searchCateID, @RequestParam(required = false) boolean showCompleted, @RequestParam(required = false) boolean ajax) {
+                            String searchKeyword, @RequestParam(required = false) Integer searchCateID,
+                            @RequestParam(required = false) boolean showCompleted, @RequestParam(required = false) boolean ajax) {
         logger.info("boardList method called");
         Page<Board> list;
         
@@ -99,8 +106,7 @@ public class BoardController {
                 list = boardService.boardList(pageable);
             }
         }
-        
-        
+
         model.addAttribute("list", list);
         
         
@@ -127,6 +133,9 @@ public class BoardController {
         model.addAttribute("categList", categList);
         model.addAttribute("categoryPostCounts", categoryPostCounts);
         
+        Long loggedUserId = getCurrentUserId();
+        model.addAttribute("loggedUserId", loggedUserId);
+        
         logger.info("Rendering boardList template");
         if (ajax) {
             // Ajax 요청인 경우, 프래그먼트를 반환하여 부분적으로 업데이트합니다.
@@ -136,20 +145,36 @@ public class BoardController {
             return "boardLists";
         }
     }
-    
-    
     @GetMapping("/board/view")
-    public String boardView(Model model, Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+    public String boardView(Model model, @RequestParam("id") Integer id, @AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID must not be null");
+        }
+        
+        logger.info("boardView 호출됨: id={}, userDetails={}", id, userDetails);
+        
+        // 세션에서 좋아요 요청 플래그 확인
+        Boolean likeRequest = (Boolean) session.getAttribute("likeRequest");
+        if (likeRequest == null || !likeRequest) {
+            boardService.boardViewCount(id); // 조회수 증가 로직
+        } else {
+            session.removeAttribute("likeRequest"); // 플래그 초기화
+        }
+        
         Board board = boardService.boardView(id);
-        boardService.boardViewCount(id);
-        model.addAttribute("board", boardService.boardView(id));
-        List<Comment> comments = commentService.getCommentsByBoardId(id);
         model.addAttribute("board", board);
+        List<Comment> comments = commentService.getCommentsByBoardId(id);
         model.addAttribute("comments", comments);
         
         if (userDetails != null) {
             Users currentUser = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
             model.addAttribute("loggedInUser", currentUser);
+            
+            // 사용자 좋아요 여부 추가
+            boolean liked = likeService.hasUserLiked(id.longValue(), userDetails.getUsername());
+            model.addAttribute("liked", liked);
+        } else {
+            model.addAttribute("liked", false);
         }
         
         Long userId = getCurrentUserId();
@@ -162,12 +187,24 @@ public class BoardController {
         
         Long userPostCount = boardService.getBoardCountByUserId(board.getUser().getId());
         model.addAttribute("userPostCount", userPostCount);
+        // 좋아요 수 추가
+        long likeCount = board.getLikecount() == null ? 0 : board.getLikecount();
+        model.addAttribute("likeCount", likeCount);
         
         return "boardView";
     }
     
     private Long getCurrentUserId() {
         // 실제 사용자 ID를 가져오는 로직으로 대체해야 합니다.
+        // 여기서는 예시로 1L을 반환합니다. 실제 구현에서는 인증된 사용자 정보에서 ID를 가져와야 합니다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+            if (user != null) {
+                return user.getId();
+            }
+        }
         return 1L; // 예시로 1을 반환
     }
     
@@ -258,11 +295,34 @@ public class BoardController {
         model.addAttribute("viewedPosts", viewedPosts);
         return "recentViewedPosts";
     }
-
-    @PostMapping("/{id}/like")
-    public void likePost(@PathVariable Long id) {
-        boardService.likePost(id);
+    
+    @PostMapping("/board/like")
+    public String likeBoard(@RequestParam Integer boardId, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes, HttpSession session) {
+        logger.info("likeBoard 호출됨: boardId={}, userDetails={}", boardId, userDetails);
+        if (userDetails == null) {
+            redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
+        
+        String userEmail = userDetails.getUsername();
+        boolean liked = likeService.addLike(boardId.longValue(), userEmail);
+        
+        // 좋아요 상태 메시지 추가
+        redirectAttributes.addFlashAttribute("message", liked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.");
+        
+        // 좋아요 요청 플래그 설정
+        session.setAttribute("likeRequest", true);
+        
+        return "redirect:/board/view?id=" + boardId;
+    }
+    
+    @GetMapping("/board/like/count")
+    @ResponseBody
+    public Long getLikeCount(@RequestParam Integer boardId) {
+        logger.info("getLikeCount 호출됨: boardId={}", boardId);
+        return likeService.getLikeCount(boardId.longValue());
     }
 }
-    
+
+
 
