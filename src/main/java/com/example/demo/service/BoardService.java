@@ -5,7 +5,6 @@ import com.example.demo.entity.Notification;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.*;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -88,6 +87,10 @@ public class BoardService {
     public Page<Board> boardSearchList(String searchKeyword, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndStatusNot(searchKeyword, pageable, status);
     }
+    
+    public Page<Board> boardSearchListAll(String searchKeyword, Pageable pageable) {
+        return boardRepository.findByTitleContaining(searchKeyword, pageable);
+    }
 
     // 특정 ID의 게시글을 조회하는 메서드
     public Board boardView(Integer id) {
@@ -103,10 +106,18 @@ public class BoardService {
     public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable, Integer status) {
         return boardRepository.findByCateIDAndStatusNot(searchCateID, pageable, status);
     }
+    
+    public Page<Board> searchByCateIDAll(Integer searchCateID, Pageable pageable) {
+        return boardRepository.findByCateID(searchCateID, pageable);
+    }
 
     // 특정 키워드와 카테고리 ID를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndCateIDAndStatusNot(searchKeyword, searchCateID, pageable, status);
+    }
+    
+    public Page<Board> searchByKeywordAndCateIDAll(String searchKeyword, Integer searchCateID, Pageable pageable) {
+        return boardRepository.findByTitleContainingAndCateID(searchKeyword, searchCateID, pageable);
     }
 
     // 게시글의 제목과 내용을 확인하여 키워드 알림을 생성하는 메서드
@@ -177,5 +188,8 @@ public class BoardService {
     
 
 
+    public void likePost(Long id) {
+        boardRepository.incrementLikes(id);
+    }
 
 }

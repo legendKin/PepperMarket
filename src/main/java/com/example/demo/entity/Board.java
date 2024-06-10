@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -9,8 +11,16 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 
 import static com.example.demo.service.CategoryService.categoryList;
+
+
+
+
+/**
+ * 게시글을 나타내는 엔티티 클래스입니다.
+ */
 
 @Entity
 @Getter
@@ -27,12 +37,12 @@ public class Board {
     private String filename; // 파일 이름
     private String filepath; // 파일 경로
     private Integer viewcount; // 조회수
+    private Integer likecount; // 좋아요 수
     private Integer cateID; // 카테고리 ID
     private String categName; // 카테고리 이름
     private String quality;
     private Integer status; // 판매 상태 1:판매중, 2:예약중 3:판매완료
-
-    private Integer likecount = 0;
+    private int likes; // 좋아요 갯수
 
 
     @ManyToOne
@@ -45,30 +55,25 @@ public class Board {
     @Column(name = "modifydate", nullable = true)
     private LocalDateTime modifyDate; // 수정일
 
+
     public String getCategName() {
         categName = categoryList.get(cateID - 1);
         return categName;
     }
-
-    public String qualityHangul() {
-        if (quality == null) return null;
-        switch (quality) {
-            case "perfect":
-                return "매우 좋음";
-            case "good":
-                return "좋음";
-            case "bad":
-                return "보통";
-            default:
-                return " ";
-        }
+    public String qualityHangul(){
+        return switch (quality) {
+            case "perfect" -> "매우 좋음";
+            case "good" -> "좋음";
+            case "bad" -> "보통";
+            default -> " ";
+        };
     }
 
-    public Long getWriter() {
+    public Long getWriter(){
         return user.getId();
     }
 
-    public String getWriterPic() {
+    public String getWriterPic(){
         return user.getProfilePictureUrl();
     }
 
@@ -85,6 +90,15 @@ public class Board {
         }
     }
 
+
+
+
+
+//    @ManyToOne
+//    @JoinColumn(name = "category_id")
+//    private Category category;
+
+    // createDate를 기준으로 몇 분 전, 몇 시간 전 등을 반환하는 메서드
     public String getTimeAgo() {
         if (this.createDate == null) {
             return "날짜 정보 없음";
@@ -93,3 +107,4 @@ public class Board {
         return Time.calculateTime(date);
     }
 }
+
