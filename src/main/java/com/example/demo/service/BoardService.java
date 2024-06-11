@@ -5,9 +5,7 @@ import com.example.demo.entity.Notification;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.*;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -25,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service // 서비스 클래스임을 나타냄
-public class BoardService {
+public abstract class BoardService {
 
     private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 
@@ -86,11 +82,11 @@ public class BoardService {
     
     
     // 특정 키워드를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
-    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable, Integer status) {
+    public Page<Board> boardSearchListAvailable(String searchKeyword, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndStatusNot(searchKeyword, pageable, status);
     }
     
-    public Page<Board> boardSearchListAll(String searchKeyword, Pageable pageable) {
+    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
         return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
@@ -105,11 +101,11 @@ public class BoardService {
     }
     
     // 특정 카테고리 ID의 게시글 리스트를 페이징하여 가져오는 메서드
-    public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable, Integer status) {
+    public Page<Board> searchByCateIDAvailable(Integer searchCateID, Pageable pageable, Integer status) {
         return boardRepository.findByCateIDAndStatusNot(searchCateID, pageable, status);
     }
     
-    public Page<Board> searchByCateIDAll(Integer searchCateID, Pageable pageable) {
+    public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable) {
         return boardRepository.findByCateID(searchCateID, pageable);
     }
     
@@ -117,11 +113,11 @@ public class BoardService {
     
 
     // 특정 키워드와 카테고리 ID를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
-    public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status) {
+    public Page<Board> searchByKeywordAndCateIDAvailable(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndCateIDAndStatusNot(searchKeyword, searchCateID, pageable, status);
     }
     
-    public Page<Board> searchByKeywordAndCateIDAll(String searchKeyword, Integer searchCateID, Pageable pageable) {
+    public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable) {
         return boardRepository.findByTitleContainingAndCateID(searchKeyword, searchCateID, pageable);
     }
 
@@ -196,5 +192,9 @@ public class BoardService {
     public void likePost(Long id) {
         boardRepository.incrementLikes(id);
     }
-
+    
+    public Page<Board> searchBoards(String searchKeyword, Integer searchCateID, Pageable pageable, boolean showCompleted) {
+        Integer status = showCompleted ? null : 3; // showCompleted가 true이면 status를 null로 설정하여 모든 상태의 게시글을 가져옴
+        return boardRepository.searchBoards(searchKeyword, searchCateID, status, pageable);
+    }
 }

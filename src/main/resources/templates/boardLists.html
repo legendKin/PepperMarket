@@ -71,7 +71,7 @@
               <div class="category-count">
                 <a
                   class="category-link"
-                  th:href="@{/board/list(searchKeyword=${searchKeyword}, searchCateID=)}"
+                  th:href="@{/board/list(searchCateID='',searchKeyword=${param.searchKeyword})}"
                   >전체</a
                 >
                 <div
@@ -81,7 +81,7 @@
                   <a
                     class="category-link"
                     th:classappend="'category' + ${iterStat.index + 1}"
-                    th:href="@{/board/list(searchKeyword=${searchKeyword}, searchCateID=${iterStat.index + 1})}"
+                    th:href="@{/board/list(searchCateID=${iterStat.index + 1},searchKeyword=${param.searchKeyword})}"
                     th:text="${board} + ' (' + (${categoryPostCounts[iterStat.index + 1]} ?: 0) + ')'"
                   ></a>
                 </div>
@@ -113,10 +113,14 @@
           <div class="product-count">
             <div class="product-count-left">
               <h2><span th:text="${categNow}"></span></h2>
-              <span class="count-text"
-                ><span th:text="${list.getTotalElements()}"></span>개의 상품이
-                있습니다.</span
-              >
+              <span class="count-text">
+                <!--                <span id="product-count"></span>개의 상품이 있습니다.-->
+                <span
+                  id="product-count"
+                  th:text="${list.getTotalElements()}"
+                ></span
+                >개의 상품이 있습니다.
+              </span>
             </div>
             <div class="recommendation">
               <div class="recommendation-text">추천순</div>
@@ -130,7 +134,9 @@
           <div id="product-list" th:fragment="content">
             <div class="product-album py-5 bg-light">
               <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div
+                  class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 boards"
+                >
                   <div class="col" th:each="board : ${list}">
                     <div class="card shadow-sm">
                       <a
@@ -214,7 +220,8 @@
                   <a
                     aria-label="Previous"
                     class="page-link"
-                    th:href="@{/board/list(page=${startPage - 1}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
+                    href="javascript:void(0);"
+                    th:onclick="|fetchBoardListData(${startPage - 1})|"
                   >
                     <span aria-hidden="true">&laquo;</span>
                   </a>
@@ -230,7 +237,8 @@
                   >
                     <a
                       class="page-link"
-                      th:href="@{/board/list(page=${page-1}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
+                      href="javascript:void(0);"
+                      th:onclick="|fetchBoardListData(${page - 1})|"
                       th:text="${page}"
                     ></a>
                   </li>
@@ -243,7 +251,8 @@
                   <a
                     aria-label="Next"
                     class="page-link"
-                    th:href="@{/board/list(page=${endPage + 1}, searchKeyword=${searchKeyword}, searchCateID=${searchCateID})}"
+                    href="javascript:void(0);"
+                    th:onclick="|fetchBoardListData(${endPage + 1})|"
                   >
                     <span aria-hidden="true">&raquo;</span>
                   </a>
@@ -267,9 +276,7 @@
             selectedCategory = document.querySelector(
               ".category" + currentCategoryId,
             );
-            selectedCategoryTab = document.querySelector(
-              ".category-toggle" + currentCategoryId,
-            );
+            selectedCategoryTab = document.querySelector(".category-toggle");
           }
 
           if (selectedCategory !== null) {
@@ -307,19 +314,29 @@
       </script>
 
       <script>
-        function fetchBoardListData() {
+        function getUrlParameter(name) {
+          name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+          var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+          var results = regex.exec(location.search);
+          return results === null
+            ? ""
+            : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        function fetchBoardListData(page) {
           var showCompleted = document.getElementById("showCompleted").checked;
-          // var searchCateID = $('input[name="category"]:checked').val();
-          // var searchKeyword = document.getElementById("searchKeyword").value;
+          var searchKeyword = getUrlParameter("searchKeyword");
+          var searchCateID = getUrlParameter("searchCateID");
 
           $.ajax({
             url: "/board/list",
             type: "GET",
             data: {
-              // searchKeyword: searchKeyword,
-              // searchCateID: searchCateID,
+              // showCompleted: showCompleted,
+              page: page || 0, // Use the provided page parameter or default to 0
+              ajax: true, // Ajax request indicator
               showCompleted: showCompleted,
-              ajax: true, // Ajax 요청임을 나타내는 매개변수 추가
+              searchKeyword: searchKeyword,
+              searchCateID: searchCateID,
             },
             success: function (response) {
               $("#product-list").html(response);
@@ -329,6 +346,10 @@
             },
           });
         }
+
+        $(document).ready(function () {
+          fetchBoardListData(0);
+        });
       </script>
     </div>
   </body>

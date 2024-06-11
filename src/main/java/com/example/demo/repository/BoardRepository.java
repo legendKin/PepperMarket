@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,5 +58,13 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     
     Page<Board> findByStatusNotOrderByCreateDateDesc(Integer status, Pageable pageable);
     
+    @Query("SELECT b FROM Board b WHERE " +
+                   "(:searchKeyword IS NULL OR b.title LIKE %:searchKeyword%) AND " +
+                   "(:searchCateID IS NULL OR b.cateID = :searchCateID) AND " +
+                   "(:status IS NULL OR b.status <> :status)")
+    Page<Board> searchBoards(@Param("searchKeyword") String searchKeyword,
+                             @Param("searchCateID") Integer searchCateID,
+                             @Param("status") Integer status,
+                             Pageable pageable);
     
 }

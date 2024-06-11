@@ -81,31 +81,8 @@ public class BoardController {
                             String searchKeyword, @RequestParam(required = false) Integer searchCateID,
                             @RequestParam(required = false) boolean showCompleted, @RequestParam(required = false) boolean ajax) {
         logger.info("boardList method called");
-        Page<Board> list;
-        
-        
-        if (!showCompleted) {
-            // 판매 완료된 상품을 보여주지 않는 경우
-            if (searchKeyword != null && searchCateID != null) {
-                list = boardService.searchByKeywordAndCateID(searchKeyword, searchCateID, pageable, 3);
-            } else if (searchKeyword != null) {
-                list = boardService.boardSearchList(searchKeyword, pageable, 3);
-            } else if (searchCateID != null) {
-                list = boardService.searchByCateID(searchCateID, pageable, 3);
-            } else {
-                list = boardService.getAvailableBoard(pageable);
-            }
-        } else {
-            if (searchKeyword != null && searchCateID != null) {
-                list = boardService.searchByKeywordAndCateIDAll(searchKeyword, searchCateID, pageable);
-            } else if (searchKeyword != null) {
-                list = boardService.boardSearchListAll(searchKeyword, pageable);
-            } else if (searchCateID != null) {
-                list = boardService.searchByCateIDAll(searchCateID, pageable);
-            } else {
-                list = boardService.boardList(pageable);
-            }
-        }
+        Page<Board> list = boardService.searchBoards(searchKeyword, searchCateID, pageable, showCompleted);
+
 
         model.addAttribute("list", list);
         
@@ -138,13 +115,18 @@ public class BoardController {
         
         logger.info("Rendering boardList template");
         if (ajax) {
+            long totalElements = list.getTotalElements();
+            model.addAttribute("totalElements", totalElements);
             // Ajax 요청인 경우, 프래그먼트를 반환하여 부분적으로 업데이트합니다.
             return "boardLists :: content"; // 이 뷰 템플릿은 상품 목록에 해당하는 부분만을 포함해야 합니다.
         } else {
+            long totalElements = list.getTotalElements();
+            model.addAttribute("totalElements", totalElements);
             // 판매 완료된 상품을 보여주지 않는 경우, 기존의 뷰 템플릿을 반환합니다.
             return "boardLists";
         }
     }
+    
     @GetMapping("/board/view")
     public String boardView(Model model, @RequestParam("id") Integer id, @AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
         if (id == null) {
