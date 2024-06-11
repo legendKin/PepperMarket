@@ -4,6 +4,7 @@
 >
 <th:block th:fragment="header">
 	<head>
+		<meta charset="UTF-8" />
 		<link rel="stylesheet" th:href="@{/css/header.css}"/>
 		<link rel="stylesheet" th:href="@{/css/footer.css}"/>
 		<title>페퍼마켓에 오신 것을 환영합니다</title>
@@ -44,7 +45,7 @@
 								id="dropdownMenuButton"
 								type="button"
 						>
-							<img alt="프사" class="profile-img" th:src="@{${profilepic}}"/>
+
 							<p class="profile-name badg" th:text="${nickname}"></p>
 						</a>
 						<div
