@@ -39,7 +39,7 @@ public class ChatMessageService {
     }
 
     // 특정 채팅방 ID에 속한 메시지를 타임스탬프 순서대로 가져오는 메서드
-    public List<ChatMessage> getMessagesByChatRoomId(String chatRoomId) {
+    public List<ChatMessage> getMessagesByChatRoomId(Long chatRoomId) {
         return chatMessageRepository.findByChatRoomIdOrderByTimestampAsc(chatRoomId);
     }
 
@@ -60,7 +60,7 @@ public class ChatMessageService {
         List<ChatMessage> receivedMessages = chatMessageRepository.findByReceiver(user);
 
         // 채팅방 ID를 키로, 마지막 메시지를 값으로 하는 맵 생성
-        Map<String, ChatMessage> chatRooms = new HashMap<>();
+        Map<Long, ChatMessage> chatRooms = new HashMap<>();
 
         // 발신한 메시지 처리
         for (ChatMessage message : sentMessages) {

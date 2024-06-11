@@ -19,13 +19,13 @@
 			<h2>My Chats</h2>
 			<ul id="chatList">
 				<!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
-				<li th:each="chatRoom : ${chatRooms}">
-					<span th:text="${chatRoom.partnerName}"></span>님의 메세지 -
-					<a th:href="@{/chat/room/{chatRoomId}(chatRoomId=${chatRoom.chatRoomId})}">채팅방으로 이동</a>
-				</li>
+<!--				<li th:each="chatRoom : ${chatRooms}">-->
+<!--					<span th:text="${chatRoom.partnerName}"></span>님의 메세지 - -->
+<!--					<a th:href="@{/chat/room/{chatRoomId}(chatRoomId=${chatRoom.chatRoomId})}">채팅방으로 이동</a>-->
+<!--				</li>-->
 			</ul>
 		</section>
-		<th:block th:insert="~{fragments/chatscripts::script}"></th:block>
+
 	</div>
 
 	<div class="chat-content" layout:fragment="chat-content"></div>

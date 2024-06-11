@@ -40,34 +40,7 @@
                       <div class="item-count-label">판매상품</div>
                       <div class="item-count" th:text="${userPostCount}"></div>
                     </div>
-                    <div class="rating">
-                      <img
-                        class="star"
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                      />
-                      <img
-                        class="star"
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                      />
-                      <img
-                        class="star"
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                      />
-                      <img
-                        class="star"
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                      />
-                      <img
-                        class="star"
-                        src="https://ccimage.hellomarket.com/img/web/common/empty_star.png"
-                        alt="rating"
-                      />
-                      <div class="rating-count">(0)</div>
-                    </div>
+
                   </div>
                 </a>
               </div>
@@ -117,7 +90,7 @@
                   >
                     <a
                       class="chat-text"
-                      th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id})}"
+                      th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id},postId=${board.id})}"
                     >
                       <i class="far fa-comments fa-lg btn-icon chat-icon"></i
                       >판매자와 채팅하기

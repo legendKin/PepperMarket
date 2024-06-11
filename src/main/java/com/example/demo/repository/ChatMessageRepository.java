@@ -17,7 +17,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     List<String> findChatRoomsByUserEmail(@Param("userEmail") String userEmail);
 
     // 특정 채팅방 ID에 속한 모든 메시지를 타임스탬프 오름차순으로 조회
-    List<ChatMessage> findByChatRoomIdOrderByTimestampAsc(String chatRoomId);
+    List<ChatMessage> findByChatRoomIdOrderByTimestampAsc(Long chatRoomId);
 
     // 발신자 또는 수신자가 특정 사용자와 일치하는 모든 메시지를 조회하는 사용자 정의 쿼리
     @Query("SELECT cm FROM ChatMessage cm WHERE cm.sender = :sender OR cm.receiver = :receiver")
@@ -28,4 +28,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 
     // 특정 사용자가 발신한 모든 메시지를 조회
     List<ChatMessage> findBySender(Users sender);
+
+    List<ChatMessage> findByChatRoomId(Long chatRoomId);
 }

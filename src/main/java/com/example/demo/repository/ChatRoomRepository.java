@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     List<ChatRoom> findBySenderIdOrReceiverId(Long senderId, Long receiverId);
+    ChatRoom findBySenderIdAndReceiverIdAndBoardId(Long senderId, Long receiverId, Long boardId);
 }

@@ -4,6 +4,7 @@ import com.example.demo.entity.ChatMessage;
 import com.example.demo.entity.ChatRoom;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.BoardService;
 import com.example.demo.service.ChatMessageService;
 import com.example.demo.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +26,22 @@ public class ChatController {
     private final ChatMessageService chatMessageService;
     private final UserRepository userRepository;
     private final ChatRoomService chatRoomService;
+    private final BoardService boardService;
 
     @Autowired
-    public ChatController(ChatMessageService chatMessageService, UserRepository userRepository, ChatRoomService chatRoomService) {
+    public ChatController(ChatMessageService chatMessageService, UserRepository userRepository, ChatRoomService chatRoomService, BoardService boardService) {
         this.chatMessageService = chatMessageService;
         this.userRepository = userRepository;
         this.chatRoomService = chatRoomService;
+        this.boardService = boardService;
     }
 
     // 새로운 채팅을 시작하는 엔드포인트
     @GetMapping("/start")
-    public ModelAndView startChat(@RequestParam Long senderId, @RequestParam Long receiverId) {
-        ChatRoom chatRoom = chatRoomService.createChatRoom(senderId, receiverId); // 새로운 채팅방 생성
+    public ModelAndView startChat(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long postId) {
+        ChatRoom chatRoom = chatRoomService.createOrGetChatRoom(senderId, receiverId, postId);
         Long chatRoomId = chatRoom.getId();
-        return new ModelAndView("redirect:/chat/room/" + chatRoomId + "?receiverId=" + receiverId); // 생성된 채팅방으로 리다이렉트
+        return new ModelAndView("redirect:/chat/room/" + chatRoomId + "?receiverId=" + receiverId);
     }
 
     // 특정 채팅방을 불러오는 엔드포인트
@@ -58,7 +61,7 @@ public class ChatController {
 
         // 새로운 채팅 메시지 객체 생성 및 설정
         ChatMessage message = new ChatMessage();
-        message.setChatRoomId(chatRoomId.toString()); // chatRoomId를 문자열로 변환하여 설정
+        message.setChatRoomId(chatRoomId);
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setContent(content);
@@ -73,7 +76,7 @@ public class ChatController {
     // 특정 채팅방의 메시지 리스트를 가져오는 엔드포인트
     @GetMapping("/messages/{chatRoomId}")
     public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable Long chatRoomId) {
-        List<ChatMessage> messages = chatMessageService.getMessagesByChatRoomId(chatRoomId.toString()); // chatRoomId를 문자열로 변환하여 사용
+        List<ChatMessage> messages = chatMessageService.getMessagesByChatRoomId(chatRoomId);
         return ResponseEntity.ok(messages); // 메시지 리스트를 HTTP 응답으로 반환
     }
 
@@ -88,6 +91,11 @@ public class ChatController {
             Map<String, String> chatRoomInfo = new HashMap<>();
             chatRoomInfo.put("chatRoomId", room.getId().toString());
             chatRoomInfo.put("partnerName", getPartnerName(room, userId)); // 상대방 이름 추가
+            chatRoomInfo.put("partnerId", String.valueOf(room.getReceiverId().equals(userId) ? room.getSenderId() : room.getReceiverId()));
+
+            // 게시글의 제목 가져오기
+            String postTitle = boardService.getBoardTitleByPostId(room.getPostId()); // postId로 게시글 제목 가져오기
+            chatRoomInfo.put("postTitle", postTitle);
             return chatRoomInfo;
         }).collect(Collectors.toList());
     }

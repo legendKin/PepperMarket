@@ -185,7 +185,8 @@ public abstract class BoardService {
     public Page<Board> getAvailableBoard(Pageable pageable) {
         return boardRepository.findByStatusNotOrderByCreateDateDesc(3, pageable);
     }
-    
+
+
     
 
 
@@ -196,5 +197,16 @@ public abstract class BoardService {
     public Page<Board> searchBoards(String searchKeyword, Integer searchCateID, Pageable pageable, boolean showCompleted) {
         Integer status = showCompleted ? null : 3; // showCompleted가 true이면 status를 null로 설정하여 모든 상태의 게시글을 가져옴
         return boardRepository.searchBoards(searchKeyword, searchCateID, status, pageable);
+    }
+
+    public Board getBoardById(Long postId) {
+        return boardRepository.findById(Math.toIntExact(postId))
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. postId: " + postId));
+    }
+
+    public String getBoardTitleByPostId(Long postId) {
+        Board board = boardRepository.findById(Math.toIntExact(postId))
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. postId: " + postId));
+        return board.getTitle();
     }
 }

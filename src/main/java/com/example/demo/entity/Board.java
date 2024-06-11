@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.example.demo.service.CategoryService.categoryList;
@@ -44,6 +45,8 @@ public class Board {
     private Integer status; // 판매 상태 1:판매중, 2:예약중 3:판매완료
     private int likes; // 좋아요 갯수
 
+    @OneToMany(mappedBy = "board")
+    private List<ChatRoom> chatRooms;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -54,6 +57,7 @@ public class Board {
 
     @Column(name = "modifydate", nullable = true)
     private LocalDateTime modifyDate; // 수정일
+
 
 
     public String getCategName() {
