@@ -6,12 +6,12 @@
 >
 <head>
   <meta charset="UTF-8" />
-  <title>마이페이지</title>
+  <title>마이 페이지</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
-  <h1>내 페이지</h1>
+  <h1>마이 페이지</h1>
   <p>닉네임: <span th:text="${user.nickname}"></span></p>
   <p>이메일: <span th:text="${user.email}"></span></p>
   <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
@@ -23,10 +23,6 @@
   <!-- 프로필 정보 변경 섹션 -->
   <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
-    <form
-            method="post"
-            th:action="@{/mypage/change-profile-info}"
-    >
       <label for="nickname">닉네임:</label>
       <input
               id="nickname"
@@ -91,7 +87,7 @@
   </section>
 
   <!-- *신고 목록 섹션 - 관리자 계정만* -->
-  <div th:if="${user.role} == 'ADMIN'">
+  <div th:if="${user.role} == 'admin'">
     <section id="report-section">
       <h2>신고 목록</h2>
       <ul>
