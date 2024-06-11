@@ -11,10 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.Date;
 
 @Controller
@@ -31,47 +29,20 @@ public class MyPageController {
         return "mypage";
     }
 
-    @PostMapping("/mypage/change-profile-picture")
-    public String changeProfilePicture(@RequestParam("file") MultipartFile file,
-                                       @AuthenticationPrincipal UserDetails userDetails,
-                                       RedirectAttributes redirectAttributes) {
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:/mypage";
-        }
-
-        try {
-            String fileName = memberService.storeFile(file);
-            memberService.updateUserProfilePicture(userDetails.getUsername(), fileName);
-            redirectAttributes.addFlashAttribute("message", "You successfully uploaded '" + fileName + "'");
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("message", "File upload failed: " + e.getMessage());
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
-        }
-
-        return "redirect:/mypage";
-    }
-
     @PostMapping("/mypage/change-profile-info")
-    public String changeProfileInfo(@RequestParam("file") MultipartFile file,
-                                    @RequestParam("nickname") String nickname,
+    public String changeProfileInfo(@RequestParam("nickname") String nickname,
                                     @RequestParam("email") String email,
                                     @RequestParam("name") String name,
                                     @RequestParam("birthdate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthdate,
                                     @AuthenticationPrincipal UserDetails userDetails,
                                     RedirectAttributes redirectAttributes) {
         try {
-            memberService.updateUserProfileInfo(userDetails.getUsername(), file, nickname, email, name, birthdate);
+            memberService.updateUserProfileInfo(userDetails.getUsername(), nickname, email, name, birthdate);
             redirectAttributes.addFlashAttribute("message", "Profile updated successfully.");
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("message", "File upload failed: " + e.getMessage());
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
         }
 
         return "redirect:/mypage";
     }
-
-
 }

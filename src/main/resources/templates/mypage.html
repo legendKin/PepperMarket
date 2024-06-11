@@ -6,7 +6,7 @@
 >
 <head>
   <meta charset="UTF-8" />
-  <title>내 페이지</title>
+  <title>마이페이지</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -17,7 +17,6 @@
   <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
   <p>제공자: <span th:text="${user.provider}"></span></p>
   <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
-	<p>프로필 사진: <img th:src="@{${user.profilePictureUrl}}" alt="Profile Picture"></p>
   <!-- 사용자 ID를 숨겨진 필드로 추가 -->
   <input id="userId" th:value="${user.id}" type="hidden" />
 
@@ -25,18 +24,9 @@
   <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
     <form
-            enctype="multipart/form-data"
             method="post"
             th:action="@{/mypage/change-profile-info}"
     >
-      <label for="file">프로필 사진:</label>
-      <img
-              alt="프사"
-              class="profile-img-mypage"
-              th:src="@{${user.profilePictureUrl}}"
-      />
-      <input id="file" name="file" type="file" /><br />
-
       <label for="nickname">닉네임:</label>
       <input
               id="nickname"
@@ -54,14 +44,14 @@
               readonly
       /><br />
 
-      <label for="name">이름:</label> <!-- *추가된 필드* -->
+      <label for="name">이름:</label>
       <input
               id="name"
               name="name"
               th:value="${user.name}"
               type="text"
       /><br />
-      <label for="birthdate">생년월일:</label> <!-- *** 생년월일 필드 추가 -->
+      <label for="birthdate">생년월일:</label>
       <input type="date" name="birthdate" id="birthdate" th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}"><br>
 
       <button type="submit">프로필 정보 변경</button>
@@ -70,7 +60,7 @@
 
   <!-- 키워드 관리 섹션 -->
   <section id="keywords-section">
-	  <label for="new-keyword">키워드 목록</label>
+    <label for="new-keyword">키워드 목록</label>
     <input id="new-keyword" placeholder="새 키워드를 입력하세요" type="text" />
     <button onclick="addKeyword()">추가</button>
     <ul id="keyword-list"></ul>
@@ -79,11 +69,9 @@
   <!-- 알림 섹션 -->
   <section id="notifications-section">
     <h2>알림 목록</h2>
-	  <div th:text="${unreadNotificationCount}">
-	  
-	  </div>
-	  <ul id="notification-list"></ul>
-  
+    <div th:text="${unreadNotificationCount}">
+    </div>
+    <ul id="notification-list"></ul>
   </section>
 
   <!-- 채팅 목록 섹션 -->
@@ -101,6 +89,21 @@
       <!-- 최근 본 상품 목록이 여기에 동적으로 추가됩니다 -->
     </ul>
   </section>
+
+  <!-- *신고 목록 섹션 - 관리자 계정만* -->
+  <div th:if="${user.role} == 'ADMIN'">
+    <section id="report-section">
+      <h2>신고 목록</h2>
+      <ul>
+        <li th:each="report : ${reports}">
+          <span th:text="${report.reporter}"></span> 신고 ->
+          <span th:text="${report.reportedUser}"></span> 이유:
+          <span th:text="${report.reason}"></span> 날짜:
+          <span th:text="${#dates.format(report.reportedAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+        </li>
+      </ul>
+    </section>
+  </div>
 
   <script th:inline="javascript">
     // API URL 설정
@@ -179,7 +182,7 @@
                 );
               });
             },
-            
+
             error: function(error) {
                 console.error('알림 목록 불러오기 중 오류 발생:', error);
             }
@@ -215,6 +218,29 @@
             },
             error: function(error) {
                 console.error('채팅 방 목록 로딩 중 오류 발생:',  error);
+            }
+        });
+    }
+
+    // 최근 본 상품 목록 불러오기 함수
+    function loadRecentViewedPosts() {
+        const userId = $('#userId').val(); // 사용자 ID 가져오기
+        console.log('최근 본 상품 로딩 중:', userId); // 디버깅 로그 추가
+
+        $.ajax({
+            type: 'GET',
+            url: `${RECENT_VIEWED_POSTS_API_URL}?userId=${userId}`,
+            success: function(viewedPosts) {
+                console.log('최근 본 상품 목록 가져옴:', viewedPosts); // 디버깅 로그 추가
+
+                const recentViewedPostsList = $('#recentViewedPostsList');
+                recentViewedPostsList.empty();
+                viewedPosts.forEach(post => {
+                    recentViewedPostsList.append(`<li><a href="/board/view/${post.id}">${post.title}</a></li>`);
+                });
+            },
+            error: function(error) {
+                console.error('최근 본 상품 목록 불러오기 중 오류 발생:', error);
             }
         });
     }

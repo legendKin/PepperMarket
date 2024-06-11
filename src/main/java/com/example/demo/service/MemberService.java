@@ -5,11 +5,10 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
+
 @Service
 public class MemberService {
 
@@ -32,31 +31,13 @@ public class MemberService {
         }
     }
 
-    // 파일 저장 로직
-    public String storeFile(MultipartFile file) throws IOException {
-        // 파일 저장 로직 구현
-        return file.getOriginalFilename();
-    }
-
-    // 프로필 사진 업데이트
-    public void updateUserProfilePicture(String username, String fileName) throws Exception {
-        Users user = findByEmail(username);
-        user.setProfilePictureUrl(fileName);
-        userRepository.save(user);
-    }
-
     // 프로필 정보 업데이트
-    public void updateUserProfileInfo(String username, MultipartFile file, String nickname, String email, String name, Date birthdate) throws Exception {
+    public void updateUserProfileInfo(String username, String nickname, String email, String name, Date birthdate) throws Exception {
         Users user = findByEmail(username);
-        if (!file.isEmpty()) {
-            String fileName = storeFile(file);
-            user.setProfilePictureUrl(("/files/" + fileName));
-        }
         user.setNickname(nickname);
         user.setEmail(email);
         user.setName(name);
-        userRepository.save(user);
         user.setBirthdate(birthdate);
+        userRepository.save(user);
     }
-
 }
