@@ -127,7 +127,7 @@
                         const chatList = $('#chatList');
                         chatList.empty();
                         chatRooms.forEach(chatRoom => {
-                            chatList.append(`<li> ${chatRoom.partnerName}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
+                            chatList.append(`<li> ${chatRoom.postTitle}  ${chatRoom.partnerName}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${chatRoom.partnerId}">채팅방으로 이동</a></li>`);
                         });
                     },
                     error: function (error) {

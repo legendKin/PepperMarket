@@ -19,10 +19,19 @@ public class ChatRoom {
     @Column
     private Long receiverId;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Board board;
+
     public ChatRoom() {}
 
-    public ChatRoom(Long senderId, Long receiverId) {
+    public ChatRoom(Long senderId, Long receiverId, Board board) {
         this.senderId = senderId;
         this.receiverId = receiverId;
+        this.board = board;
+    }
+
+    public Long getPostId() {
+        return Long.valueOf(board.getId());
     }
 }
