@@ -6,6 +6,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.dto.KeywordRequest;
 import com.example.demo.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,9 +33,13 @@ public class KeywordController {
         Keyword keyword = new Keyword();
         keyword.setKeyword(keywordRequest.getKeyword());
         keyword.setUser(user);
-
+        
         // 키워드를 저장하고 HTTP 응답으로 반환
-        return ResponseEntity.ok(keywordService.save(keyword));
+        try {
+            return ResponseEntity.ok(keywordService.save(keyword));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // 중복된 키워드인 경우 409 Conflict 응답
+        }
     }
 
     // 키워드를 삭제하는 엔드포인트

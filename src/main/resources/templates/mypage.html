@@ -7,13 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>마이 페이지</title>
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script></script>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
   </head>
   <body>
     <div layout:fragment="content">
@@ -84,65 +78,50 @@
           type="text"
         />
         <button onclick="addKeyword()">추가</button>
-        <ul id="keyword-list"></ul>
+        <div id="keyword-list"></div>
       </section>
 
-      <!-- 알림 섹션 -->
-      <section id="notifications-section">
-        <h2>알림 목록</h2>
-        <div th:text="${unreadNotificationCount}"></div>
-        <ul id="notification-list"></ul>
-      </section>
+      <!--      &lt;!&ndash; *최근 본 상품 목록 섹션* &ndash;&gt;-->
+      <!--      <section id="recent-viewed-posts-section">-->
+      <!--        <h2>최근 본 상품 목록</h2>-->
+      <!--        <ul id="recentViewedPostsList">-->
+      <!--          &lt;!&ndash; 최근 본 상품 목록이 여기에 동적으로 추가됩니다 &ndash;&gt;-->
+      <!--        </ul>-->
+      <!--      </section>-->
 
-      <!--  &lt;!&ndash; 채팅 목록 섹션 &ndash;&gt;-->
-      <!--  <section id="chat-list-section">-->
-      <!--    <h2>My Chats</h2>-->
-      <!--    <ul id="chatList">-->
-      <!--      &lt;!&ndash; 채팅 목록이 여기에 동적으로 추가됩니다 &ndash;&gt;-->
-      <!--    </ul>-->
-      <!--  </section>-->
+      <!--      &lt;!&ndash; *신고 목록 섹션 - 사용자 신고 목록* &ndash;&gt;-->
+      <!--      <section id="report-section">-->
+      <!--        <h2>신고 목록</h2>-->
+      <!--        <ul>-->
+      <!--          <li th:each="report : ${myReports}">-->
+      <!--            <span th:text="${report.reporter}"></span> 신고 ->-->
+      <!--            <span th:text="${report.reportedUser}"></span> 이유:-->
+      <!--            <span th:text="${report.reason}"></span> 날짜:-->
+      <!--            <span-->
+      <!--              th:text="${#dates.format(report.reportedAt, 'yyyy-MM-dd HH:mm:ss')}"-->
+      <!--            ></span>-->
+      <!--          </li>-->
+      <!--        </ul>-->
+      <!--      </section>-->
 
-      <!-- *최근 본 상품 목록 섹션* -->
-      <section id="recent-viewed-posts-section">
-        <h2>최근 본 상품 목록</h2>
-        <ul id="recentViewedPostsList">
-          <!-- 최근 본 상품 목록이 여기에 동적으로 추가됩니다 -->
-        </ul>
-      </section>
+      <!--      &lt;!&ndash; 신고 생성 섹션 &ndash;&gt;-->
+      <!--      <section id="create-report-section">-->
+      <!--        <h2>신고하기</h2>-->
+      <!--        <form action="/mypage/report" method="post">-->
+      <!--          <label for="reportedUser">신고할 사용자:</label>-->
+      <!--          <input-->
+      <!--            id="reportedUser"-->
+      <!--            name="reportedUser"-->
+      <!--            type="text"-->
+      <!--            required-->
+      <!--          /><br />-->
 
-      <!-- *신고 목록 섹션 - 사용자 신고 목록* -->
-      <section id="report-section">
-        <h2>신고 목록</h2>
-        <ul>
-          <li th:each="report : ${myReports}">
-            <span th:text="${report.reporter}"></span> 신고 ->
-            <span th:text="${report.reportedUser}"></span> 이유:
-            <span th:text="${report.reason}"></span> 날짜:
-            <span
-              th:text="${#dates.format(report.reportedAt, 'yyyy-MM-dd HH:mm:ss')}"
-            ></span>
-          </li>
-        </ul>
-      </section>
+      <!--          <label for="reason">신고 이유:</label>-->
+      <!--          <input id="reason" name="reason" type="text" required /><br />-->
 
-      <!-- 신고 생성 섹션 -->
-      <section id="create-report-section">
-        <h2>신고하기</h2>
-        <form action="/mypage/report" method="post">
-          <label for="reportedUser">신고할 사용자:</label>
-          <input
-            id="reportedUser"
-            name="reportedUser"
-            type="text"
-            required
-          /><br />
-
-          <label for="reason">신고 이유:</label>
-          <input id="reason" name="reason" type="text" required /><br />
-
-          <button type="submit">신고하기</button>
-        </form>
-      </section>
+      <!--          <button type="submit">신고하기</button>-->
+      <!--        </form>-->
+      <!--      </section>-->
 
       <!-- 모달 창 추가 -->
       <div
@@ -267,7 +246,7 @@
               keywordList.empty();
               keywords.forEach((keyword) => {
                 keywordList.append(
-                  `<li>${keyword.keyword} <button onclick="deleteKeyword(${keyword.id})">삭제</button></li>`,
+                  `<div class = "keyword-item">${keyword.keyword} <i class="fas fa-times delete-keyword" onclick="deleteKeyword(${keyword.id})"></i></div>`,
                 );
               });
             },
@@ -276,66 +255,6 @@
             },
           });
         }
-
-        // 알림 목록 불러오기 함수
-        function loadNotifications() {
-          const userId = $("#userId").val(); // 사용자 ID 가져오기
-          console.log("사용자 ID의 알림 로딩 중:", userId); // 디버깅 로그 추가
-
-          $.ajax({
-            type: "GET",
-            url: `${NOTIFICATION_API_URL}?userId=${userId}`,
-            success: function (notifications) {
-              console.log("알림 가져옴:", notifications); // 디버깅 로그 추가
-
-              const notificationList = $("#notification-list");
-              notificationList.empty();
-              notifications.forEach((notification) => {
-                const readStatus = notification.read ? "읽음" : "읽지 않음";
-                notificationList.append(
-                  `<li><a href="board/view?id=${notification.board.id}">${notification.message}</a> - ${readStatus} <button onclick="markAsRead(${notification.id})">읽음 표시</button></li>`,
-                );
-              });
-            },
-
-            error: function (error) {
-              console.error("알림 목록 불러오기 중 오류 발생:", error);
-            },
-          });
-        }
-
-        // 알림 읽음 표시 함수
-        function markAsRead(id) {
-          $.ajax({
-            type: "POST",
-            url: `${NOTIFICATION_API_URL}/${id}/read`,
-            success: function () {
-              loadNotifications();
-            },
-            error: function (error) {
-              console.error("알림 읽음 표시 중 오류 발생:", error);
-            },
-          });
-        }
-
-        // 채팅 목록 불러오기 함수
-        // function loadChatRooms() {
-        //     const userId = $('#userId').val(); // 사용자 ID 가져오기
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: `/chat/chats?userId=${userId}`,
-        //         success: function(chatRooms) {
-        //             const chatList = $('#chatList');
-        //             chatList.empty();
-        //             chatRooms.forEach(chatRoom => {
-        //                 chatList.append(`<li> ${chatRoom.partnerName}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${userId}">채팅방으로 이동</a></li>`);
-        //             });
-        //         },
-        //         error: function(error) {
-        //             console.error('채팅 방 목록 로딩 중 오류 발생:',  error);
-        //         }
-        //     });
-        // }
 
         // 최근 본 상품 목록 불러오기 함수
         function loadRecentViewedPosts() {

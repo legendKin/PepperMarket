@@ -45,6 +45,7 @@
   align-items: flex-end;
   display: flex;
   flex-direction: row-reverse;
+  max-height: 40px;
 }
 .msg-box {
   margin-bottom: 20px;
@@ -62,6 +63,7 @@
 .from-partner {
   display: flex;
   flex-direction: row;
+  max-height: 60px;
 }
 .from-me-box {
   /* margin-right: 5px; */

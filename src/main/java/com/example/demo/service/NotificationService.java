@@ -58,7 +58,7 @@ public class NotificationService {
                     Notification notification = new Notification();
                     notification.setUser(user);
                     notification.setBoard(board);
-                    notification.setMessage("등록한 키워드에 해당하는 게시글이 올라왔습니다: " + board.getTitle());
+                    notification.setMessage(board.getTitle() + " 키워드가 포함된 글이 올라왔어요");
                     notification.setRead(false);
                     notificationRepository.save(notification);
                     logger.info("Notification saved for user ID: " + user.getId() + " for board ID: " + board.getId());
@@ -71,6 +71,11 @@ public class NotificationService {
     public void markAsRead(Long id) {
         Notification notification = notificationRepository.findById(id).orElseThrow();
         notification.setRead(true); // 알림을 읽음 상태로 설정
+        notificationRepository.save(notification); // 알림 저장
+    }
+    public void markAsUnRead(Long id) {
+        Notification notification = notificationRepository.findById(id).orElseThrow();
+        notification.setRead(false); // 알림을 읽음 상태로 설정
         notificationRepository.save(notification); // 알림 저장
     }
 

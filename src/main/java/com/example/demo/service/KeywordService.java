@@ -31,6 +31,7 @@ public class KeywordService {
 
     // 특정 사용자의 키워드를 조회하는 메서드
     public List<Keyword> findByUser(Users user) {
-        return keywordRepository.findByUser(user); // 특정 사용자의 키워드를 조회하여 반환
+//        return keywordRepository.findByUser(user); // 특정 사용자의 키워드를 조회하여 반환
+        return keywordRepository.findByUserOrderByKeywordAsc(user); // 가나다순으로 정렬
     }
 }
