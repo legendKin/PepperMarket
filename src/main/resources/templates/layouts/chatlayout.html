@@ -24,7 +24,9 @@
 <!--					<a th:href="@{/chat/room/{chatRoomId}(chatRoomId=${chatRoom.chatRoomId})}">채팅방으로 이동</a>-->
 <!--				</li>-->
 			</ul>
+
 		</section>
+		<th:block th:insert="~{fragments/chatscripts::script}"></th:block>
 
 	</div>
 
