@@ -69,7 +69,8 @@ public class MyPageController {
     @PostMapping("/mypage/report")
     public String createReport(@AuthenticationPrincipal UserDetails userDetails,
                                @RequestParam("reportedUser") String reportedUser,
-                               @RequestParam("reason") String reason) {
+                               @RequestParam("reason") String reason,
+                               RedirectAttributes redirectAttributes) {
         String email = userDetails.getUsername();
         try {
             Users user = memberService.findByEmail(email);
@@ -77,11 +78,13 @@ public class MyPageController {
                     .reporter(user.getEmail())
                     .reportedUser(reportedUser)
                     .reason(reason)
-                    .reportedAt(new java.util.Date())
+                    .reportedAt(new Date())
                     .build();
             reportService.createReport(report);
+            redirectAttributes.addFlashAttribute("message", "Report created successfully.");
             return "redirect:/mypage/reports"; // 신고 목록 페이지로 리디렉션합니다.
         } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while creating the report.");
             return "redirect:/error"; // 에러 발생 시 에러 페이지로 리디렉션합니다.
         }
     }

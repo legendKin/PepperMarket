@@ -1,54 +1,39 @@
 <!doctype html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layouts/mypagelayout}"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/mypagelayout}">
 <head>
   <meta charset="UTF-8" />
   <title>마이 페이지</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+
+  </script>
 </head>
 <body>
 <div layout:fragment="content">
   <h1>마이 페이지</h1>
-  <p>닉네임: <span th:text="${user.nickname}"></span></p>
-  <p>이메일: <span th:text="${user.email}"></span></p>
-  <p>소셜 아이디: <span th:text="${user.socialId}"></span></p>
-  <p>제공자: <span th:text="${user.provider}"></span></p>
-  <p>제공자 아이디: <span th:text="${user.providerId}"></span></p>
-  <!-- 사용자 ID를 숨겨진 필드로 추가 -->
+  <p>닉네임: <span id="nicknameDisplay" th:text="${user.nickname}"></span></p>
+  <p>이메일: <span id="emailDisplay" th:text="${user.email}"></span></p>
+  <p>소셜 아이디: <span id="socialIdDisplay" th:text="${user.socialId}"></span></p>
+  <p>제공자: <span id="providerDisplay" th:text="${user.provider}"></span></p>
+  <p>제공자 아이디: <span id="providerIdDisplay" th:text="${user.providerId}"></span></p>
   <input id="userId" th:value="${user.id}" type="hidden" />
 
   <!-- 프로필 정보 변경 섹션 -->
   <section id="profile-info-section">
     <h2>프로필 정보 변경</h2>
+    <form id="profile-info-form">
       <label for="nickname">닉네임:</label>
-      <input
-              id="nickname"
-              name="nickname"
-              th:value="${user.nickname}"
-              type="text"
-      /><br />
+      <input id="nickname" name="nickname" th:value="${user.nickname}" type="text" /><br />
 
       <label for="email">이메일:</label>
-      <input
-              id="email"
-              name="email"
-              th:value="${user.email}"
-              type="email"
-              readonly
-      /><br />
+      <input id="email" name="email" th:value="${user.email}" type="email" readonly /><br />
 
       <label for="name">이름:</label>
-      <input
-              id="name"
-              name="name"
-              th:value="${user.name}"
-              type="text"
-      /><br />
+      <input id="name" name="name" th:value="${user.name}" type="text" /><br />
       <label for="birthdate">생년월일:</label>
-      <input type="date" name="birthdate" id="birthdate" th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}"><br>
+      <input type="date" name="birthdate" id="birthdate" th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}" /><br>
 
       <button type="submit">프로필 정보 변경</button>
     </form>
@@ -65,8 +50,7 @@
   <!-- 알림 섹션 -->
   <section id="notifications-section">
     <h2>알림 목록</h2>
-    <div th:text="${unreadNotificationCount}">
-    </div>
+    <div th:text="${unreadNotificationCount}"></div>
     <ul id="notification-list"></ul>
   </section>
 
@@ -86,27 +70,98 @@
     </ul>
   </section>
 
-  <!-- *신고 목록 섹션 - 관리자 계정만* -->
-  <div th:if="${user.role} == 'admin'">
-    <section id="report-section">
-      <h2>신고 목록</h2>
-      <ul>
-        <li th:each="report : ${reports}">
-          <span th:text="${report.reporter}"></span> 신고 ->
-          <span th:text="${report.reportedUser}"></span> 이유:
-          <span th:text="${report.reason}"></span> 날짜:
-          <span th:text="${#dates.format(report.reportedAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
-        </li>
-      </ul>
-    </section>
+  <!-- *신고 목록 섹션 - 사용자 신고 목록* -->
+  <section id="report-section">
+    <h2>신고 목록</h2>
+    <ul>
+      <li th:each="report : ${myReports}">
+        <span th:text="${report.reporter}"></span> 신고 ->
+        <span th:text="${report.reportedUser}"></span> 이유:
+        <span th:text="${report.reason}"></span> 날짜:
+        <span th:text="${#dates.format(report.reportedAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 신고 생성 섹션 -->
+  <section id="create-report-section">
+    <h2>신고하기</h2>
+    <form action="/mypage/report" method="post">
+      <label for="reportedUser">신고할 사용자:</label>
+      <input id="reportedUser" name="reportedUser" type="text" required /><br />
+
+      <label for="reason">신고 이유:</label>
+      <input id="reason" name="reason" type="text" required /><br />
+
+      <button type="submit">신고하기</button>
+    </form>
+  </section>
+
+  <!-- 모달 창 추가 -->
+  <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">PepperMarket</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          변경이 완료되었습니다.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
   </div>
+
 
   <script th:inline="javascript">
     // API URL 설정
     const API_BASE_URL = "/keywords";
     const NOTIFICATION_API_URL = "/notifications";
-    const RECENT_VIEWED_POSTS_API_URL = '/recent-viewed-posts'; // *
+    const RECENT_VIEWED_POSTS_API_URL = '/recent-viewed-posts';
 
+    // 프로필 변경 팝업
+    $(document).ready(function() {
+      $("#profile-info-form").submit(function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+        const nickname = $("#nickname").val();
+        const email = $("#email").val();
+        const name = $("#name").val();
+        const birthdate = $("#birthdate").val();
+
+        $.ajax({
+          type: "POST",
+          url: "/mypage/change-profile-info",
+          data: {
+            nickname: nickname,
+            email: email,
+            name: name,
+            birthdate: birthdate
+          },
+          success: function() {
+            $("#successModal").modal('show'); // 모달 표시
+            // 프로필 정보 업데이트
+            $("#nicknameDisplay").text(nickname);
+            $("#emailDisplay").text(email);
+            $("#nameDisplay").text(name);
+            $("#birthdateDisplay").text(birthdate);
+
+            // ******** 모달을 일정 시간 후 자동으로 닫기 ********
+            setTimeout(function() {
+              $("#successModal").modal('hide');
+            }, 1000);
+          },
+          error: function() {
+            alert("프로필 정보 변경 중 오류가 발생했습니다.");
+          }
+        });
+      });
+    });
     // 키워드 추가 함수
     function addKeyword() {
         const keyword = $('#new-keyword').val();
@@ -246,7 +301,7 @@
       loadKeywords();
       loadNotifications();
       loadChatRooms();
-      loadRecentViewedPosts(); // *
+      loadRecentViewedPosts();
     });
   </script>
 </div>
