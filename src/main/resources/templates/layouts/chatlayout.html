@@ -1,38 +1,42 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-	<meta charset="UTF-8"/>
-	<title>Pepper Market</title>
-	<meta content="width=device-width, initial-scale=1" name="viewport"/>
-	<!-- jQuery -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<!-- 공통 CSS -->
-	<th:block th:replace="~{fragments/common-styles::styles}"></th:block>
-	<!-- CSS -->
-	<th:block layout:fragment="css"></th:block>
-</head>
-<body>
-<div th:replace="~{fragments/header::header}"></div>
-<div class="main-content">
-	<div class="chat-list">
-		<section id="chat-list-section">
-			<h2>My Chats</h2>
-			<ul id="chatList">
-				<!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
-<!--				<li th:each="chatRoom : ${chatRooms}">-->
-<!--					<span th:text="${chatRoom.partnerName}"></span>님의 메세지 - -->
-<!--					<a th:href="@{/chat/room/{chatRoomId}(chatRoomId=${chatRoom.chatRoomId})}">채팅방으로 이동</a>-->
-<!--				</li>-->
-			</ul>
-		</section>
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pepper Market</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- 공통 CSS -->
+    <th:block th:replace="~{fragments/common-styles::styles}"></th:block>
+    <!-- CSS -->
+    <th:block layout:fragment="css"></th:block>
+  </head>
+  <body>
+    <div th:replace="~{fragments/header::header}"></div>
+    <div class="container">
+      <div class="main-content">
+        <h2>My Chats</h2>
+        <div class="chat-container">
+          <div class="chat-list">
+            <div id="chat-list-section">
+              <ul id="chatList">
+                <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
+              </ul>
+            </div>
+            <th:block th:insert="~{fragments/chatscripts::script}"></th:block>
+          </div>
 
-	</div>
-
-	<div class="chat-content" layout:fragment="chat-content"></div>
-</div>
-<div th:replace="~{fragments/footer::footer}"></div>
-<!-- JQuery 스크립트를 body 끝부분에 추가하는 것이 좋습니다. -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<!-- 추가 스크립트가 필요한 경우 여기에 추가 -->
-</body>
+          <div class="chat-content" layout:fragment="chat-content"></div>
+        </div>
+      </div>
+    </div>
+    <div th:replace="~{fragments/footer::footer}"></div>
+    <!-- JQuery 스크립트를 body 끝부분에 추가하는 것이 좋습니다. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- 추가 스크립트가 필요한 경우 여기에 추가 -->
+  </body>
 </html>
