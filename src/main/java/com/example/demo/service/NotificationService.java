@@ -6,6 +6,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.NotificationRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ public class NotificationService {
     }
 
     // 특정 게시글과 관련된 알림을 삭제하는 메서드 추가
+    @Transactional
     public void deleteNotificationsByBoardId(Integer boardId) {
         notificationRepository.deleteByBoardId(boardId);
     }

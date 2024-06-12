@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.ChatRoom;
 import com.example.demo.repository.ChatRoomRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +35,12 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
-//    public ChatRoom createChatRoom(Long senderId, Long receiverId) {
-//        ChatRoom chatRoom = new ChatRoom(senderId, receiverId);
-//        return chatRoomRepository.save(chatRoom);
-//    }
 
     public List<ChatRoom> findByUserId(Long userId) {
         return chatRoomRepository.findBySenderIdOrReceiverId(userId, userId);
+    }
+    @Transactional
+    public void deleteChatRoomByBoardId(Integer boardId) {
+        chatRoomRepository.deleteByBoardId(boardId);
     }
 }

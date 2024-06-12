@@ -45,16 +45,7 @@
         </div>
       </div>
 
-      <!-- 채팅 목록 섹션 추가 -->
-      <!--	<section id="chat-list-section">-->
-      <!--		<h2>My Chats</h2>-->
-      <!--		<ul id="chatList">-->
-      <!--			<li th:each="chatRoom : ${chatRooms}">-->
-      <!--				<span th:text="${chatRoom.partnerName}"></span>님의 메세지 - -->
-      <!--				<a th:href="@{/chat/room/{chatRoomId}(chatRoomId=${chatRoom.chatRoomId})}">채팅방으로 이동</a>-->
-      <!--			</li>-->
-      <!--		</ul>-->
-      <!--	</section>-->
+
 
       <script th:inline="javascript">
         $(document).ready(function () {
@@ -179,6 +170,23 @@
               },
             });
           }
+            // 채팅 목록 불러오기 함수
+            function loadChatRooms() {
+                $.ajax({
+                    type: 'GET',
+                    url: `/chat/chats?userId=${userId}`,
+                    success: function (chatRooms) {
+                        const chatList = $('#chatList');
+                        chatList.empty();
+                        chatRooms.forEach(chatRoom => {
+                            chatList.append(`<li> ${chatRoom.postTitle} 게시글 채팅 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${chatRoom.partnerId}">채팅방으로 이동</a></li>`);
+                        });
+                    },
+                    error: function (error) {
+                        console.error('채팅 방 목록 로딩 중 오류 발생:', error);
+                    }
+                });
+            }
 
           // 페이지 로드 시 데이터 불러오기
           loadChatRooms();

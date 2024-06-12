@@ -5,6 +5,7 @@ import com.example.demo.entity.Notification;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,15 @@ public abstract class BoardService {
 
     @Autowired
     private KeywordRepository keywordRepository;
+
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
     
 //    @Value("${file.upload-dir}")
 //    private String uploadDir;
@@ -96,8 +106,22 @@ public abstract class BoardService {
     }
 
     // 특정 ID의 게시글을 삭제하는 메서드
+    @Transactional
     public void boardDelete(Integer id) {
-        boardRepository.deleteById(id);
+        try {
+            // 자식 레코드 삭제
+            chatRoomRepository.deleteByBoardId(id);
+            commentRepository.deleteByBoardId(id);
+            likeRepository.deleteByBoardId(id);
+            notificationRepository.deleteByBoardId(id);
+
+            // 게시글 삭제
+            boardRepository.deleteById(id);
+        } catch (Exception e) {
+            // 예외 기록
+            System.out.println("Error deleting board: " + e.getMessage());
+            throw e;
+        }
     }
     
     // 특정 카테고리 ID의 게시글 리스트를 페이징하여 가져오는 메서드

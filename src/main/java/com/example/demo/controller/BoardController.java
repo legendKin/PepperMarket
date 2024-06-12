@@ -61,6 +61,9 @@ public class BoardController {
     private LikeService likeService;
 
     @Autowired
+    private ChatRoomService chatRoomService;
+
+    @Autowired
     public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService) {
         this.boardService = boardService;
         this.commentService = commentService;
@@ -249,24 +252,29 @@ public class BoardController {
         redirectAttributes.addFlashAttribute("message", "파일 업로드 크기를 초과했습니다. 최대 파일 크기는 10MB입니다.");
         return "redirect:/board/write";
     }
-    
+
     @GetMapping("/board/delete/{id}")
     public String boardDelete(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
         Board board = boardService.boardView(id);
         Users currentUser = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
-        
+
         if (currentUser == null || (!board.getUser().getEmail().equals(userDetails.getUsername()) && !"admin".equals(currentUser.getNickname()))) {
             model.addAttribute("message", "작성자 또는 관리자로 로그인한 경우에만 글을 삭제할 수 있습니다.");
             model.addAttribute("redirectUrl", "/board/list");
             return "message";
         }
-        
-        notificationService.deleteNotificationsByBoardId(id);
-        commentService.deleteCommentsByBoardId(id);
-        boardService.boardDelete(id);
-        
-        model.addAttribute("message", "게시글 삭제 완료했습니다.");
-        model.addAttribute("redirectUrl", "/board/list");
+
+        try {
+            // 게시글 삭제
+            boardService.boardDelete(id);
+
+            model.addAttribute("message", "게시글 삭제 완료했습니다.");
+            model.addAttribute("redirectUrl", "/board/list");
+        } catch (Exception e) {
+            model.addAttribute("message", "게시글 삭제 중 오류가 발생했습니다: " + e.getMessage());
+            model.addAttribute("redirectUrl", "/board/list");
+        }
+
         return "message";
     }
     

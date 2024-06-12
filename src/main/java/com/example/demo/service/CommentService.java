@@ -6,6 +6,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,11 +52,13 @@ public class CommentService {
     }
 
     // 특정 게시글 ID에 해당하는 모든 댓글을 삭제하는 메서드
+    @Transactional
     public void deleteCommentsByBoardId(Integer boardId) {
         commentRepository.deleteByBoardId(boardId);
     }
 
     // 특정 댓글을 ID로 삭제하는 메서드
+    @Transactional
     public void deleteCommentById(Integer commentId) {
         commentRepository.deleteById(commentId);
     }
