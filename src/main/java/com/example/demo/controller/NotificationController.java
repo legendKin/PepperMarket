@@ -37,4 +37,6 @@ public class NotificationController {
         // HTTP 204 No Content 응답 반환
         return ResponseEntity.noContent().build();
     }
+    
+    
 }

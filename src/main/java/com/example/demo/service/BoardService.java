@@ -233,4 +233,8 @@ public abstract class BoardService {
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. postId: " + postId));
         return board.getTitle();
     }
+    
+    public Page<Board> getBoardByUserId(Long userId, Pageable pageable) {
+        return boardRepository.findByUserId(userId, pageable);
+    }
 }

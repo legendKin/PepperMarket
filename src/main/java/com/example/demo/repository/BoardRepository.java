@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Users;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     
     Page<Board> findByCateID(Integer searchCateID, Pageable pageable);
     
-    
+    Page<Board> findByUserId(Long user, Pageable pageable);
 
     // 제목에 특정 키워드를 포함하는 게시글을 페이징하여 검색
     Page<Board> findByTitleContainingAndStatusNot(String searchKeyword, Pageable pageable, Integer status);

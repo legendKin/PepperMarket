@@ -18,7 +18,7 @@
   <body>
     <div layout:fragment="chat-content">
       <div class="chat-msg-container row row-cols-1">
-        <div class="col chat-receiver"></div>
+        <div class="col chat-receiver" id="chatroom-detail"></div>
         <div class="col chat-msg" id="msgArea" style="height: 50vh">
           <!-- 채팅 내용이 여기에 표시됩니다 -->
         </div>
@@ -26,8 +26,7 @@
           <div class="input-group mb-3">
             <input
               aria-describedby="button-addon2"
-              aria-label="Recipient's username"
-              class="form-control messageInput"
+              class="messageInput"
               id="msg"
               type="text"
               placeholder="메세지를 입력해주세요."
@@ -44,8 +43,6 @@
           </div>
         </div>
       </div>
-
-
 
       <script th:inline="javascript">
         $(document).ready(function () {
@@ -84,6 +81,27 @@
             $("#msgArea").append(str);
             // 스크롤을 맨 아래로 이동
             $("#msgArea").scrollTop($("#msgArea")[0].scrollHeight);
+          }
+
+          function loadCurrentChatRoomInfo(chatRoomId) {
+            $.ajax({
+              type: "GET",
+              url: `/chat/chatRoom/${chatRoomId}`,
+              success: function (chatRoomInfo) {
+                // 성공적으로 채팅방 정보를 받아왔을 때 실행되는 코드
+                // 받은 정보를 사용하여 채팅방의 세부 정보를 표시
+                $("#chatroom-detail").html(`
+                <div class="chat-room-detail">
+                    <h3>${chatRoomInfo.partnerName}님과의 채팅</h3>
+                    <p>게시글: <a href="/board/view?id=${chatRoomInfo.postId}">${chatRoomInfo.postTitle}</a></p>
+                </div>
+            `);
+              },
+              error: function (error) {
+                // AJAX 요청이 실패했을 때 실행되는 코드
+                console.error("채팅방 정보 로딩 중 오류 발생:", error);
+              },
+            });
           }
 
           function getPreviousChatMessages(chatRoomId) {
@@ -128,10 +146,15 @@
           });
 
           function send() {
+            const messageContent = document.getElementById("msg").value.trim();
+
+            if (messageContent === "") {
+              return; // 메시지가 비어있으면 함수를 종료하여 전송하지 않음
+            }
             const message = {
               senderId: userId, // 사용자 ID로 변경
               receiverId: receiverId, // 수신자 ID 추가
-              content: document.getElementById("msg").value,
+              content: messageContent,
               chatRoomId: chatRoomId,
             };
             stompClient.send(
@@ -161,7 +184,19 @@
                 chatList.empty();
                 chatRooms.forEach((chatRoom) => {
                   chatList.append(
-                    `<li> ${chatRoom.postTitle}님의 메세지 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${chatRoom.partnerId}">채팅방으로 이동</a></li>`,
+                    `<li class="chat-list-box">
+                        <div class="chat-list-sender">
+                            <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${chatRoom.partnerId}">
+                                ${chatRoom.partnerName}님과의 채팅
+                            </a>
+                        </div>
+                        <div  class="post-link">
+                            <a href="/board/view?id=${chatRoom.postId}">
+								${chatRoom.postTitle} 게시글로 가기
+							</a>
+						</div>
+    
+    </li>`,
                   );
                 });
               },
@@ -170,26 +205,10 @@
               },
             });
           }
-            // 채팅 목록 불러오기 함수
-            function loadChatRooms() {
-                $.ajax({
-                    type: 'GET',
-                    url: `/chat/chats?userId=${userId}`,
-                    success: function (chatRooms) {
-                        const chatList = $('#chatList');
-                        chatList.empty();
-                        chatRooms.forEach(chatRoom => {
-                            chatList.append(`<li> ${chatRoom.postTitle} 게시글 채팅 - <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${chatRoom.partnerId}">채팅방으로 이동</a></li>`);
-                        });
-                    },
-                    error: function (error) {
-                        console.error('채팅 방 목록 로딩 중 오류 발생:', error);
-                    }
-                });
-            }
 
           // 페이지 로드 시 데이터 불러오기
           loadChatRooms();
+          loadCurrentChatRoomInfo(chatRoomId);
         });
       </script>
     </div>

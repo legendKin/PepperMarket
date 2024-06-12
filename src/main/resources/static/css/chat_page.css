@@ -56,18 +56,32 @@
   display: flex;
   flex-direction: column;
   font-size: 20px;
-  margin-right: 5px;
+
   padding: 5px 20px;
 }
 .from-partner {
   display: flex;
   flex-direction: row;
 }
+.from-me-box {
+  /* margin-right: 5px; */
+}
 .from-partner-box {
+  margin-left: 5px;
   margin-top: 20px;
 }
 .msg-time {
   align-items: flex-end;
   display: flex;
   font-size: 15px;
+  margin: 0 10px;
+}
+
+#chatList {
+  padding: 0;
+}
+
+.chat-list-box {
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
 }

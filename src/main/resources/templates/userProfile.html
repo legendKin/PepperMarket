@@ -1,0 +1,39 @@
+<!doctype html>
+<html
+  layout:decorate="~{layouts/layout}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <title>사용자 정보</title>
+  </head>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/boardcategories.css}" />
+  </th:block>
+  <div layout:fragment="content">
+    <div class="main-content">
+      <h1 th:text="${user.nickname} +님"></h1>
+      <h1 th:text="${user.id}"></h1>
+      <h1 th:text="${user.email}"></h1>
+      <h1 th:text="${user.name}"></h1>
+      <h1 th:text="${userPostCount} + 개 "></h1>
+      <img th:src="@{${user.profilePictureUrl}}" />
+      <div class="user-board-list" th:each="b : ${list}">
+        <a th:href="@{/board/view(id=${b.id})}">
+          <img
+            alt="상품이미지"
+            class="goods-img"
+            height="100"
+            onerror="this.src='/files/default.png'"
+            th:src="@{/files/{filename}(filename=${b.filename})}"
+            width="75"
+          />
+          <p th:text="${b.title}"></p>
+          <p th:text="${b.categName}"></p>
+          <p th:text="${b.getFormattedPrice()} + '원'"></p>
+        </a>
+      </div>
+    </div>
+  </div>
+</html>

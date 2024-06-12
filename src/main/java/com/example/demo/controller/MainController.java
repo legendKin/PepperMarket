@@ -47,4 +47,9 @@ public class MainController {
         // "chatter" 뷰를 반환 (resources/templates/chatter.html 파일을 가리킴)
         return "chatter";
     }
+    
+    @GetMapping("/noti")
+    public String noti() {
+        return "noti";
+    }
 }

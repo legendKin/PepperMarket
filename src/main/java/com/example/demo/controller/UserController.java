@@ -1,25 +1,40 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AddUserRequest;
+import com.example.demo.entity.Board;
+import com.example.demo.entity.PrincipalDetails;
+import com.example.demo.entity.Users;
+import com.example.demo.service.BoardService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
+import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor // Lombok을 사용하여 필요한 생성자를 자동으로 생성
 @Controller // Spring MVC에서 컨트롤러로 작동하도록 지정
 public class UserController {
 
     private final UserService userService; // UserService를 주입받아 사용
-
+    private final BoardService boardService;
+    
+    
     // 회원가입 요청을 처리하는 메서드
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
@@ -78,5 +93,20 @@ public class UserController {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         // 로그아웃 후 홈 페이지로 리다이렉트
         return "redirect:/";
+    }
+    
+    @GetMapping("/profile/{id}")
+    public String getUserProfile(@PathVariable Long id, Model model, PrincipalDetails principalDetails, Pageable pageable) {
+        Optional<Users> userProfile = userService.getUserProfile(id);
+        Page<Board> list = boardService.getBoardByUserId(id, pageable);
+        
+        Long userPostCount = boardService.getBoardCountByUserId(id); // userPostCount을 저장.
+        
+        model.addAttribute("user", userProfile.orElse(null));
+        model.addAttribute("userPostCount", userPostCount);
+        model.addAttribute("principal", principalDetails);
+        model.addAttribute("list", list);
+        
+        return "userProfile";
     }
 }

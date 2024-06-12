@@ -4,17 +4,16 @@
   xmlns:th="http://www.thymeleaf.org"
 >
   <head>
-	  <meta charset="UTF-8"/>
-	  <title>Pepper Market</title>
-	  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-	  <!--    jQuery      -->
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	  
-	  
-	  <!-- 공통 css -->
-	  <th:block th:replace="~{fragments/common-styles::styles}"></th:block>
-	  <!--    CSS     -->
-	  <th:block layout:fragment="css"></th:block>
+    <meta charset="UTF-8" />
+    <title>Pepper Market</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!--    jQuery      -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- 공통 css -->
+    <th:block th:replace="~{fragments/common-styles::styles}"></th:block>
+    <!--    CSS     -->
+    <th:block layout:fragment="css"></th:block>
 
     <style>
       body {
@@ -97,6 +96,11 @@
                 href="/chat"
                 class="list-group-item list-group-item-action sidemenu-tab"
                 >내 채팅</a
+              >
+              <a
+                href="/noti"
+                class="list-group-item list-group-item-action sidemenu-tab"
+                >키워드 알림</a
               >
               <a
                 href="#"

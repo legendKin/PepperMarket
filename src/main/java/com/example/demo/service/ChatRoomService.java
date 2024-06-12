@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatRoomService {
@@ -42,5 +43,9 @@ public class ChatRoomService {
     @Transactional
     public void deleteChatRoomByBoardId(Integer boardId) {
         chatRoomRepository.deleteByBoardId(boardId);
+    }
+    
+    public Optional<ChatRoom> findByChatRoomId(Long chatRoomId) {
+        return chatRoomRepository.findById(chatRoomId);
     }
 }

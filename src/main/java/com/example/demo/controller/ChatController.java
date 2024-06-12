@@ -92,6 +92,7 @@ public class ChatController {
             chatRoomInfo.put("chatRoomId", room.getId().toString());
             chatRoomInfo.put("partnerName", getPartnerName(room, userId)); // 상대방 이름 추가
             chatRoomInfo.put("partnerId", String.valueOf(room.getReceiverId().equals(userId) ? room.getSenderId() : room.getReceiverId()));
+            chatRoomInfo.put("postId", String.valueOf(room.getPostId()));
 
             // 게시글의 제목 가져오기
             String postTitle = boardService.getBoardTitleByPostId(room.getPostId()); // postId로 게시글 제목 가져오기

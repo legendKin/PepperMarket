@@ -25,7 +25,10 @@
 
             <div class="seller-info">
               <div class="seller-profile">
-                <a class="seller-link" href="">
+                <a
+                  class="seller-link"
+                  th:href="@{'/profile/' + ${board.user.Id}}"
+                >
                   <img
                     class="profile-img"
                     th:src="${board.writerPic}"
@@ -40,7 +43,6 @@
                       <div class="item-count-label">판매상품</div>
                       <div class="item-count" th:text="${userPostCount}"></div>
                     </div>
-
                   </div>
                 </a>
               </div>
