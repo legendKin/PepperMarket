@@ -58,7 +58,7 @@ public class NotificationService {
                     Notification notification = new Notification();
                     notification.setUser(user);
                     notification.setBoard(board);
-                    notification.setMessage("A new board matches your keyword: " + board.getTitle());
+                    notification.setMessage("등록한 키워드에 해당하는 게시글이 올라왔습니다: " + board.getTitle());
                     notification.setRead(false);
                     notificationRepository.save(notification);
                     logger.info("Notification saved for user ID: " + user.getId() + " for board ID: " + board.getId());

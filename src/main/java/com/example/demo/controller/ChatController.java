@@ -8,8 +8,8 @@ import com.example.demo.service.BoardService;
 import com.example.demo.service.ChatMessageService;
 import com.example.demo.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -68,8 +69,6 @@ public class ChatController {
         message.setTimestamp(LocalDateTime.now());
 
         chatMessageService.saveChatMessage(message); // 메시지 저장 후 반환
-
-        // 메시지 전송 후에도 채팅방 목록을 유지하기 위해 사용자에게 채팅방 목록을 반환
         return message;
     }
 
@@ -101,36 +100,30 @@ public class ChatController {
         }).collect(Collectors.toList());
     }
 
+    // 게시글 제목 받아오는 엔드포인트
+    @GetMapping("/postTitle/{postId}")
+    public ResponseEntity<String> getPostTitle(@PathVariable Long postId) {
+        String postTitle = boardService.getBoardTitleByPostId(postId);
+        return ResponseEntity.ok(postTitle);
+    }
+
+    // 특정 채팅방의 정보를 가져오는 엔드포인트
+    @GetMapping("/chatRoom/{chatRoomId}")
+    public ResponseEntity<Map<String, Object>> getChatRoomInfo(@PathVariable Long chatRoomId) {
+        Optional<ChatRoom> chatRoom = chatRoomService.findByChatRoomId(chatRoomId);
+        if (chatRoom.isPresent()) {
+            ChatRoom room = chatRoom.get();
+            Map<String, Object> chatRoomInfo = new HashMap<>();
+            chatRoomInfo.put("partnerName", getPartnerName(room, room.getSenderId())); // 상대방 이름 추가
+            chatRoomInfo.put("postId", room.getPostId());
+            return ResponseEntity.ok(chatRoomInfo);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     private String getPartnerName(ChatRoom room, Long userId) {
         Long partnerId = room.getSenderId().equals(userId) ? room.getReceiverId() : room.getSenderId();
         return userRepository.findById(partnerId).map(Users::getNickname).orElse("Unknown");
-    }
-
-    // 사용자의 마이페이지를 불러오는 엔드포인트
-    @GetMapping("/mypage")
-    public String myPage(Model model, @RequestParam Long userId) {
-        Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID")); // 사용자 확인
-        List<Map<String, String>> chatRooms = getUserChatRooms(userId); // 사용자의 채팅방 목록 가져옴
-        model.addAttribute("user", user); // 사용자 정보를 모델에 추가
-        model.addAttribute("chatRooms", chatRooms); // 채팅방 정보를 모델에 추가
-        return "mypage"; // 마이페이지로 이동
-    }
-
-    // 특정 게시글 작성자와의 채팅방으로 이동하는 엔드포인트
-    @GetMapping("/chatRoom")
-    public String chatRoom(@RequestParam("postAuthor") String postAuthor, @RequestParam("chatRoomId") Long chatRoomId, Model model) {
-        model.addAttribute("postAuthor", postAuthor); // 게시글 작성자를 모델에 추가
-        model.addAttribute("chatRoomId", chatRoomId); // 채팅방 ID를 모델에 추가
-        model.addAttribute("receiverId", postAuthor); // 게시글 작성자를 수신자로 설정
-        return "chatRoom"; // 채팅방 페이지로 이동
-    }
-
-    @GetMapping("/chat")
-    public String chatter(Model model, @RequestParam Long userId) {
-        Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID")); // 사용자 확인
-        List<Map<String, String>> chatRooms = getUserChatRooms(userId); // 사용자의 채팅방 목록 가져옴
-        model.addAttribute("user", user); // 사용자 정보를 모델에 추가
-        model.addAttribute("chatRooms", chatRooms); // 채팅방 정보를 모델에 추가
-        return "chatRoom"; // chatRoom.html으로 이동
     }
 }
