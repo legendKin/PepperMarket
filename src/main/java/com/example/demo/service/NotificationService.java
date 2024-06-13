@@ -39,7 +39,10 @@ public class NotificationService {
     public List<Notification> findByUser(Users user) {
         return notificationRepository.findByUser(user);
     }
-
+    
+    public void deleteNoti(Long id) {
+        notificationRepository.deleteById(id);
+    }
     // 게시글과 관련된 키워드 알림을 생성하는 메서드
     public void notify(Board board) {
         // 모든 사용자를 조회
@@ -84,6 +87,9 @@ public class NotificationService {
     public void deleteNotificationsByBoardId(Integer boardId) {
         notificationRepository.deleteByBoardId(boardId);
     }
+    
+    
+    
     public int getUnreadNotificationCount(Long userId) {
         return notificationRepository.countUnreadNotificationsByUser(userId);
     }

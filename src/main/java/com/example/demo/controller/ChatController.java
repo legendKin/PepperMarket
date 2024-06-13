@@ -10,8 +10,10 @@ import com.example.demo.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import com.example.demo.entity.PrincipalDetails;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -36,6 +38,7 @@ public class ChatController {
         this.chatRoomService = chatRoomService;
         this.boardService = boardService;
     }
+  
 
     // 새로운 채팅을 시작하는 엔드포인트
     @GetMapping("/start")
@@ -47,10 +50,11 @@ public class ChatController {
 
     // 특정 채팅방을 불러오는 엔드포인트
     @GetMapping("/room/{chatRoomId}")
-    public ModelAndView getChatRoom(@PathVariable Long chatRoomId, @RequestParam Long receiverId) {
+    public ModelAndView getChatRoom(@PathVariable Long chatRoomId, @RequestParam Long receiverId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ModelAndView modelAndView = new ModelAndView("chatRoom");
         modelAndView.addObject("chatRoomId", chatRoomId); // 채팅방 ID를 모델에 추가
         modelAndView.addObject("receiverId", receiverId); // 수신자 ID를 모델에 추가
+        modelAndView.addObject("userId", principalDetails.getId()); // 수신자 ID를 모델에 추가
         return modelAndView;
     }
 

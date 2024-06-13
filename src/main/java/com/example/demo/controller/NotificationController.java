@@ -63,5 +63,12 @@ public class NotificationController {
         return ResponseEntity.noContent().build();
     }
     
+    // 특정 알림을 삭제하는 엔드포인트
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Void> deleteByNotificationId(@PathVariable Long id) {
+        notificationService.deleteNoti(id);
+        // HTTP 204 No Content 응답 반환
+        return ResponseEntity.noContent().build();
+    }
     
 }

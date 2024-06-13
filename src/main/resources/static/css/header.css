@@ -11,6 +11,7 @@
   display: flex;
   margin-bottom: 14px;
   margin-left: auto;
+  position: relative;
 }
 
 .header1 {
@@ -167,4 +168,22 @@
   margin-top: 20px;
   width: 100%;
   z-index: 2;
+}
+#notification-list-pop {
+  background-color: rgb(255, 255, 255);
+  border: 1px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  padding: 20px;
+  position: absolute;
+  right: 0px;
+  top: 30px;
+  width: 200px;
+  z-index: 1;
+}
+.read-notification > a {
+  color: gray;
+}
+.delete-noti {
+  cursor: pointer;
 }

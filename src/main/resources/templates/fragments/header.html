@@ -1,33 +1,31 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <th:block th:fragment="header">
-    <head>
-      <meta charset="UTF-8" />
-      <link rel="stylesheet" th:href="@{/css/header.css}" />
-      <link rel="stylesheet" th:href="@{/css/footer.css}" />
-      <title>페퍼마켓에 오신 것을 환영합니다</title>
-    </head>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
 
+    <title>페퍼마켓에 오신 것을 환영합니다</title>
+  </head>
+  <th:block th:fragment="header">
     <div class="header-wrapper">
       <div class="header-box">
         <div class="header-1">
           <div class="header-notification">
-            <a class="header1" href="#">
+            <a class="header1" href="/noti">
               <i class="far fa-bell icon"></i>
               <div class="badg">나의 알림</div>
             </a>
-            <th:block th:unless="${unreadNotificationCount == 0}">
-              <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                th:text="${unreadNotificationCount}"
-              ></span>
-            </th:block>
-            <th:block th:if="${unreadNotificationCount == 0}">
-              <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                style="display: none"
-              ></span>
-            </th:block>
+            <span
+              id="noti-count"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="display: none"
+            ></span>
+
+            <div class="noti-pop">
+              <ul id="notification-list-pop"></ul>
+            </div>
           </div>
           <div class="header-chat">
             <a class="header1" href="/chat">
