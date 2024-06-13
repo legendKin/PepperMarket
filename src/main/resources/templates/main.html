@@ -9,7 +9,7 @@
 	<link rel="stylesheet" th:href="@{/css/boardcategories.css}"/>
 </th:block>
 <div layout:fragment="content">
-	
+
 	<div class="main-content">
 		<div class="main-banner">
 			<img th:src="@{/img/banner.png}"/>
@@ -50,10 +50,9 @@
 										<th:block th:unless="${board.writer !=  loggedUserId}">
 											<button
 												class="btn btn-sm btn-outline-secondary edit-button"
-												
 												type="button"
 											><a th:href="@{/board/modify/{id}(id=${board.id})}">Edit</a>
-											
+
 											</button>
 										</th:block>
 										<th:block th:if="${board.writer !=  loggedUserId}">
@@ -74,12 +73,10 @@
 							</div>
 						</div>
 					</div>
-					<button class="btn btn-primary" type="button" onclick="location.href='/board/list'">더 많은 상품
-					보기</button>
-					
+					<button class="btn btn-primary" onclick="location.href='/board/list'" type="button">더 많은 상품
+						보기
 					</button>
 				</div>
-			
 			</div>
 		</div>
 	</div>
