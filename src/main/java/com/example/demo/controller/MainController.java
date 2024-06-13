@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -43,9 +44,10 @@ public class MainController {
     
     // "/chat" URL 요청을 처리하는 메서드
     @GetMapping("/chat")
-    public String chat() {
-        // "chatter" 뷰를 반환 (resources/templates/chatter.html 파일을 가리킴)
-        return "chatter";
+    public ModelAndView showChatMainPage(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        ModelAndView modelAndView = new ModelAndView("chatRoom");
+        modelAndView.addObject("userId", principalDetails.getId()); // 수신자 ID를 모델에 추가
+        return modelAndView;
     }
     
     @GetMapping("/noti")

@@ -1,5 +1,4 @@
 body {
-
   background-color: #f9f9f9;
   margin: 0;
   padding: 0;
@@ -19,13 +18,9 @@ body {
   width: 50%;
 }
 
-
-
 .ev_detail img {
   width: 100%;
 }
-
-
 
 .cover {
   background: rgba(0, 0, 0, 0.2);
@@ -96,24 +91,17 @@ body {
   margin-bottom: 20px;
 }
 
-.icon {
-  cursor: pointer;
-  height: 24px;
-  margin-left: 10px;
-  width: 24px;
-}
-
 .product-info {
   margin-bottom: 20px;
 }
 
-.product-image>img {
+.product-image > img {
   height: 400px;
   max-width: 540px;
   object-fit: cover;
 }
 
-.category-box{
+.category-box {
   background-color: #000;
   border-radius: 0.3rem;
   color: #fff;
@@ -127,7 +115,7 @@ body {
   font-weight: bold;
   margin-bottom: 10px;
 }
-.price{
+.price {
   font-size: 35px;
   font-weight: bold;
 }
@@ -160,8 +148,7 @@ body {
   margin-top: 30px;
 }
 
-
-.action-buttons:after{
+.action-buttons:after {
   border-bottom: 1px solid #ccc;
   content: "";
   display: block;
@@ -175,8 +162,7 @@ body {
   justify-content: space-between;
 }
 
-
-.chat-button{
+.chat-button {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -184,7 +170,7 @@ body {
   display: flex;
   padding: 10px 20px;
 }
-.like-button{
+.like-button {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -193,21 +179,21 @@ body {
   padding: 10px 10px;
 }
 
-.like-icon{
+.like-icon {
   font-size: 20px;
   height: 24px;
   margin-right: 5px;
   width: 24px;
 }
 .chat-icon,
-.edit-icon{
+.edit-icon {
   margin-right: 10px;
 }
 
 .like-count,
 .chat-text,
 .gologin-text,
-.edit-text{
+.edit-text {
   align-items: center;
   display: flex;
   font-size: 20px;

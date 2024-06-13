@@ -1,32 +1,49 @@
 <!doctype html>
 <html
-        lang="en"
-        layout:decorate="~{layouts/chatlayout}"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-        xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+  layout:decorate="~{layouts/chatlayout}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  xmlns:th="http://www.thymeleaf.org"
 >
-<head>
-  <meta charset="UTF-8" />
-  <title>Chat Room</title>
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
-  <link rel="stylesheet" th:href="@{/css/chat_page.css}" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-</head>
-<body>
-<div layout:fragment="chat-content">
-  <div class="chat-msg-container row row-cols-1">
-    <div class="chat-room-detail">
-      <h3 id="partnerName">채팅방</h3>
-      <p id="postTitle">게시글: 게시글 제목 없음</p>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat Room</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/chat_page.css}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="container">
+        <h2>My Chats</h2>
+        <div class="chat-container">
+          <div class="chat-list">
+            <div id="chat-list-section">
+              <ul id="chatList">
+                <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
+              </ul>
+            </div>
+          </div>
+          <div class="chat-content">
+            <div class="chat-msg-container row row-cols-1">
+              <div class="chat-room-detail">
+                <div
+                  id="userIdHolder"
+                  data-user-id="${#authentication.principal.id}"
+                  th:text="${#authentication.principal.id}"
+                ></div>
+                <div th:text="${userId}"></div>
+                <h3 id="partnerName">채팅방</h3>
+                <p id="postTitle">게시글: 게시글 제목 없음</p>
+              </div>
 
-    <div class="col chat-msg" id="msgArea" style="height: 50vh">
+    <div class="chat-msg" id="msgArea" style="height: 50vh">
       <!-- 채팅 내용이 여기에 표시됩니다 -->
     </div>
-    <div class="col chat-input">
+    <div class="chat-input">
       <div class="input-group mb-3">
         <input
                 aria-describedby="button-addon2"
@@ -71,7 +88,7 @@
         var name = message.sender.id === userId ? "" : senderName;
 
         var str = "<div class='col msg-box " + fromWhoBox + "'>";
-        str += "<div class  = 'sender'>" + name + "</div>";
+        str += "<div class='sender'>" + name + "</div>";
         str += "<div class='msg " + fromWhoMsg + "'>";
         str += message.content;
         str += "</div>";
@@ -87,26 +104,61 @@
           type: "GET",
           url: `/chat/chatRoom/${chatRoomId}`,
           success: function (chatRoomInfo) {
-            console.log("Chat Room Info:", chatRoomInfo); // Chat Room Info 출력
             $("#partnerName").text(`${chatRoomInfo.partnerName}님과의 채팅`);
             // 게시글 제목을 가져오는 Ajax 호출
             $.ajax({
               type: "GET",
               url: `/chat/postTitle/${chatRoomInfo.postId}`,
               success: function (postTitle) {
-                console.log("Post Title:", postTitle); // Post Title 출력
                 $("#postTitle").html(`게시글: <a href="/board/view?id=${chatRoomInfo.postId}">${postTitle}</a>`);
               },
               error: function (error) {
                 console.error("게시글 제목 로딩 중 오류 발생:", error);
               }
             });
+            getPreviousChatMessages(chatRoomId);
           },
           error: function (error) {
             console.error("채팅방 정보 로딩 중 오류 발생:", error);
           },
         });
       }
+	    function loadChatRooms() {
+		    $.ajax({
+			    type: "GET",
+			    url: `/chat/chats?userId=${userId}`,
+			    success: function (chatRooms) {
+				    const chatListContainer = $("#chatList");
+				    chatListContainer.empty();
+				    chatRooms.forEach((chatRoom) => {
+					    chatListContainer.append(
+						    `<div class="chat-list-box">
+                  <div class="chat-list-sender">
+                      <a href="#" class="chat-room-link" data-chat-room-id="${chatRoom.chatRoomId}" data-receiver-id="${chatRoom.partnerId}">
+                          ${chatRoom.partnerName}님과의 채팅
+                      </a>
+                  </div>
+                  <div class="post-link">
+                      <a href="/board/view?id=${chatRoom.postId}">
+                          ${chatRoom.postTitle} 게시글로 가기
+                      </a>
+                  </div>
+              </div>`,
+					    );
+				    });
+				    
+				    $(".chat-room-link").on("click", function (e) {
+					    e.preventDefault();
+					    const chatRoomId = $(this).data("chat-room-id");
+					    const receiverId = $(this).data("receiver-id");
+					    window.location.href = `/chat/room/${chatRoomId}?receiverId=${receiverId}`;
+				    });
+			    },
+			    error: function (error) {
+				    console.error("채팅 방 목록 로딩 중 오류 발생:", error);
+			    },
+		    });
+	    }
 
       function getPreviousChatMessages(chatRoomId) {
         fetch("/chat/messages/" + chatRoomId)
@@ -118,6 +170,7 @@
           })
           .then((messages) => {
             if (Array.isArray(messages)) {
+              $("#msgArea").empty(); // 기존 메시지 지우기
               messages.forEach(displayMessage);
             } else {
               throw new Error("Invalid response format");
@@ -130,8 +183,6 @@
             );
           });
       }
-
-      getPreviousChatMessages(chatRoomId);
 
       $("#button-send").on("click", (e) => {
         send();
@@ -177,38 +228,8 @@
       socket.onerror = function (event) {
         console.error("WebSocket error: ", event);
       };
-
-      function loadChatRooms() {
-        $.ajax({
-          type: "GET",
-          url: `/chat/chats?userId=${userId}`,
-          success: function (chatRooms) {
-            const chatList = $("#chatList");
-            chatList.empty();
-            chatRooms.forEach((chatRoom) => {
-              chatList.append(
-                `<li class="chat-list-box">
-                    <div class="chat-list-sender">
-                        <a href="/chat/room/${chatRoom.chatRoomId}?receiverId=${chatRoom.partnerId}">
-                            ${chatRoom.partnerName}님과의 채팅
-                        </a>
-                    </div>
-                    <div  class="post-link">
-                        <a href="/board/view?id=${chatRoom.postId}">
-                            ${chatRoom.postTitle} 게시글로 가기
-                        </a>
-                    </div>
-                </li>`,
-              );
-            });
-          },
-          error: function (error) {
-            console.error("채팅 방 목록 로딩 중 오류 발생:", error);
-          },
-        });
-      }
-
-      loadChatRooms();
+	  
+	  loadChatRooms();
       loadCurrentChatRoomInfo(chatRoomId);
     });
   </script>
