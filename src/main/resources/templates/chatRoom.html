@@ -1,27 +1,44 @@
 <!doctype html>
 <html
-        lang="en"
-        layout:decorate="~{layouts/chatlayout}"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-        xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+  layout:decorate="~{layouts/chatlayout}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  xmlns:th="http://www.thymeleaf.org"
 >
-<head>
-  <meta charset="UTF-8" />
-  <title>Chat Room</title>
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
-  <link rel="stylesheet" th:href="@{/css/chat_page.css}" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-</head>
-<body>
-<div layout:fragment="chat-content">
-  <div class="chat-msg-container">
-    <div class="chat-room-detail">
-      <h3 id="partnerName">채팅방</h3>
-      <p id="postTitle">게시글: 게시글 제목 없음</p>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat Room</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/chat_page.css}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="container">
+        <h2>My Chats</h2>
+        <div class="chat-container">
+          <div class="chat-list">
+            <div id="chat-list-section">
+              <ul id="chatList">
+                <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
+              </ul>
+            </div>
+          </div>
+          <div class="chat-content">
+            <div class="chat-msg-container row row-cols-1">
+              <div class="chat-room-detail">
+                <div
+                  id="userIdHolder"
+                  data-user-id="${#authentication.principal.id}"
+                  th:text="${#authentication.principal.id}"
+                ></div>
+                <div th:text="${userId}"></div>
+                <h3 id="partnerName">채팅방</h3>
+                <p id="postTitle">게시글: 게시글 제목 없음</p>
+              </div>
 
     <div class="chat-msg" id="msgArea" style="height: 50vh">
       <!-- 채팅 내용이 여기에 표시됩니다 -->
