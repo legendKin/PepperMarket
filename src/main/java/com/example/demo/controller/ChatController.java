@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ChatMessage;
 import com.example.demo.entity.ChatRoom;
+import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BoardService;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import com.example.demo.entity.PrincipalDetails;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -117,16 +117,16 @@ public class ChatController {
         }
     }
 
-    @GetMapping("/postTitle/{postId}")
-    public ResponseEntity<String> getPostTitle(@PathVariable Long postId) {
-        try {
-            String postTitle = boardService.getBoardTitleByPostId(postId);
-            return ResponseEntity.ok(postTitle);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping("/postTitle/{postId}")
+//    public ResponseEntity<String> getPostTitle(@PathVariable Long postId) {
+//        try {
+//            String postTitle = boardService.getBoardTitleByPostId(postId);
+//            return ResponseEntity.ok(postTitle);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @GetMapping("/chatRoom/{chatRoomId}")
     public ResponseEntity<Map<String, Object>> getChatRoomInfo(@PathVariable Long chatRoomId) {
@@ -137,6 +137,10 @@ public class ChatController {
                 Map<String, Object> chatRoomInfo = new HashMap<>();
                 chatRoomInfo.put("partnerName", getPartnerName(room, room.getSenderId()));
                 chatRoomInfo.put("postId", room.getPostId());
+
+                chatRoomInfo.put("postTitle", boardService.getBoardTitleByPostId(room.getPostId()));
+                chatRoomInfo.put("postPic", room.getPostPic());
+
                 return ResponseEntity.ok(chatRoomInfo);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

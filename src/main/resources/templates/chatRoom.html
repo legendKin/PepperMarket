@@ -27,10 +27,14 @@
 				</div>
 			</div>
 			<div class="chat-content">
-				<div class="chat-msg-container row row-cols-1">
+				<div class="chat-msg-container row-cols-1">
 					<div class="chat-room-detail">
-						<h3 id="partnerName">채팅방</h3>
-						<p id="postTitle">게시글: 게시글 제목 없음</p>
+						<div id="postPic"></div>
+						<div class="chat-room-detail-text">
+							<div id="postTitle"></div>
+							<div id="partnerName"></div>
+						</div>
+
 					</div>
 
 					<div class="chat-msg" id="msgArea" style="height: 50vh">
@@ -98,18 +102,12 @@
                         type: "GET",
                         url: `/chat/chatRoom/${chatRoomId}`,
                         success: function (chatRoomInfo) {
-                            $("#partnerName").text(`${chatRoomInfo.partnerName}님과의 채팅`);
+                            $("#partnerName").text(`${chatRoomInfo.partnerName}님`);
+                            $("#postPic").html(`<img src="${chatRoomInfo.postPic}">`);
+                            $("#postTitle").html(`${chatRoomInfo.postTitle}
+																									<a href="/board/view?id=${chatRoomInfo.postId}">게시글로 가기 > </a>`);
                             // 게시글 제목을 가져오는 Ajax 호출
-                            $.ajax({
-                                type: "GET",
-                                url: `/chat/postTitle/${chatRoomInfo.postId}`,
-                                success: function (postTitle) {
-                                    $("#postTitle").html(`게시글: <a href="/board/view?id=${chatRoomInfo.postId}">${postTitle}</a>`);
-                                },
-                                error: function (error) {
-                                    console.error("게시글 제목 로딩 중 오류 발생:", error);
-                                }
-                            });
+
                             getPreviousChatMessages(chatRoomId);
                         },
                         error: function (error) {
