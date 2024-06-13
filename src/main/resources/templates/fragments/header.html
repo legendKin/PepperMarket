@@ -13,7 +13,7 @@
       <div class="header-box">
         <div class="header-1">
           <div class="header-notification">
-            <a class="header1" href="/noti">
+            <a class="header1" id="notificationButton" onclick="openNotiPop()">
               <i class="far fa-bell icon"></i>
               <div class="badg">나의 알림</div>
             </a>
@@ -23,8 +23,9 @@
               style="display: none"
             ></span>
 
-            <div class="noti-pop">
-              <ul id="notification-list-pop"></ul>
+            <div class="noti-pop-box" id="notiPop" style="display: none">
+              <!-- 여기에 알림 내용을 동적으로 추가할 수 있음 -->
+              <div id="noti-pop-content"></div>
             </div>
           </div>
           <div class="header-chat">

@@ -106,9 +106,14 @@ public class ChatController {
             }).collect(Collectors.toList());
 
             return ResponseEntity.ok(chatRoomInfos);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            // Log the specific error
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.badRequest().build(); // Return a 400 Bad Request if user ID is invalid
+        } catch (Exception e) {
+            // Log the generic error
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
