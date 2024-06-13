@@ -165,44 +165,58 @@
         const NOTIFICATION_API_URL = "/notifications";
         const RECENT_VIEWED_POSTS_API_URL = "/recent-viewed-posts";
 
-        // 프로필 변경 팝업
-        $(document).ready(function () {
-          $("#profile-info-form").submit(function (event) {
-            event.preventDefault(); // 기본 폼 제출 동작을 막음
+      $(document).ready(function() {
+      $("#profile-info-form").submit(function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작을 막음
 
-            const nickname = $("#nickname").val();
-            const email = $("#email").val();
-            const name = $("#name").val();
-            const birthdate = $("#birthdate").val();
+        const nickname = $("#nickname").val();
+        const email = $("#email").val();
+        const name = $("#name").val();
+        const birthdate = $("#birthdate").val();
 
-            $.ajax({
-              type: "POST",
-              url: "/mypage/change-profile-info",
-              data: {
-                nickname: nickname,
-                email: email,
-                name: name,
-                birthdate: birthdate,
-              },
-              success: function () {
-                $("#successModal").modal("show"); // 모달 표시
-                // 프로필 정보 업데이트
-                $("#nicknameDisplay").text(nickname);
-                $("#emailDisplay").text(email);
-                $("#nameDisplay").text(name);
-                $("#birthdateDisplay").text(birthdate);
+        $.ajax({
+          type: "POST",
+          url: "/mypage/change-profile-info",
+          data: {
+            nickname: nickname,
+            email: email,
+            name: name,
+            birthdate: birthdate
+          },
+          success: function() {
+            $("#successModal").modal('show'); // 모달 표시
+            // 프로필 정보 업데이트
+            $("#nicknameDisplay").text(nickname);
+            $("#emailDisplay").text(email);
+            $("#nameDisplay").text(name);
+            $("#birthdateDisplay").text(birthdate);
 
-                // ******** 모달을 일정 시간 후 자동으로 닫기 ********
-                setTimeout(function () {
-                  $("#successModal").modal("hide");
-                }, 1000);
-              },
-              error: function () {
-                alert("프로필 정보 변경 중 오류가 발생했습니다.");
-              },
-            });
-          });
+            // 모달을 일정 시간 후 자동으로 닫기
+            setTimeout(function() {
+              $("#successModal").modal('hide');
+            }, 2000);
+          },
+          error: function() {
+            alert("프로필 정보 변경 중 오류가 발생했습니다.");
+          }
         });
+      });
+
+      //  모달에서 확인 버튼 클릭 시 모달 닫기
+      $("#successModal .btn-primary").click(function() {
+        $("#successModal").modal('hide');
+      });
+
+      //  엔터 키로 모달 닫기
+      $(document).keypress(function(event) {
+        if (event.which == 13) { // 13은 엔터 키의 키코드입니다.
+          $("#successModal").modal('hide');
+        }
+      });
+
+      // 페이지 로드 시 데이터 불러오기
+      loadReports(); // & 추가된 부분
+    });
         // 키워드 추가 함수
         function addKeyword() {
           const keyword = $("#new-keyword").val();
