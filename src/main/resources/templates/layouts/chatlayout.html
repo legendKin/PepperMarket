@@ -12,18 +12,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- 공통 CSS -->
     <th:block th:replace="~{fragments/common-styles::styles}"></th:block>
-    <!-- CSS -->
-    <th:block layout:fragment="css"></th:block>
-  </head>
-  <body>
-    <div th:replace="~{fragments/header::header}"></div>
-    <div class="main-content" layout:fragment="content"></div>
-
-    <div th:replace="~{fragments/footer::footer}"></div>
-    <!-- JQuery 스크립트를 body 끝부분에 추가하는 것이 좋습니다. -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- 추가 스크립트가 필요한 경우 여기에 추가 -->
     <script th:inline="javascript">
       $(document).ready(function () {
         const userId = /*[[${#authentication.principal.id}]]*/ "anonymous"; // 로그인한 사용자의 ID
@@ -68,5 +56,17 @@
         loadChatRooms();
       });
     </script>
+    <!-- CSS -->
+    <th:block layout:fragment="css"></th:block>
+  </head>
+  <body>
+    <div th:replace="~{fragments/header::header}"></div>
+    <div class="main-content" layout:fragment="content"></div>
+
+    <div th:replace="~{fragments/footer::footer}"></div>
+    <!-- JQuery 스크립트를 body 끝부분에 추가하는 것이 좋습니다. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 추가 스크립트가 필요한 경우 여기에 추가 -->
   </body>
 </html>
