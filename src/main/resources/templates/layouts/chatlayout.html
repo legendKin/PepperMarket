@@ -17,23 +17,8 @@
   </head>
   <body>
     <div th:replace="~{fragments/header::header}"></div>
-    <div class="main-content">
-      <div class="container">
-        <h2>My Chats</h2>
-        <div class="chat-container">
-          <div class="chat-list">
-            <div id="chat-list-section">
-              <ul id="chatList">
-                <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
-              </ul>
-            </div>
-            <th:block th:insert="~{fragments/chatscripts::script}"></th:block>
-          </div>
+    <div class="main-content" layout:fragment="content"></div>
 
-          <div class="chat-content" layout:fragment="chat-content"></div>
-        </div>
-      </div>
-    </div>
     <div th:replace="~{fragments/footer::footer}"></div>
     <!-- JQuery 스크립트를 body 끝부분에 추가하는 것이 좋습니다. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

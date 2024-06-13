@@ -16,44 +16,59 @@
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
   </head>
   <body>
-    <div layout:fragment="chat-content">
-      <div class="chat-msg-container row row-cols-1">
-        <div class="chat-room-detail">
-          <div
-            id="userIdHolder"
-            data-user-id="${#authentication.principal.id}"
-            th:text="${#authentication.principal.id}"
-          ></div>
-          <div th:text="${userId}"></div>
-          <h3 id="partnerName">채팅방</h3>
-          <p id="postTitle">게시글: 게시글 제목 없음</p>
-        </div>
+    <div layout:fragment="content">
+      <div class="container">
+        <h2>My Chats</h2>
+        <div class="chat-container">
+          <div class="chat-list">
+            <div id="chat-list-section">
+              <ul id="chatList">
+                <!-- 채팅 목록이 여기에 동적으로 추가됩니다 -->
+              </ul>
+            </div>
+          </div>
+          <div class="chat-content">
+            <div class="chat-msg-container row row-cols-1">
+              <div class="chat-room-detail">
+                <div
+                  id="userIdHolder"
+                  data-user-id="${#authentication.principal.id}"
+                  th:text="${#authentication.principal.id}"
+                ></div>
+                <div th:text="${userId}"></div>
+                <h3 id="partnerName">채팅방</h3>
+                <p id="postTitle">게시글: 게시글 제목 없음</p>
+              </div>
 
-        <div class="col chat-msg" id="msgArea" style="height: 50vh">
-          <!-- 채팅 내용이 여기에 표시됩니다 -->
-        </div>
-        <div class="col chat-input">
-          <div class="input-group mb-3">
-            <input
-              aria-describedby="button-addon2"
-              class="messageInput"
-              id="msg"
-              type="text"
-              placeholder="메세지를 입력해주세요."
-            />
-            <div class="input-group-append">
-              <button
-                class="btn btn-outline-secondary sendButton"
-                id="button-send"
-                type="button"
-              >
-                전송
-              </button>
+              <div class="col chat-msg" id="msgArea" style="height: 50vh">
+                <!-- 채팅 내용이 여기에 표시됩니다 -->
+              </div>
+              <div class="col chat-input">
+                <div class="input-group mb-3">
+                  <input
+                    aria-describedby="button-addon2"
+                    class="messageInput"
+                    id="msg"
+                    type="text"
+                    placeholder="메세지를 입력해주세요."
+                  />
+                  <div class="input-group-append">
+                    <button
+                      class="btn btn-outline-secondary sendButton"
+                      id="button-send"
+                      type="button"
+                    >
+                      전송
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <th:block th:insert="~{fragments/chatscripts::script}"></th:block>
       <script th:inline="javascript">
         $(document).ready(function () {
           const userId = /*[[${userId}]]*/ "anonymous"; // 로그인한 사용자의 ID
