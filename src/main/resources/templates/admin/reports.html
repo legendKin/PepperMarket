@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Reports</title>
-    <meta charset="UTF-8"/>
+    <title>신고 목록</title>
 </head>
+<meta charset="UTF-8"/>
+
 <body>
-<h1>Welcome, <span th:text="${adminName}">Admin</span>!</h1>
-<h2>All Reports</h2>
+<h1>신고 목록</h1>
 <table>
     <tr>
-        <th>ID</th>
-        <th>Reporter</th>
-        <th>Reported User</th>
-        <th>Reason</th>
-        <th>Date</th>
+        <th>신고자</th>
+        <th>신고된 사용자</th>
+        <th>신고 이유</th>
+        <th>신고 날짜</th>
     </tr>
     <tr th:each="report : ${reports}">
-        <td th:text="${report.id}"></td>
         <td th:text="${report.reporter}"></td>
         <td th:text="${report.reportedUser}"></td>
         <td th:text="${report.reason}"></td>
-        <td th:text="${report.reportedAt}"></td>
+        <!-- *** 날짜 형식 수정 *** -->
+        <td th:text="${#dates.format(report.reportedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
     </tr>
 </table>
 </body>

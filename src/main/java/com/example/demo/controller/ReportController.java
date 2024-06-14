@@ -1,53 +1,35 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ReportRequest;
 import com.example.demo.entity.Report;
-import com.example.demo.entity.Users;
-import com.example.demo.service.ReportService;
-import com.example.demo.service.MemberService;
+import com.example.demo.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.Date;
 
-@Controller
+@RestController
+@RequestMapping("/report")
 public class ReportController {
 
     @Autowired
-    private ReportService reportService;
+    private ReportRepository reportRepository;
 
-    @Autowired
-    private MemberService memberService;
-
-    @GetMapping("/reports")
-    public String getAllReports(@AuthenticationPrincipal UserDetails userDetails, Model model) throws Exception {
-        String email = userDetails.getUsername();
-        Users user = memberService.findByEmail(email);
-        if (user.getRole().equals("admin")) {
-            List<Report> reports = reportService.getAllReports();
-            model.addAttribute("reports", reports);
-            return "reports"; // reports.html 뷰를 반환합니다.
-        } else {
-            return "redirect:/"; // 관리자가 아닌 경우 메인 페이지로 리디렉션합니다.
-        }
-    }
-
-    @PostMapping("/report")
-    public String createReport(@RequestParam("reporter") String reporter,
-                               @RequestParam("reportedUser") String reportedUser,
-                               @RequestParam("reason") String reason) {
+    @PostMapping
+    public ResponseEntity<String> reportPost(ReportRequest reportRequest, RedirectAttributes redirectAttributes) {
         Report report = Report.builder()
-                .reporter(reporter)
-                .reportedUser(reportedUser)
-                .reason(reason)
-                .reportedAt(new java.util.Date())
+                .reporter("anonymous@example.com") // 신고자 이메일 - 실제 구현에서는 인증된 사용자 이메일을 사용
+                .reportedUser("reported@example.com") // 신고된 사용자 이메일 - 실제 구현에서는 게시글 작성자 이메일을 사용
+                .reason(reportRequest.getReason())
+                .reportedAt(new Date())
                 .build();
-        reportService.createReport(report);
-        return "redirect:/reports"; // 신고 목록 페이지로 리디렉션합니다.
+        reportRepository.save(report);
+        redirectAttributes.addFlashAttribute("message", "신고가 접수되었습니다.");
+        return ResponseEntity.ok("신고가 접수되었습니다.");
     }
 }
