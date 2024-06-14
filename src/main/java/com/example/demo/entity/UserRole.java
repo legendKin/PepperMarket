@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 public enum UserRole {
-    ADMIN("ADMIN"),
+    ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER");
 
     private final String authority;
