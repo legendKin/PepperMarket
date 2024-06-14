@@ -50,7 +50,17 @@ public class UserService {
 	public Optional<Users> getUserProfile(Long id) {
 		return userRepository.findById(id);
 	}
-	
-	
+
+	public void suspendUser(Long userId) {
+		Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+		user.setSuspended(true);
+		userRepository.save(user);
+	}
+
+	public void unsuspendUser(Long userId) {
+		Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+		user.setSuspended(false);
+		userRepository.save(user);
+	}
 	
 }

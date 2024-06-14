@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.entity.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,14 +10,19 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.example.demo.repository")
 @EnableWebSocketMessageBroker
 public class DemoApplication {
 
+    private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
+        logger.info("DemoApplication has started");
     }
 
     @Bean
@@ -27,8 +33,9 @@ public class DemoApplication {
                 admin.setEmail("admin@peppermarket.com");
                 admin.setPassword(passwordEncoder.encode("1234")); // 원하는 비밀번호로 설정하세요.
                 admin.setNickname("admin");
-                admin.setRole("ROLE_ADMIN");
+                admin.setRole(UserRole.ADMIN);
                 userRepository.save(admin);
+                logger.info("Admin user created: admin@peppermarket.com");
             }
         };
     }

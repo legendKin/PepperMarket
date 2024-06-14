@@ -1,42 +1,68 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Report;
+import com.example.demo.entity.UserRole;
 import com.example.demo.entity.Users;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MemberService;
-import com.example.demo.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
     private MemberService memberService;
 
     @Autowired
-    private ReportService reportService;
+    private UserRepository userRepository;
 
-    @GetMapping("/admin/reports")
-    public String adminReports(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        String email = userDetails.getUsername();
-        try {
-            Users user = memberService.findByEmail(email);
-            if (user.getRole().equals("ROLE_ADMIN")) {
-                List<Report> reports = reportService.getAllReports();
-                model.addAttribute("reports", reports);
-                return "admin/reports"; // admin/reports.html 뷰를 반환합니다.
+    @GetMapping("/user-list")
+    public String userList(@AuthenticationPrincipal UserDetails userDetails, Model model) throws Exception {
+        logger.info("Attempting to access /admin/user-list");
+
+        if (userDetails != null) {
+            Users currentUser = memberService.findByEmail(userDetails.getUsername());
+            if (currentUser != null && UserRole.ADMIN.equals(currentUser.getRole())) {
+                List<Users> users = userRepository.findAll();
+                model.addAttribute("users", users);
+                logger.info("User List - Access granted for admin");
+                return "admin/user-list";
             } else {
-                return "redirect:/"; // 관리자가 아닌 경우 메인 페이지로 리디렉션합니다.
+                logger.warn("Access Denied: User is not an admin");
+                return "redirect:/";
             }
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "An error occurred while fetching the data.");
-            return "error"; // 에러 페이지로 리디렉션합니다.
         }
+        logger.warn("Access Denied: User is not authenticated");
+        return "redirect:/login";
+    }
+
+    @PostMapping("/suspend/{userId}")
+    public String suspendUser(@PathVariable Long userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + userId));
+        user.setSuspended(true);
+        userRepository.save(user);
+        return "redirect:/admin/user-list";
+    }
+
+    @PostMapping("/unsuspend/{userId}")
+    public String unsuspendUser(@PathVariable Long userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + userId));
+        user.setSuspended(false);
+        userRepository.save(user);
+        return "redirect:/admin/user-list";
     }
 }
