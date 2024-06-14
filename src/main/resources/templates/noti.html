@@ -10,9 +10,7 @@
     <th:block layout:fragment="script">
       <script th:inline="javascript">
         // API URL 설정
-        const API_BASE_URL = "/keywords";
         const NOTIFICATION_API_URL = "/notifications";
-        const RECENT_VIEWED_POSTS_API_URL = "/recent-viewed-posts";
 
         // 알림 목록 불러오기 함수
         function loadNotifications() {
@@ -119,7 +117,6 @@
         // 페이지 로드 시 데이터 불러오기
         $(document).ready(function () {
           loadNotifications();
-          loadNotificationsPop();
         });
       </script>
     </th:block>

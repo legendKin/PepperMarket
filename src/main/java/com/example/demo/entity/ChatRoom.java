@@ -23,7 +23,8 @@ public class ChatRoom {
     @JoinColumn(name = "post_id")
     private Board board;
 
-    public ChatRoom() {}
+    public ChatRoom() {
+    }
 
     public ChatRoom(Long senderId, Long receiverId, Board board) {
         this.senderId = senderId;
@@ -33,5 +34,9 @@ public class ChatRoom {
 
     public Long getPostId() {
         return Long.valueOf(board.getId());
+    }
+
+    public String getPostPic() {
+        return board.getFilepath();
     }
 }

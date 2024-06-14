@@ -32,6 +32,14 @@ public class NotificationController {
         // 사용자의 알림 리스트를 가져와서 HTTP 응답으로 반환
         return ResponseEntity.ok(notificationService.findByUser(user));
     }
+    //헤더의 팝업버튼으로 알림 리스트 가져오는 엔드포인트
+    @GetMapping("/popup")
+    public ResponseEntity<List<Notification>> getPopupNotifications(@RequestParam Long userId) {
+        // 주어진 userId로 사용자 정보를 검색
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        // 사용자의 알림 리스트를 가져와서 HTTP 응답으로 반환
+        return ResponseEntity.ok(notificationService.findByUser(user));
+    }
 
     // 특정 알림을 읽음 상태로 표시하는 엔드포인트
     @PostMapping("/{id}/read")
@@ -70,5 +78,8 @@ public class NotificationController {
         // HTTP 204 No Content 응답 반환
         return ResponseEntity.noContent().build();
     }
+    
+
+    
     
 }

@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                         // FORWARD 타입의 디스패처를 사용하는 요청은 모두 허용
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         // 특정 URL 패턴에 대한 요청은 모두 허용
-                        .requestMatchers("/", "/login", "/signup", "/user", "/board/list", "/board/view/**", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**").permitAll()
+                        .requestMatchers("/", "/login", "/signup", "/user", "/board/list", "/board/view/**", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**","/notifications").permitAll()
                         // '/mypage/**' URL 패턴에 대한 요청은 인증된 사용자만 허용
                         .requestMatchers("/mypage/**").authenticated()
                         // '/admin/**' URL 패턴에 대한 요청은 ADMIN 역할을 가진 사용자만 허용
