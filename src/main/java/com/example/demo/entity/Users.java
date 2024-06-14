@@ -64,6 +64,10 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // role이 null인 경우 기본 권한을 설정
+        if (role == null) {
+            return Stream.of(new SimpleGrantedAuthority(UserRole.USER.getAuthority())).collect(Collectors.toList());
+        }
         return Stream.of(new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
     }
 

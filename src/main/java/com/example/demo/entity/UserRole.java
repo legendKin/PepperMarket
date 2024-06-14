@@ -1,9 +1,16 @@
 package com.example.demo.entity;
 
 public enum UserRole {
-    USER, ADMIN;
+    ADMIN("ADMIN"),
+    USER("ROLE_USER");
+
+    private final String authority;
+
+    UserRole(String authority) {
+        this.authority = authority;
+    }
 
     public String getAuthority() {
-        return "ROLE_" + this.name();
+        return authority;
     }
 }
