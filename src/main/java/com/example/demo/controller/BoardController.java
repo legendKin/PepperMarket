@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+
 import com.example.demo.dto.ReportRequest;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
@@ -32,21 +33,21 @@ import java.util.Map;
 
 @Controller
 public class BoardController {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-
+    
     @Autowired
     private CommentService commentService;
-
+    
     @Autowired
     private CategoryService categoryService;
-
+    
     @Autowired
     private BoardService boardService;
-
+    
     @Autowired
     private NotificationService notificationService;
-
+    
     @Autowired
     private ViewedPostService viewedPostService;
 
@@ -55,7 +56,7 @@ public class BoardController {
 
     @Autowired
     private UserRepository userRepository;
-
+    
 
     @Autowired
     private LikeService likeService;
@@ -77,7 +78,7 @@ public class BoardController {
         model.addAttribute("username", email);
         return "boardWrite";
     }
-
+    
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -143,31 +144,31 @@ public class BoardController {
         } else {
             session.removeAttribute("likeRequest"); // 플래그 초기화
         }
-
+        
         Board board = boardService.boardView(id);
         model.addAttribute("board", board);
         List<Comment> comments = commentService.getCommentsByBoardId(id);
         model.addAttribute("comments", comments);
-
+        
         if (userDetails != null) {
             Users currentUser = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
             model.addAttribute("loggedInUser", currentUser);
-
+            
             // 사용자 좋아요 여부 추가
             boolean liked = likeService.hasUserLiked(id.longValue(), userDetails.getUsername());
             model.addAttribute("liked", liked);
         } else {
             model.addAttribute("liked", false);
         }
-
+        
         Long userId = getCurrentUserId();
         viewedPostService.addViewedPost(userId, Long.valueOf(id));
-
+        
         String writer = board.getUser().getName();
         model.addAttribute("writer", writer);
         String writerPic = board.getUser().getProfilePictureUrl();
         model.addAttribute("writerPic", writerPic);
-
+        
         Long userPostCount = boardService.getBoardCountByUserId(board.getUser().getId());
         model.addAttribute("userPostCount", userPostCount);
         // 좋아요 수 추가
@@ -179,7 +180,7 @@ public class BoardController {
 
         return "boardView";
     }
-
+    
     private Long getCurrentUserId() {
         // 실제 사용자 ID를 가져오는 로직으로 대체해야 합니다.
         // 여기서는 예시로 1L을 반환합니다. 실제 구현에서는 인증된 사용자 정보에서 ID를 가져와야 합니다.
@@ -193,27 +194,27 @@ public class BoardController {
         }
         return 1L; // 예시로 1을 반환
     }
-
+    
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("board", boardService.boardView(id));
         return "boardmodify";
     }
-
+    
     @PostMapping("/board/writepro")
     public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception {
         logger.info("게시글 작성 시작");
-
+        
         board.setViewcount(0);
         board.setCreateDate(LocalDateTime.now());
-
+        
         try {
             Board savedBoard = boardService.write(board, file);
             logger.info("게시글 저장 완료: " + savedBoard.getId());
-
+            
             notificationService.notify(savedBoard);
             logger.info("알림 생성 완료");
-
+            
             model.addAttribute("message", "게시글 작성 완료했습니다.");
             model.addAttribute("redirectUrl", "/board/view?id=" + savedBoard.getId());
             return "message";
@@ -224,29 +225,29 @@ public class BoardController {
             return "message";
         }
     }
-
+    
     @PostMapping("/board/update/{id}")
     public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model, MultipartFile file) throws Exception {
         Board boardTemp = boardService.boardView(id);
-
+        
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
         boardTemp.setModifyDate(LocalDateTime.now());
         boardTemp.setStatus(board.getStatus());
-
+        
         boardService.write(boardTemp, file);
-
+        
         model.addAttribute("message", "글 수정이 완료되었습니다.");
         model.addAttribute("redirectUrl", "/board/view?id=" + id);
         return "message";
     }
-
+    
     @PostMapping("/board/add-comment/{boardId}")
     public String addComment(@PathVariable Integer boardId, @AuthenticationPrincipal UserDetails userDetails, @RequestParam String content) {
         commentService.addComment(boardId, content, userDetails);
         return "redirect:/board/view?id=" + boardId;
     }
-
+    
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleMaxUploadSizeExceeded(MaxUploadSizeExceededException e, RedirectAttributes redirectAttributes) {
         logger.warn("파일 업로드 크기 초과", e);
@@ -278,7 +279,7 @@ public class BoardController {
 
         return "message";
     }
-
+    
     @GetMapping("/board/recentViewedPosts")
     public String recentViewedPosts(Model model) {
         Long userId = getCurrentUserId();
@@ -286,7 +287,7 @@ public class BoardController {
         model.addAttribute("viewedPosts", viewedPosts);
         return "recentViewedPosts";
     }
-
+    
     @PostMapping("/board/like")
     public String likeBoard(@RequestParam Integer boardId, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes, HttpSession session) {
         logger.info("likeBoard 호출됨: boardId={}, userDetails={}", boardId, userDetails);
@@ -294,19 +295,19 @@ public class BoardController {
             redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
             return "redirect:/login";
         }
-
+        
         String userEmail = userDetails.getUsername();
         boolean liked = likeService.addLike(boardId.longValue(), userEmail);
-
+        
         // 좋아요 상태 메시지 추가
         redirectAttributes.addFlashAttribute("message", liked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.");
-
+        
         // 좋아요 요청 플래그 설정
         session.setAttribute("likeRequest", true);
-
+        
         return "redirect:/board/view?id=" + boardId;
     }
-
+    
     @GetMapping("/board/like/count")
     @ResponseBody
     public Long getLikeCount(@RequestParam Integer boardId) {
@@ -314,3 +315,6 @@ public class BoardController {
         return likeService.getLikeCount(boardId.longValue());
     }
 }
+
+
+
