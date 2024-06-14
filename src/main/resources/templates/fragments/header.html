@@ -42,7 +42,10 @@
                 id="dropdownMenuButton"
                 type="button"
               >
-                <p class="profile-name badg" th:text="${nickname}"></p>
+                <p
+                  class="profile-name badg"
+                  th:text="${#authentication.principal.nickname}"
+                ></p>
               </a>
               <div
                 aria-labelledby="dropdownMenuButton"
