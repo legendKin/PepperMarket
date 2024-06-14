@@ -41,15 +41,14 @@
 
 .form-control,
 .container .form-select,
-.btn-group{
+.btn-group {
   height: 60px;
   width: 50%;
 }
-.quality-btn-wrap>.btn{
-  flex:1
-  
-  }
-.quality-select{
+.quality-btn-wrap > .btn {
+  flex: 1;
+}
+.quality-select {
   align-items: center;
   border: 1px solid #dee2e6;
   color: #000;
@@ -58,8 +57,7 @@
   font-weight: bold;
   justify-content: center;
 }
-#quality-button{
-
+#quality-button {
 }
 
 .price-box {
@@ -94,7 +92,7 @@
 }
 .btn-cancel {
   background-color: #a1a8af;
-  border: 0px;
+  border: 0;
 }
 .btn-cancel,
 .btn-submit {

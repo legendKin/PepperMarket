@@ -20,20 +20,18 @@
   background-color: rgb(255, 255, 255);
   border: 1.3px solid rgb(229, 232, 235);
   border-radius: 24px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 4px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 4px 4px;
   cursor: pointer;
   height: 50px;
   margin-right: 8px;
   padding: 12px 28px;
   width: 202px;
-  
-  }
+}
 .category-toggle-content {
   display: flex;
   justify-content: space-between;
 }
 .filtername {
-
   font-size: 0.938rem;
   font-weight: 700;
   line-height: 134%;
@@ -41,15 +39,15 @@
 
 .isA-box {
   align-items: flex-end;
-  display:     flex;
-  width:       202px;
-  }
+  display: flex;
+  width: 202px;
+}
 
 .is-available {
   align-items: flex-end;
-  display:     flex;
-  width:       100%;
-  }
+  display: flex;
+  width: 100%;
+}
 
 /* 카테고리 하단 */
 .reset-filter {
@@ -75,7 +73,6 @@
 
 .reset-text {
   color: #fff;
-  font-family: "Pretendard Variable";
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 100%;
@@ -96,17 +93,16 @@
   background: rgb(249, 250, 251);
   border: 1.2px solid rgb(229, 232, 235);
   border-radius: 10px;
-  padding: 18px 20px 0px;
+  padding: 18px 20px 0;
 }
 
 .category-item {
   border-bottom: 1px solid rgb(230, 235, 239);
   display: flex;
-  font-family: "Pretendard Variable";
   font-size: 0.813rem;
   font-weight: 700;
   height: 32px;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   line-height: 154%;
 }
 
@@ -116,10 +112,9 @@
 .category-link {
   color: rgb(20, 30, 43);
   cursor: pointer;
-  font-family: "Pretendard Variable";
   font-size: 0.813rem;
   font-weight: 600;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   line-height: 154%;
 }
 
@@ -146,19 +141,17 @@
 .price-filter input {
   border: none;
   border-radius: 8px;
-  font-family: "Pretendard Variable";
   font-size: 0.938rem;
   font-weight: 700;
   height: 44px;
   letter-spacing: -0.2px;
   line-height: 134%;
-  padding: 0px;
+  padding: 0;
   text-align: center;
   width: 188px;
 }
 
 .price-divider {
-  font-family: "Pretendard Variable";
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.2px;
@@ -171,7 +164,6 @@
   border: none;
   border-radius: 8px;
   color: rgb(255, 255, 255);
-  font-family: "Pretendard Variable";
   font-size: 0.938rem;
   font-weight: 700;
   height: 44px;
@@ -215,9 +207,9 @@
 
 .product-album .card {
   box-sizing: border-box;
+  max-height: 100%;
   position: relative;
   width: 100%;
-  max-height : 100%;
 }
 
 .unavailable {
@@ -235,7 +227,7 @@
   width: 100%;
   z-index: 1; /* 다른 요소들 위에 배치 */
 }
-.available{
+.available {
   display: none;
 }
 
@@ -247,7 +239,7 @@
 .product-count {
   display: flex;
   justify-content: space-between;
-  margin: 0px 20px 21px 0px;
+  margin: 0 20px 21px 0;
   position: relative;
 }
 
@@ -255,12 +247,11 @@
 .product-count {
   display: flex;
   justify-content: space-between;
-  margin: 0px 20px 21px 0px;
+  margin: 0 20px 21px 0;
   position: relative;
 }
 .count-text {
   color: rgb(255, 97, 90);
-  font-family: "Pretendard Variable";
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 100%;
@@ -274,7 +265,6 @@
 
 .recommendation-text {
   color: rgb(25, 31, 40);
-  font-family: "Pretendard Variable";
   font-size: 0.938rem;
   font-weight: 600;
   letter-spacing: -0.6px;
@@ -355,5 +345,5 @@
   font-size: 0.8rem;
 }
 .goods-img {
-   object-fit: cover;
-   }
+  object-fit: cover;
+}
