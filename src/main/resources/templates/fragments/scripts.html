@@ -1,15 +1,16 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <th:block th:fragment="script">
     <!-- Bootstrap core JS-->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     ></script>
   </th:block>
-  <script
-    th:inline="javascript"
-    th:unless="${#authentication.name == 'anonymousUser'}"
-  >
+  <script th:inline="javascript" sec:authorize="isAuthenticated()">
     // API URL 설정
     const NOTIFICATION_API_URL = "/notifications";
 
@@ -17,8 +18,6 @@
     function loadNotiPop() {
       const userId = /*[[${#authentication.principal.id}]]*/ "anonymous"; // 로그인한 사용자의 ID
       console.log("사용자 ID의 알림 로딩 중:", userId); // 디버깅 로그 추가
-
-      console.log(/*[[${#authentication.principal.nickname}]]*/);
 
       $.ajax({
         type: "GET",

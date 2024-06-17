@@ -1,5 +1,9 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  lang="ko"
+>
   <head>
     <meta charset="UTF-8" />
     <title>페퍼마켓에 오신 것을 환영합니다</title>
@@ -31,10 +35,7 @@
           </div>
           <div class="header-profile">
             <!--                            로그인시        -->
-            <div
-              class="dropdown"
-              th:unless="${#authentication.name == 'anonymousUser'}"
-            >
+            <div class="dropdown" sec:authorize="isAuthenticated()">
               <a
                 aria-expanded="false"
                 class="header1 dropdown-toggle"
@@ -59,11 +60,7 @@
             </div>
 
             <!--                            비로그인시       -->
-            <a
-              class="header1"
-              href="/login"
-              th:if="${#authentication.name == 'anonymousUser'}"
-            >
+            <a class="header1" href="/login" sec:authorize="isAnonymous()">
               <div class="badg">로그인/회원가입</div>
             </a>
           </div>
