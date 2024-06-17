@@ -24,6 +24,9 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     private boolean isSuspended;
 
     @Column(nullable = false, unique = true)
@@ -59,16 +62,10 @@ public class Users implements UserDetails {
     @Temporal(TemporalType.DATE)
     private Date birthdate;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // role이 null인 경우 기본 권한을 설정
-        if (role == null) {
-            return Stream.of(new SimpleGrantedAuthority(UserRole.USER.getAuthority())).collect(Collectors.toList());
-        }
-        return Stream.of(new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
+        return Stream.of(new SimpleGrantedAuthority(role.getAuthority()))
+                .collect(Collectors.toList());
     }
 
     @Override

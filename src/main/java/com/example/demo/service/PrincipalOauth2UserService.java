@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.PrincipalDetails;
+import com.example.demo.entity.UserRole;
 import com.example.demo.entity.Users;
 import com.example.demo.oauth.GoogleUserInfo;
 import com.example.demo.oauth.NaverUserInfo;
@@ -75,6 +76,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                 .socialId(socialId)
                 .nickname(nickname)
                 .profilePictureUrl(profilePictureUrl)
+                .role(UserRole.USER) // 기본 역할 설정
                 .build();
         return userRepository.save(user);
     }
