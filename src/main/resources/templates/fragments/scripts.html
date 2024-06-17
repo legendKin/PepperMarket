@@ -16,8 +16,8 @@
 
     // 알림 목록 불러오기 함수
     function loadNotiPop() {
-      const userId = /*[[${#authentication.principal.id}]]*/ "anonymous"; // 로그인한 사용자의 ID
-      console.log("사용자 ID의 알림 로딩 중:", userId); // 디버깅 로그 추가
+        const userId = /*[[${#authentication.principal.id}]]*/ "anonymous"; // 로그인한 사용자의 ID
+        console.log("사용자 ID의 알림 로딩 중:", userId); // 디버깅 로그 추가
 
       $.ajax({
         type: "GET",
@@ -25,46 +25,46 @@
         success: function (notifications) {
           console.log("알림 가져옴:", notifications); // 디버깅 로그 추가
 
-          const notificationListPop = $("#noti-pop-content");
-          const unreadCountElement = $("#unread-count");
-          const unreadCountBadge = $("#noti-count");
+                const notificationListPop = $("#noti-pop-content");
+                const unreadCountElement = $("#unread-count");
+                const unreadCountBadge = $("#noti-count");
 
-          notificationListPop.empty();
+                notificationListPop.empty();
 
-          let unreadCount = 0;
+                let unreadCount = 0;
 
-          notifications.forEach((notification) => {
-            const notificationClass = notification.read
-              ? "read-notification"
-              : "";
-            if (!notification.read) {
-              unreadCount++;
-            }
+                notifications.forEach((notification) => {
+                    const notificationClass = notification.read
+                        ? "read-notification"
+                        : "";
+                    if (!notification.read) {
+                        unreadCount++;
+                    }
 
-            notificationListPop.append(
-              `
+                    notificationListPop.append(
+                        `
     			                <li class="${notificationClass}">
     			                <a href="/board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
     			                ${notification.message}</a>
     			                <i class="fas fa-times delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
     			                </li>
                           `,
-            );
-          });
-          // 안 읽은 알림 개수 업데이트
-          if (unreadCount === 0) {
-            unreadCountElement.text("모든 알림을 읽었습니다");
-            unreadCountBadge.hide();
-          } else {
-            unreadCountElement.text(`안 읽은 알림: ${unreadCount}`);
-            unreadCountBadge.text(unreadCount);
-            unreadCountBadge.show();
-          }
-        },
-        error: function (error) {
-          console.error("알림 목록 불러오기 중 오류 발생:", error);
-        },
-      });
+                    );
+                });
+                // 안 읽은 알림 개수 업데이트
+                if (unreadCount === 0) {
+                    unreadCountElement.text("모든 알림을 읽었습니다");
+                    unreadCountBadge.hide();
+                } else {
+                    unreadCountElement.text(`안 읽은 알림: ${unreadCount}`);
+                    unreadCountBadge.text(unreadCount);
+                    unreadCountBadge.show();
+                }
+            },
+            error: function (error) {
+                console.error("알림 목록 불러오기 중 오류 발생:", error);
+            },
+        });
     }
 
     const e = document.getElementById("notificationButton");
@@ -76,46 +76,46 @@
 
     // 알림 읽음 표시 함수
     function markAsRead(id) {
-      $.ajax({
-        type: "POST",
-        url: `${NOTIFICATION_API_URL}/${id}/read`,
-        success: function () {
-          loadNotiPop();
-        },
-        error: function (error) {
-          console.error("알림 읽음 표시 중 오류 발생:", error);
-        },
-      });
+        $.ajax({
+            type: "POST",
+            url: `${NOTIFICATION_API_URL}/${id}/read`,
+            success: function () {
+                loadNotiPop();
+            },
+            error: function (error) {
+                console.error("알림 읽음 표시 중 오류 발생:", error);
+            },
+        });
     }
 
     function markAsReadToggle(id) {
-      $.ajax({
-        type: "POST",
-        url: `${NOTIFICATION_API_URL}/${id}/readtoggle`,
-        success: function () {
-          loadNotiPop();
-        },
-        error: function (error) {
-          console.error("알림 읽음 표시 중 오류 발생:", error);
-        },
-      });
+        $.ajax({
+            type: "POST",
+            url: `${NOTIFICATION_API_URL}/${id}/readtoggle`,
+            success: function () {
+                loadNotiPop();
+            },
+            error: function (error) {
+                console.error("알림 읽음 표시 중 오류 발생:", error);
+            },
+        });
     }
 
     function deleteNoti(id) {
-      $.ajax({
-        type: "DELETE",
-        url: `${NOTIFICATION_API_URL}/${id}/delete`,
-        success: function () {
-          loadNotiPop();
-        },
-        error: function (error) {
-          console.error("알림 삭제 중 오류 발생:", error);
-        },
-      });
+        $.ajax({
+            type: "DELETE",
+            url: `${NOTIFICATION_API_URL}/${id}/delete`,
+            success: function () {
+                loadNotiPop();
+            },
+            error: function (error) {
+                console.error("알림 삭제 중 오류 발생:", error);
+            },
+        });
     }
 
     $(document).ready(function () {
-      loadNotiPop();
+        loadNotiPop();
     });
-  </script>
+</script>
 </html>

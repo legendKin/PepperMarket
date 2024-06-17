@@ -38,7 +38,7 @@ public class WebSecurityConfig {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/", "/login", "/signup", "/user", "/board/list", "/board/view/**", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**", "/notifications").permitAll()
+                        .requestMatchers("/", "/login", "/signup", "/user", "/board/list", "/board/view/**", "/main", "/layout", "/img/**", "/css/**", "/js/**", "/username", "/files/**", "/notifications", "/board/like/count").permitAll()
                         .requestMatchers("/mypage/**").authenticated()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/chat/**").authenticated()
