@@ -25,14 +25,17 @@ public class UserService {
 	
 	// 새로운 사용자를 생성하고 저장하는 메서드
 	public Long save(AddUserRequest dto) {
-		if ("admin".equalsIgnoreCase(dto.getNickname())) {
+		if ("admin".equalsIgnoreCase(dto.getName())) {
 			throw new IllegalArgumentException("Cannot use 'admin' as nickname");
 		}
 		// 사용자 정보를 생성하고 저장
+		String email = dto.getEmail();
+		String nickname = email.substring(0, email.indexOf("@"));
 		Users newUser = Users.builder()
-				                .email(dto.getEmail())
+				                .email(email)
 				                .password(bCryptPasswordEncoder.encode(dto.getPassword())) // 비밀번호를 암호화하여 저장
-				                .nickname(dto.getNickname()) // 닉네임 추가
+				                .name(dto.getName()) // 닉네임 추가
+				                .nickname(nickname)
 				                .build();
 		return userRepository.save(newUser).getId(); // 사용자의 ID 반환
 	}

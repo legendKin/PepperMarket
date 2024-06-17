@@ -65,10 +65,11 @@ public class BoardController {
     private ChatRoomService chatRoomService;
 
     @Autowired
-    public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService) {
+    public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService,UserService userService) {
         this.boardService = boardService;
         this.commentService = commentService;
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @GetMapping("/board/write")

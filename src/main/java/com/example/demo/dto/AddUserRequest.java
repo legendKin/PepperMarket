@@ -34,6 +34,6 @@ public class AddUserRequest {
     private LocalDate birthDate; // 생년월일
 
     @NotBlank
-    private String nickname; // 닉네임
+    private String name; // 이름
 
 }
