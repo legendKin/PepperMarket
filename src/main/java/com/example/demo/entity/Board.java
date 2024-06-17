@@ -57,13 +57,16 @@ public class Board {
 
     @Column(name = "modifydate", nullable = true)
     private LocalDateTime modifyDate; // 수정일
-
-
+    @Getter
+    @Setter
+    @Transient
+    private boolean liked;
 
     public String getCategName() {
         categName = categoryList.get(cateID - 1);
         return categName;
     }
+
     public String qualityHangul(){
         return switch (quality) {
             case "perfect" -> "매우 좋음";
@@ -81,6 +84,14 @@ public class Board {
         return user.getProfilePictureUrl();
     }
 
+
+
+
+
+//    @ManyToOne
+//    @JoinColumn(name = "category_id")
+//    private Category category;
+
     public String getFormattedPrice() {
         if (price == null || price.isEmpty()) {
             return "가격 정보 없음";
@@ -93,15 +104,7 @@ public class Board {
             return "잘못된 가격 형식";
         }
     }
-
-
-
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    private Category category;
-
+    
     // createDate를 기준으로 몇 분 전, 몇 시간 전 등을 반환하는 메서드
     public String getTimeAgo() {
         if (this.createDate == null) {
@@ -110,5 +113,8 @@ public class Board {
         Date date = Date.from(this.createDate.atZone(ZoneId.systemDefault()).toInstant());
         return Time.calculateTime(date);
     }
+    
+    // getters and setters...
+	
 }
 

@@ -172,12 +172,31 @@
   border: 1px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
+  display: flex;
   padding: 20px;
   position: absolute;
   right: 0;
   top: 30px;
-  width: 200px;
+  width: 350px;
   z-index: 1;
+}
+#noti-pop-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+#noti-pop-content > li {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  padding: 10px 0;
+}
+
+#noti-pop-content > li > a {
+  margin-left: 10px;
 }
 
 .read-notification > a {

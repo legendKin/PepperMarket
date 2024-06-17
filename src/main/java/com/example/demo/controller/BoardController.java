@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,11 +68,10 @@ public class BoardController {
     private ChatRoomService chatRoomService;
 
     @Autowired
-    public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService,UserService userService) {
+    public BoardController(BoardService boardService, CommentService commentService, NotificationService notificationService) {
         this.boardService = boardService;
         this.commentService = commentService;
         this.notificationService = notificationService;
-        this.userService = userService;
     }
 
     @GetMapping("/board/write")
@@ -84,9 +86,9 @@ public class BoardController {
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             String searchKeyword, @RequestParam(required = false) Integer searchCateID,
-                            @RequestParam(required = false) boolean showCompleted, @RequestParam(required = false) boolean ajax) {
+                            @RequestParam(required = false) boolean showCompleted, @RequestParam(required = false) boolean ajax, @AuthenticationPrincipal UserDetails userDetails) {
         logger.info("boardList method called");
-        Page<Board> list = boardService.searchBoards(searchKeyword, searchCateID, pageable, showCompleted);
+        Page<Board> list = boardService.searchBoards(searchKeyword, searchCateID, pageable, showCompleted, userDetails);
 
         model.addAttribute("list", list);
 
@@ -290,23 +292,39 @@ public class BoardController {
     }
     
     @PostMapping("/board/like")
-    public String likeBoard(@RequestParam Integer boardId, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes, HttpSession session) {
+    @ResponseBody // JSON 응답을 위해 필요
+    public ResponseEntity<String> likeBoard(@RequestParam Integer boardId, @AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
         logger.info("likeBoard 호출됨: boardId={}, userDetails={}", boardId, userDetails);
+        
         if (userDetails == null) {
-            redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
-            return "redirect:/login";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
         
         String userEmail = userDetails.getUsername();
         boolean liked = likeService.addLike(boardId.longValue(), userEmail);
         
-        // 좋아요 상태 메시지 추가
-        redirectAttributes.addFlashAttribute("message", liked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.");
+        // 좋아요 상태 메시지 반환
+        String message = liked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.";
         
-        // 좋아요 요청 플래그 설정
-        session.setAttribute("likeRequest", true);
+        // 좋아요 요청 플래그 설정 (세션 사용 대신 JSON 응답에 포함할 수 있음)
+        session.setAttribute("likeRequest", true); // 세션 사용 예시
         
-        return "redirect:/board/view?id=" + boardId;
+        // JSON 형식의 응답 반환
+        return ResponseEntity.ok(message);
+    }
+    
+    @GetMapping("/board/like")
+    @ResponseBody
+    public Map<String, Boolean> hasUserLiked(@RequestParam Integer boardId, @AuthenticationPrincipal UserDetails userDetails) {
+        logger.info("hasUserLiked 호출됨: boardId={}, userDetails={}", boardId, userDetails);
+        Map<String, Boolean> response = new HashMap<>();
+        if (userDetails == null) {
+            response.put("liked", false);
+        } else {
+            boolean liked = likeService.hasUserLiked(boardId.longValue(), userDetails.getUsername());
+            response.put("liked", liked);
+        }
+        return response;
     }
     
     @GetMapping("/board/like/count")

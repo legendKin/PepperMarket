@@ -206,7 +206,7 @@
         function loadKeywords() {
           $.ajax({
             type: "GET",
-            url: API_BASE_URL,
+            url: `${API_BASE_URL}`,
             success: function (keywords) {
               const keywordList = $("#keyword-list");
               keywordList.empty();

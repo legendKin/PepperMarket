@@ -54,4 +54,9 @@ public class MainController {
     public String noti() {
         return "noti";
     }
+    
+    @GetMapping("/usernametest")
+    public String usernametest() {
+        return "usernametest";
+    }
 }

@@ -8,6 +8,7 @@ import com.example.demo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,6 +47,9 @@ public abstract class BoardService {
 
     @Autowired
     private LikeRepository likeRepository;
+    
+    @Autowired
+    private LikeService likeService;
     
 //    @Value("${file.upload-dir}")
 //    private String uploadDir;
@@ -218,9 +222,18 @@ public abstract class BoardService {
         boardRepository.incrementLikes(id);
     }
     
-    public Page<Board> searchBoards(String searchKeyword, Integer searchCateID, Pageable pageable, boolean showCompleted) {
+    public Page<Board> searchBoards(String searchKeyword, Integer searchCateID, Pageable pageable, boolean showCompleted, UserDetails userDetails) {
         Integer status = showCompleted ? null : 3; // showCompleted가 true이면 status를 null로 설정하여 모든 상태의 게시글을 가져옴
-        return boardRepository.searchBoards(searchKeyword, searchCateID, status, pageable);
+        Page<Board> boards = boardRepository.searchBoards(searchKeyword, searchCateID, status, pageable);
+        
+        String username = userDetails != null ? userDetails.getUsername() : null;
+        
+        for (Board board : boards) {
+            boolean liked = username != null && likeService.hasUserLiked(Long.valueOf(board.getId()), username);
+            board.setLiked(liked);
+        }
+        
+        return boards;
     }
 
     public Board getBoardById(Long postId) {

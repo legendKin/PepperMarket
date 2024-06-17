@@ -44,10 +44,9 @@
             notificationListPop.append(
               `
     			                <li class="${notificationClass}">
-    			                <a href="board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
+    			                <a href="/board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
     			                ${notification.message}</a>
-    			                <button onclick="markAsReadToggle(${notification.id})">읽음 표시</button>
-    			                <i class="far fa-trash-alt delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
+    			                <i class="fas fa-times delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
     			                </li>
                           `,
             );
@@ -72,7 +71,7 @@
     const g = document.getElementById("notiPop");
 
     e.addEventListener("click", function openNotiPop() {
-      g.style.display = g.style.display === "none" ? "block" : "none";
+      g.style.display = g.style.display === "none" ? "" : "none";
     });
 
     // 알림 읽음 표시 함수

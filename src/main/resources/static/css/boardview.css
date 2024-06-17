@@ -17,7 +17,9 @@ body {
   padding: 20px;
   width: 50%;
 }
-
+.product-image {
+  width: 100%;
+}
 .ev_detail img {
   width: 100%;
 }
@@ -88,7 +90,7 @@ body {
 
 .product-image > img {
   height: 400px;
-  max-width: 540px;
+  max-width: 100%;
   object-fit: cover;
 }
 
@@ -146,6 +148,8 @@ body {
   margin-top: 30px;
   width: 100%;
 }
+.heart {
+}
 
 .like-chat {
   align-items: center;
@@ -162,12 +166,11 @@ body {
   padding: 10px 20px;
 }
 .like-button {
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  padding: 10px 10px;
+  background: none;
+  border: none;
+}
+.like-button > i {
+  font-size: 40px;
 }
 
 .like-icon {
@@ -184,10 +187,17 @@ body {
 .like-count,
 .chat-text,
 .gologin-text,
-.edit-text {
+.edit-text,
+.delete-text {
   align-items: center;
   display: flex;
   font-size: 20px;
+}
+.edit-text::after {
+  border-left: 1px solid #bbb;
+  content: "";
+  height: 30px;
+  margin: 0 10px;
 }
 
 .product-description {
