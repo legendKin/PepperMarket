@@ -19,6 +19,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     public PrincipalDetails() {
         // 기본 생성자 내용 (필요한 경우)
     }
+
     public PrincipalDetails(Users users) {
         this.users = users;
     }
@@ -30,6 +31,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     public Long getId() {
         return users.getId();
+    }
+
+    public Users getUser() {
+        return users;
     }
 
     @Override
@@ -71,7 +76,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     public String getName() {
         return users.getNickname();
     }
-    
+
     public String getNickname() {
         return users.getNickname();
     }

@@ -40,7 +40,8 @@ public class ChatController {
     }
 
     @GetMapping("/start")
-    public ModelAndView startChat(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long postId) {
+    public ModelAndView startChat(@RequestParam Long receiverId, @RequestParam Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long senderId = principalDetails.getUser().getId();
         ChatRoom chatRoom = chatRoomService.createOrGetChatRoom(senderId, receiverId, postId);
         Long chatRoomId = chatRoom.getId();
         return new ModelAndView("redirect:/chat/room/" + chatRoomId + "?receiverId=" + receiverId);
@@ -51,13 +52,14 @@ public class ChatController {
         ModelAndView modelAndView = new ModelAndView("chatRoom");
         modelAndView.addObject("chatRoomId", chatRoomId);
         modelAndView.addObject("receiverId", receiverId);
-        modelAndView.addObject("userId", principalDetails.getId());
+        modelAndView.addObject("userId", principalDetails.getUser().getId());
         return modelAndView;
     }
 
     @PostMapping("/send")
-    public ResponseEntity<ChatMessage> sendMessage(@RequestParam Long chatRoomId, @RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam String content) {
+    public ResponseEntity<ChatMessage> sendMessage(@RequestParam Long chatRoomId, @RequestParam Long receiverId, @RequestParam String content, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         try {
+            Long senderId = principalDetails.getUser().getId();
             Users sender = userRepository.findById(senderId).orElseThrow(() -> new IllegalArgumentException("Invalid sender ID"));
             Users receiver = userRepository.findById(receiverId).orElseThrow(() -> new IllegalArgumentException("Invalid receiver ID"));
 
@@ -88,8 +90,9 @@ public class ChatController {
     }
 
     @GetMapping("/chats")
-    public ResponseEntity<List<Map<String, String>>> getUserChatRooms(@RequestParam Long userId) {
+    public ResponseEntity<List<Map<String, String>>> getUserChatRooms(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         try {
+            Long userId = principalDetails.getUser().getId();
             Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
             List<ChatRoom> chatRooms = chatRoomService.findByUserId(userId);
 
@@ -107,26 +110,13 @@ public class ChatController {
 
             return ResponseEntity.ok(chatRoomInfos);
         } catch (IllegalArgumentException e) {
-            // Log the specific error
             e.printStackTrace();
-            return ResponseEntity.badRequest().build(); // Return a 400 Bad Request if user ID is invalid
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            // Log the generic error
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-//    @GetMapping("/postTitle/{postId}")
-//    public ResponseEntity<String> getPostTitle(@PathVariable Long postId) {
-//        try {
-//            String postTitle = boardService.getBoardTitleByPostId(postId);
-//            return ResponseEntity.ok(postTitle);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
     @GetMapping("/chatRoom/{chatRoomId}")
     public ResponseEntity<Map<String, Object>> getChatRoomInfo(@PathVariable Long chatRoomId) {
