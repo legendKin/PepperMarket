@@ -6,7 +6,6 @@
   grid-template-rows: 1fr;
 
   margin: 0 auto;
-  padding: 20px;
 }
 
 .chat-list {
@@ -29,6 +28,7 @@
 .chat-room-detail {
   border-bottom: 1px solid black;
   display: flex;
+  height: 140px;
   padding: 20px;
 }
 
@@ -40,13 +40,14 @@
 
 #postTitle {
   color: black;
-  cursor: pointer;
+
   font-size: 30px;
   text-decoration: none;
 }
 
 #postTitle > a {
   color: black;
+  cursor: pointer;
   font-size: 15px;
 }
 
@@ -64,7 +65,11 @@
   height: 10vh;
   padding: 10px;
 }
-
+.message-date {
+  color: #999;
+  margin: 10px 0;
+  text-align: center;
+}
 .chat-msg {
   display: flex;
   flex-direction: column;
@@ -80,8 +85,33 @@
 }
 
 .chat-input {
-  height: 10vh;
-  padding: 10px;
+  border-top: 1px solid black;
+  height: 51px;
+}
+.chat-input-box {
+  display: flex;
+  justify-content: space-between;
+}
+.messageInput {
+  border: none;
+  margin-left: 10px;
+  width: 70%;
+}
+
+.messageInput:focus {
+  outline: none;
+}
+.sendButton {
+  background-color: #52fd7a;
+  border: none;
+  border-radius: 0 0 10px 0;
+  color: #000;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  height: 50px;
+  overflow: hidden;
+  width: 200px;
 }
 
 .from-me {

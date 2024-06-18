@@ -128,7 +128,6 @@
       <script th:inline="javascript">
         // API URL 설정
         const API_BASE_URL = "/keywords";
-        const NOTIFICATION_API_URL = "/notifications";
         const RECENT_VIEWED_POSTS_API_URL = "/recent-viewed-posts";
 
         // 프로필 변경 팝업
@@ -250,8 +249,6 @@
         // 페이지 로드 시 데이터 불러오기
         $(document).ready(function () {
           loadKeywords();
-          loadNotifications();
-          loadChatRooms();
           loadRecentViewedPosts();
         });
       </script>

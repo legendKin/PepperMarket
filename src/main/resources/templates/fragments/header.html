@@ -13,18 +13,40 @@
       <div class="header-box">
         <div class="header-1">
           <div class="header-notification">
-            <a class="header1" id="notificationButton">
-              <i class="far fa-bell icon"></i>
-              <div class="badg">나의 알림</div>
-            </a>
-            <span
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-              id="noti-count"
-            ></span>
-
-            <div class="noti-pop-box" id="notiPop" style="display: none">
-              <!-- 여기에 알림 내용을 동적으로 추가할 수 있음 -->
-              <div id="noti-pop-content"></div>
+            <div class="dropdown">
+              <a
+                class="header1"
+                id="notificationButton"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="far fa-bell icon"></i>
+                <div class="badg">나의 알림</div>
+              </a>
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                id="noti-count"
+              ></span>
+              <div
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="notificationDropdown"
+              >
+                <div class="noti-pop-box" id="notiPop">
+                  <!-- 여기에 알림 내용을 동적으로 추가할 수 있음 -->
+                  <div id="noti-pop-content"></div>
+                  <div class="noti-pop-footer">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      id="notiPopClose"
+                      onclick="location.href='/noti'"
+                    >
+                      알림센터로 가기
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="header-chat">

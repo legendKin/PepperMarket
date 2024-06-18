@@ -127,9 +127,10 @@ public class ChatController {
                 Map<String, Object> chatRoomInfo = new HashMap<>();
                 chatRoomInfo.put("partnerName", getPartnerName(room, room.getSenderId()));
                 chatRoomInfo.put("postId", room.getPostId());
-
+                chatRoomInfo.put("postCount", getPartnerPostCount(room, room.getSenderId()));
                 chatRoomInfo.put("postTitle", boardService.getBoardTitleByPostId(room.getPostId()));
                 chatRoomInfo.put("postPic", room.getPostPic());
+                chatRoomInfo.put("partnerId", String.valueOf(room.getReceiverId().equals(room.getSenderId()) ? room.getSenderId() : room.getReceiverId()));
 
                 return ResponseEntity.ok(chatRoomInfo);
             } else {
@@ -144,5 +145,9 @@ public class ChatController {
     private String getPartnerName(ChatRoom room, Long userId) {
         Long partnerId = room.getSenderId().equals(userId) ? room.getReceiverId() : room.getSenderId();
         return userRepository.findById(partnerId).map(Users::getNickname).orElse("Unknown");
+    }
+    private Long getPartnerPostCount(ChatRoom room, Long userId) {
+        Long partnerId = room.getSenderId().equals(userId) ? room.getReceiverId() : room.getSenderId();
+        return boardService.getBoardCountByUserId(partnerId);
     }
 }
