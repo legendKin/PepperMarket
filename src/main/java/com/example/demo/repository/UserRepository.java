@@ -4,8 +4,9 @@ import com.example.demo.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
     // email로 사용자 정보 가져옴
@@ -15,4 +16,6 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     @Query("SELECT u FROM Users u")
     List<Users> findAllUsers();
+    
+    
 }

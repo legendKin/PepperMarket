@@ -110,9 +110,9 @@
   <div layout:fragment="content">
     <div class="main-content">
       <div class="user-info">
-        <img
+        <div
           class="profile-picture"
-          th:src="@{${user.profilePictureUrl}}"
+          th:text="${user.profilePictureUrl}"
           alt="Profile Picture"
         />
         <div class="user-details">

@@ -35,6 +35,8 @@ public class Users implements UserDetails {
     private String nickname;
 
     private String profilePictureUrl;
+    
+    private String profilePicPath;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

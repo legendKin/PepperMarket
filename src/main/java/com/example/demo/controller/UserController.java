@@ -22,6 +22,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.Objects;
@@ -35,7 +37,7 @@ public class UserController {
     private final BoardService boardService;
 
     @PostMapping("/user")
-    public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
+    public String signup(@Valid AddUserRequest request, BindingResult bindingResult, @RequestParam("profilePic") MultipartFile file, Model model) {
         if (bindingResult.hasErrors()) {
             return "signup";
         }
@@ -45,7 +47,7 @@ public class UserController {
         }
 
         try {
-            userService.save(request);
+            userService.save(request,file);
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
@@ -92,4 +94,5 @@ public class UserController {
 
         return "userProfile";
     }
+    
 }

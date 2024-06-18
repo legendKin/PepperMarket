@@ -51,6 +51,9 @@ public class MyPageController {
 
         return "redirect:/mypage";
     }
+    
+    
+    
 
     @GetMapping("/mypage/reports")
     public String myReports(@AuthenticationPrincipal UserDetails userDetails, Model model) {

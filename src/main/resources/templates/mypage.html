@@ -7,11 +7,38 @@
   <head>
     <meta charset="UTF-8" />
     <title>마이 페이지</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
   </head>
   <body>
     <div layout:fragment="content">
-      <h1>마이 페이지</h1>
+      <div class="stack-1">
+        <div class="username-box">
+          <p><span th:text="${user.nickname}"></span>님의 페이지</p>
+        </div>
+      </div>
+      <div class="stack-2">
+        <div class="user-info">
+          <div class="stack-2-title">UserInfo</div>
+          <div class="user-info-box">
+            <div class="user-profile-pic">
+              <div class="user-profile-pic-img">
+                <img th:src="@{${user.profilePictureUrl}}" />
+              </div>
+            </div>
+            <div class="user-nickname"></div>
+            <div class="user-email"></div>
+          </div>
+          <div class="user-info-modify-box">
+            <div class="modify-nickname"></div>
+          </div>
+        </div>
+        <div class="user-detail"></div>
+      </div>
+      <div class="stack-3">
+        <div class="post-list"></div>
+        <div class="liked-list"></div>
+        <div class="comment"></div>
+      </div>
+
       <p>
         닉네임: <span id="nicknameDisplay" th:text="${user.nickname}"></span>
       </p>
@@ -70,16 +97,6 @@
       </section>
 
       <!-- 키워드 관리 섹션 -->
-      <section id="keywords-section">
-        <label for="new-keyword">키워드 목록</label>
-        <input
-          id="new-keyword"
-          placeholder="새 키워드를 입력하세요"
-          type="text"
-        />
-        <button onclick="addKeyword()">추가</button>
-        <div id="keyword-list"></div>
-      </section>
 
       <!--      &lt;!&ndash; *최근 본 상품 목록 섹션* &ndash;&gt;-->
       <!--      <section id="recent-viewed-posts-section">-->
@@ -127,7 +144,7 @@
 
       <script th:inline="javascript">
         // API URL 설정
-        const API_BASE_URL = "/keywords";
+
         const RECENT_VIEWED_POSTS_API_URL = "/recent-viewed-posts";
 
         // 프로필 변경 팝업
@@ -248,7 +265,6 @@
 
         // 페이지 로드 시 데이터 불러오기
         $(document).ready(function () {
-          loadKeywords();
           loadRecentViewedPosts();
         });
       </script>

@@ -13,6 +13,7 @@
   <script th:inline="javascript" sec:authorize="isAuthenticated()">
     // API URL 설정
     const NOTIFICATION_API_URL = "/notifications";
+    const API_BASE_URL = "/keywords";
 
     // 알림 목록 불러오기 함수
     function loadNotifications() {
@@ -78,28 +79,12 @@
       });
     }
 
-    // // 팝업 열기/닫기 토글
-    // function toggleNotiPop() {
-    //   $("#notiPop").toggle(); // 팝업 표시 상태를 토글
-    // }
-    //
-    // // 외부영역 클릭 시 팝업 닫기
-    // $(document).mouseup(function (e) {
-    //   var popup = $("#notiPop");
-    //   if (
-    //     (!popup.is(e.target) && popup.has(e.target).length === 0) ||
-    //     e.target.id === "notiPop"
-    //   ) {
-    //     popup.hide(); // 팝업 닫기
-    //   }
-    // });
-    // 알림 읽음 표시 함수
     function markAsRead(id) {
       $.ajax({
         type: "POST",
         url: `${NOTIFICATION_API_URL}/${id}/read`,
         success: function () {
-          loadNotiPop();
+          loadNotifications();
         },
         error: function (error) {
           console.error("알림 읽음 표시 중 오류 발생:", error);
@@ -112,7 +97,7 @@
         type: "POST",
         url: `${NOTIFICATION_API_URL}/${id}/readtoggle`,
         success: function () {
-          loadNotiPop();
+          loadNotifications();
         },
         error: function (error) {
           console.error("알림 읽음 표시 중 오류 발생:", error);
@@ -125,7 +110,7 @@
         type: "DELETE",
         url: `${NOTIFICATION_API_URL}/${id}/delete`,
         success: function () {
-          loadNotiPop();
+          loadNotifications();
         },
         error: function (error) {
           console.error("알림 삭제 중 오류 발생:", error);
@@ -133,8 +118,62 @@
       });
     }
 
+    // 키워드 추가 함수
+    function addKeyword() {
+      const keyword = $("#new-keyword").val();
+      const userId = $("#userId").val(); // 사용자 ID 가져오기
+      $.ajax({
+        type: "POST",
+        url: API_BASE_URL,
+        contentType: "application/json",
+        data: JSON.stringify({ keyword: keyword, userId: userId }),
+        success: function () {
+          loadKeywords();
+          $("#new-keyword").val("");
+        },
+        error: function (error) {
+          console.error("키워드 추가 중 오류 발생:", error);
+        },
+      });
+    }
+
+    // 키워드 삭제 함수
+    function deleteKeyword(id) {
+      $.ajax({
+        type: "DELETE",
+        url: `${API_BASE_URL}/${id}`,
+        success: function () {
+          loadKeywords();
+        },
+        error: function (error) {
+          console.error("키워드 삭제 중 오류 발생:", error);
+        },
+      });
+    }
+
+    // 키워드 목록 불러오기 함수
+    function loadKeywords() {
+      $.ajax({
+        type: "GET",
+        url: `${API_BASE_URL}`,
+        success: function (keywords) {
+          const keywordList = $("#keyword-list");
+          keywordList.empty();
+          keywords.forEach((keyword) => {
+            keywordList.append(
+              `<div class = "keyword-item">${keyword.keyword} <i class="fas fa-times delete-keyword" onclick="deleteKeyword(${keyword.id})"></i></div>`,
+            );
+          });
+        },
+        error: function (error) {
+          console.error("키워드 목록 불러오기 중 오류 발생:", error);
+        },
+      });
+    }
+
     $(document).ready(function () {
       loadNotifications();
+      loadKeywords();
     });
   </script>
 </html>

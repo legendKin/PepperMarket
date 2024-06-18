@@ -37,15 +37,17 @@ public class ChatMessage {
 
     @Transient
     private Long receiverId;
+    
+    
 
     public ChatMessage() {}
-
     public ChatMessage(Long chatRoomId, Long senderId, String content, LocalDateTime timestamp) {
         this.chatRoomId = chatRoomId;
         this.senderId = senderId;
         this.content = content;
         this.timestamp = timestamp;
     }
+    
     public String getSenderNickname() {
         return sender.getNickname();
     }

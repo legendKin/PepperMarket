@@ -48,7 +48,7 @@ public class GlobalControllerAdvice {
 
         try {
             // PrincipalDetails 객체에서 사용자 프로필 사진 URL을 가져옵니다.
-            profilepic = principalDetails.getPPic();
+            profilepic = principalDetails.getProfilePic();
         } catch (Exception e) {
             // 예외 발생 시 기본 프로필 사진 URL을 설정합니다.
             profilepic = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";

@@ -252,6 +252,14 @@
                   document.getElementById("msg").value = "";
                 }
 
+                const msgsend = document.querySelector(".messageInput");
+
+                msgsend.addEventListener("keyup", function (event) {
+                  if (event.keyCode === 13) {
+                    send();
+                  }
+                });
+
                 socket.onclose = function (event) {
                   console.log("WebSocket closed: ", event);
                 };

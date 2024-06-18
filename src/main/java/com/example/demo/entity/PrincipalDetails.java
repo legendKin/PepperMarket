@@ -86,11 +86,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return attributes;
     }
 
-    public String getProfilePic() {
-        return (String) attributes.get("profile_picture_url");
-    }
 
-    public String getPPic() {
+    public String getProfilePic() {
         return users.getProfilePictureUrl();
     }
 }
