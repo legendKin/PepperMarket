@@ -88,6 +88,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 
     public String getProfilePic() {
-        return users.getProfilePictureUrl();
+        return users.getProfilePicPath();
     }
 }

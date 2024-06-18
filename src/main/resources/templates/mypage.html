@@ -7,6 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>마이 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
   </head>
   <body>
     <div layout:fragment="content">
@@ -21,14 +22,26 @@
           <div class="user-info-box">
             <div class="user-profile-pic">
               <div class="user-profile-pic-img">
-                <img th:src="@{${user.profilePictureUrl}}" />
+                <img th:src="@{${user.profilePicPath}}" />
+              </div>
+              <div class="user-profile-change-btn">
+                <i class="far fa-edit"></i>
               </div>
             </div>
-            <div class="user-nickname"></div>
-            <div class="user-email"></div>
+            <div class="user-nickname">
+              <span th:text="${user.nickname}"></span>
+            </div>
+            <div class="user-email">
+              <span th:text="${user.email}"></span>
+            </div>
           </div>
           <div class="user-info-modify-box">
-            <div class="modify-nickname"></div>
+            <div class="modify-nickname-box">
+              <div class="modify-nickname">
+                <i class="fas fa-lg fa-plus"></i>
+                내 닉네임 수정
+              </div>
+            </div>
           </div>
         </div>
         <div class="user-detail"></div>

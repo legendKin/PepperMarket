@@ -65,6 +65,7 @@
                 id="dropdownMenuButton"
                 type="button"
               >
+	              <img th:src="@{${myProfilePic}}" alt="profile picture" class="profile-img">
                 <p
                   class="profile-name badg"
                   th:text="${#authentication.principal.nickname}"
