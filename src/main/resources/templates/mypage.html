@@ -1,0 +1,607 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/mypagelayout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>마이 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="stack-1">
+        <div class="username-box">
+          <p><span th:text="${user.nickname}"></span>님의 페이지</p>
+        </div>
+      </div>
+      <div class="stack-2">
+        <div class="user-info">
+          <div class="stack-2-title"><i class="fas fa-user"></i> UserInfo</div>
+          <div class="user-info-box">
+            <div class="user-profile-pic">
+              <div class="user-profile-pic-img">
+                <img th:src="@{${user.profilePicPath}}" />
+              </div>
+              <div
+                class="user-profile-change-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#profile-photo-modify-modal"
+              >
+                <i class="far fa-edit"></i>
+              </div>
+            </div>
+            <div class="user-nickname">
+              <span th:text="${user.nickname}"></span>
+            </div>
+            <div class="user-email">
+              <span th:text="${user.email}"></span>
+            </div>
+          </div>
+          <div class="user-info-modify-box">
+            <div class="modify-nickname-box">
+              <button
+                type="button"
+                class="btn btn-primary modify-nickname"
+                data-bs-toggle="modal"
+                data-bs-target="#nickname-modify-modal"
+              >
+                <i class="fas fa-lg fa-plus"></i>
+                내 닉네임 수정
+              </button>
+            </div>
+            <div class="modify-password-box">
+              <button
+                type="button"
+                class="btn btn-primary modify-nickname"
+                data-bs-toggle="modal"
+                data-bs-target="#password-modify-modal"
+              >
+                <i class="far fa-edit"></i>
+                비밀번호 변경
+              </button>
+            </div>
+          </div>
+          <div class="user-info-modify-modal">
+            <div
+              class="modal fade"
+              id="nickname-modify-modal"
+              tabindex="-1"
+              aria-labelledby="nicknameModifyModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <form id="nickname-form">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                      <div class="mb-3">
+                        <label for="nickname" class="form-label">닉네임</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nickname"
+                          name="nickname"
+                          th:value="${user.nickname}"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button type="submit" class="btn btn-primary">
+                        Save changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="password-modify-modal"
+              tabindex="-1"
+              aria-labelledby="passwordModifyModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <th:block th:if="${user.provider}==null">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+
+                      <form id="password-change-form">
+                        <div>
+                          <label for="current-password">현재 비밀번호</label>
+                          <input
+                            type="password"
+                            id="current-password"
+                            name="current-password"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label for="new-password">새 비밀번호</label>
+                          <input
+                            type="password"
+                            id="new-password"
+                            name="new-password"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label for="confirm-password">새 비밀번호 확인</label>
+                          <input
+                            type="password"
+                            id="confirm-password"
+                            name="confirm-password"
+                            required
+                          />
+                        </div>
+                        <button type="submit">비밀번호 변경</button>
+                      </form>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button type="button" class="btn btn-primary">
+                        Save changes
+                      </button>
+                    </div>
+                  </th:block>
+                  <th:block th:if="${user.provider} != null">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                      <p>소셜계정 가입 회원은 변경할 수 없습니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </th:block>
+                </div>
+              </div>
+            </div>
+            <div
+              class="modal fade"
+              id="profile-photo-modify-modal"
+              tabindex="-1"
+              aria-labelledby="profilePhotoModifyModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                    <form id="profile-photo-form" enctype="multipart/form-data">
+                      <div class="mb-3">
+                        <label for="profile-photo" class="form-label"
+                          >프로필 사진 선택</label
+                        >
+                        <input
+                          type="file"
+                          class="form-control"
+                          id="profile-photo"
+                          name="profile-photo"
+                          accept="image/*"
+                          required
+                        />
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        프로필 사진 변경
+                      </button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 성공 모달 -->
+          <div id="successModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <p>Profile updated successfully.</p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 오류 모달 -->
+          <div id="errorModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <p>비밀번호 변경 중 오류가 발생했습니다.</p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="user-detail"></div>
+      </div>
+      <div class="stack-3">
+        <div class="post-list">판매 내역</div>
+        <div class="liked-list">찜 목록</div>
+        <div class="comment">후기</div>
+      </div>
+
+      <p>
+        닉네임: <span id="nicknameDisplay" th:text="${user.nickname}"></span>
+      </p>
+      <p>이메일: <span id="emailDisplay" th:text="${user.email}"></span></p>
+      <p>
+        소셜 아이디:
+        <span id="socialIdDisplay" th:text="${user.socialId}"></span>
+      </p>
+      <p>
+        제공자: <span id="providerDisplay" th:text="${user.provider}"></span>
+      </p>
+      <p>
+        제공자 아이디:
+        <span id="providerIdDisplay" th:text="${user.providerId}"></span>
+      </p>
+      <input id="userId" th:value="${user.id}" type="hidden" />
+
+      <!-- 프로필 정보 변경 섹션 -->
+      <section id="profile-info-section">
+        <h2>프로필 정보 변경</h2>
+        <form id="profile-info-form">
+          <label for="email">이메일:</label>
+          <input
+            id="email"
+            name="email"
+            th:value="${user.email}"
+            type="email"
+            readonly
+          /><br />
+
+          <label for="name">이름:</label>
+          <input
+            id="name"
+            name="name"
+            th:value="${user.name}"
+            type="text"
+          /><br />
+          <label for="birthdate">생년월일:</label>
+          <input
+            type="date"
+            name="birthdate"
+            id="birthdate"
+            th:value="${#dates.format(user.birthdate, 'yyyy-MM-dd')}"
+          /><br />
+
+          <button type="submit">프로필 정보 변경</button>
+        </form>
+      </section>
+
+      <script th:inline="javascript">
+        // API URL 설정
+
+        const RECENT_VIEWED_POSTS_API_URL = "/recent-viewed-posts";
+
+        // 프로필 변경 팝업
+        $(document).ready(function () {
+          $("#nickname-form").submit(function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+            const nickname = $("#nickname").val();
+
+            $.ajax({
+              type: "POST",
+              url: "/mypage/change-nickname",
+              data: { nickname: nickname },
+              success: function () {
+                $("#nickname-modify-modal").modal("hide");
+                $("#nicknameDisplay").text(nickname);
+
+                $("#successModal").modal("show"); // 성공 모달 표시
+              },
+              error: function () {
+                $("#nickname-modify-modal").modal("hide");
+
+                $("#errorModal").modal("show"); // 오류 모달 표시
+                $("#errorModal .modal-content p").text(
+                  "닉네임 변경 중 오류가 발생했습니다.",
+                );
+              },
+            });
+          });
+          $("#password-change-form").submit(function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+            $.ajax({
+              type: "GET",
+              url: "/mypage/is-social-login",
+              success: function (isSocialLogin) {
+                if (isSocialLogin) {
+                  $("#errorModal .modal-content p").text(
+                    "소셜 로그인 계정은 비밀번호를 변경할 수 없습니다.",
+                  );
+                  $("#errorModal").modal("show");
+                } else {
+                  // 소셜 로그인 사용자가 아니면 비밀번호 변경 요청 진행
+                  const currentPassword = $("#current-password").val();
+                  const newPassword = $("#new-password").val();
+                  const confirmPassword = $("#confirm-password").val();
+
+                  if (newPassword !== confirmPassword) {
+                    alert("새 비밀번호가 일치하지 않습니다.");
+                    return;
+                  }
+
+                  $.ajax({
+                    type: "POST",
+                    url: "/mypage/change-password",
+                    data: JSON.stringify({
+                      currentPassword: currentPassword,
+                      newPassword: newPassword,
+                    }),
+                    contentType: "application/json",
+                    success: function () {
+                      $("#password-modify-modal").modal("hide");
+                      $("#successModal").modal("show"); // 성공 모달 표시
+                    },
+                    error: function (xhr, status, error) {
+                      $("#password-modify-modal").modal("hide");
+                      $("#errorModal .modal-content p").text(
+                        "오류가 발생했습니다: " + xhr.responseText,
+                      );
+                      $("#errorModal").modal("show"); // 오류 모달 표시
+                    },
+                  });
+                }
+              },
+              error: function () {
+                $("#errorModal .modal-content p").text(
+                  "소셜 로그인 상태를 확인하는 중 오류가 발생했습니다.",
+                );
+                $("#errorModal").modal("show");
+              },
+            });
+          });
+
+          $("#name-form").submit(function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+            const name = $("#name").val();
+
+            $.ajax({
+              type: "POST",
+              url: "/mypage/change-name",
+              data: { name: name },
+              success: function () {
+                $("#successModal").modal("show"); // 모달 표시
+                $("#nameDisplay").text(name);
+
+                setTimeout(function () {
+                  $("#successModal").modal("hide");
+                }, 1000);
+              },
+              error: function () {
+                alert("이름 변경 중 오류가 발생했습니다.");
+              },
+            });
+          });
+
+          $("#profile-photo-form").submit(function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+            var formData = new FormData();
+            formData.append("file", $("#profile-photo")[0].files[0]); // 파일 업로드 부분
+
+            $.ajax({
+              type: "POST",
+              url: "/mypage/change-profilepic",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                $("#profile-photo-modify-modal").modal("hide");
+                $("#successModal .modal-content p").text(response); // 성공 메시지 표시
+                $("#successModal").modal("show");
+              },
+              error: function (xhr, status, error) {
+                $("#profile-photo-modify-modal").modal("hide");
+                $("#errorModal .modal-content p").text(xhr.responseText); // 오류 메시지 표시
+                $("#errorModal").modal("show");
+              },
+            });
+          });
+
+          $("#birthdate-form").submit(function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+            const birthdate = $("#birthdate").val();
+
+            $.ajax({
+              type: "POST",
+              url: "/mypage/change-birthdate",
+              data: { birthdate: birthdate },
+              success: function () {
+                $("#successModal").modal("show"); // 모달 표시
+                $("#birthdateDisplay").text(birthdate);
+
+                setTimeout(function () {
+                  $("#successModal").modal("hide");
+                }, 1000);
+              },
+              error: function () {
+                alert("생년월일 변경 중 오류가 발생했습니다.");
+              },
+            });
+          });
+        });
+
+        // 성공 모달의 확인 버튼 클릭 시 모달 닫기
+        $("#successModal .btn-primary").click(function () {
+          $("#successModal").modal("hide");
+        });
+
+        // 오류 모달의 확인 버튼 클릭 시 모달 닫기
+        $("#errorModal .btn-primary").click(function () {
+          $("#errorModal").modal("hide");
+        });
+
+        // 성공 모달이 숨겨질 때 페이지 새로고침
+        $("#successModal").on("hidden.bs.modal", function () {
+          location.reload();
+        });
+
+        // 오류 모달이 숨겨질 때 페이지 새로고침
+        $("#errorModal").on("hidden.bs.modal", function () {
+          location.reload();
+        });
+
+        // 키워드 추가 함수
+        function addKeyword() {
+          const keyword = $("#new-keyword").val();
+          const userId = $("#userId").val(); // 사용자 ID 가져오기
+          $.ajax({
+            type: "POST",
+            url: API_BASE_URL,
+            contentType: "application/json",
+            data: JSON.stringify({ keyword: keyword, userId: userId }),
+            success: function () {
+              loadKeywords();
+              $("#new-keyword").val("");
+            },
+            error: function (error) {
+              console.error("키워드 추가 중 오류 발생:", error);
+            },
+          });
+        }
+
+        // 키워드 삭제 함수
+        function deleteKeyword(id) {
+          $.ajax({
+            type: "DELETE",
+            url: `${API_BASE_URL}/${id}`,
+            success: function () {
+              loadKeywords();
+            },
+            error: function (error) {
+              console.error("키워드 삭제 중 오류 발생:", error);
+            },
+          });
+        }
+
+        // 키워드 목록 불러오기 함수
+        function loadKeywords() {
+          $.ajax({
+            type: "GET",
+            url: `${API_BASE_URL}`,
+            success: function (keywords) {
+              const keywordList = $("#keyword-list");
+              keywordList.empty();
+              keywords.forEach((keyword) => {
+                keywordList.append(
+                  `<div class = "keyword-item">${keyword.keyword} <i class="fas fa-times delete-keyword" onclick="deleteKeyword(${keyword.id})"></i></div>`,
+                );
+              });
+            },
+            error: function (error) {
+              console.error("키워드 목록 불러오기 중 오류 발생:", error);
+            },
+          });
+        }
+
+        // 최근 본 상품 목록 불러오기 함수
+        function loadRecentViewedPosts() {
+          const userId = $("#userId").val(); // 사용자 ID 가져오기
+          console.log("최근 본 상품 로딩 중:", userId); // 디버깅 로그 추가
+
+          $.ajax({
+            type: "GET",
+            url: `${RECENT_VIEWED_POSTS_API_URL}?userId=${userId}`,
+            success: function (viewedPosts) {
+              console.log("최근 본 상품 목록 가져옴:", viewedPosts); // 디버깅 로그 추가
+
+              const recentViewedPostsList = $("#recentViewedPostsList");
+              recentViewedPostsList.empty();
+              viewedPosts.forEach((post) => {
+                recentViewedPostsList.append(
+                  `<li><a href="/board/view/${post.id}">${post.title}</a></li>`,
+                );
+              });
+            },
+            error: function (error) {
+              console.error("최근 본 상품 목록 불러오기 중 오류 발생:", error);
+            },
+          });
+        }
+
+        // 페이지 로드 시 데이터 불러오기
+        $(document).ready(function () {
+          loadRecentViewedPosts();
+        });
+      </script>
+    </div>
+  </body>
+</html>

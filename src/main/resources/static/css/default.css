@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+  font-family: DungGeunMo;
+  font-size: 15px;
+  font-weight: normal;
+  margin: 0;
+
+  padding: 0;
+}
+html {
+  overflow-y: scroll;
+}
+.main-content {
+  margin: 0 auto;
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}

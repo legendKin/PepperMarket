@@ -1,0 +1,44 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/mypagelayout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>알림</title>
+    <link rel="stylesheet" th:href="@{/css/keyword.css}" />
+
+    <style>
+      .read-notification > a {
+        color: gray;
+      }
+      .delete-noti {
+        cursor: pointer;
+      }
+      .content {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <section id="notifications-section">
+        <h2>알림 목록</h2>
+        <div id="unread-count"></div>
+        <ul id="notification-list"></ul>
+      </section>
+      <section id="keywords-section">
+        <label for="new-keyword">키워드 목록</label>
+        <input
+          id="new-keyword"
+          placeholder="새 키워드를 입력하세요"
+          type="text"
+        />
+        <button onclick="addKeyword()">추가</button>
+        <div id="keyword-list"></div>
+      </section>
+    </div>
+  </body>
+</html>
