@@ -9,6 +9,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
@@ -39,7 +41,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return Stream.of(
+                new SimpleGrantedAuthority(users.getRole().getAuthority()),
+                new SimpleGrantedAuthority("user")
+        ).collect(Collectors.toList());
     }
 
     @Override

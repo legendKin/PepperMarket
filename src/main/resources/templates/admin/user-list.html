@@ -86,6 +86,31 @@
         </tr>
         </tbody>
     </table>
+
+    <h2>신고 목록</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>신고자 이메일</th>
+            <th>신고 대상자 이메일</th>
+            <th>사유</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="report : ${reports}">
+            <td th:text="${report.reporterEmail}">신고자 이메일</td>
+            <td th:text="${report.reportedEmail}">신고 대상자 이메일</td>
+            <td th:text="${report.reason}">사유</td>
+        </tr>
+        </tbody>
+    </table>
+
+<!--    <h2>신고하기</h2>-->
+<!--    <form id="reportForm" method="post" action="/report">-->
+<!--        <input type="hidden" name="postId" value="1">-->
+<!--        <input type="text" name="reason" placeholder="신고 사유를 입력하세요">-->
+<!--        <button type="submit" class="btn btn-primary">신고하기</button>-->
+<!--    </form>-->
 </div>
 </body>
 </html>
