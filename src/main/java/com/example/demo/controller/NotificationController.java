@@ -20,7 +20,7 @@ public class NotificationController {
 
     @Autowired // NotificationRepository를 주입받아 사용
     private NotificationRepository notificationRepository;
-    
+
     @Autowired // UserRepository를 주입받아 사용
     private UserRepository userRepository;
 
@@ -32,6 +32,7 @@ public class NotificationController {
         // 사용자의 알림 리스트를 가져와서 HTTP 응답으로 반환
         return ResponseEntity.ok(notificationService.findByUser(user));
     }
+
     //헤더의 팝업버튼으로 알림 리스트 가져오는 엔드포인트
     @GetMapping("/popup")
     public ResponseEntity<List<Notification>> getPopupNotifications(@RequestParam Long userId) {
@@ -44,25 +45,20 @@ public class NotificationController {
     // 특정 알림을 읽음 상태로 표시하는 엔드포인트
     @PostMapping("/{id}/read")
     public ResponseEntity<Void> markAsRead(@PathVariable Long id) {
-//        Notification notification = notificationRepository.findById(id).orElseThrow();
-//        if(notification.isRead()) {
-//            notificationService.markAsUnRead(id);
-//        }else{
-//            notificationService.markAsRead(id);
-//        }
+
         // 주어진 알림 ID로 알림을 읽음 상태로 표시
         notificationService.markAsRead(id);
         // HTTP 204 No Content 응답 반환
         return ResponseEntity.noContent().build();
     }
-    
+
     // 특정 알림을 읽음/안읽음 상태 토글하는 엔드포인트
     @PostMapping("/{id}/readtoggle")
     public ResponseEntity<Void> markAsReadToggle(@PathVariable Long id) {
         Notification notification = notificationRepository.findById(id).orElseThrow();
-        if(notification.isRead()) {
+        if (notification.isRead()) {
             notificationService.markAsUnRead(id);
-        }else{
+        } else {
             notificationService.markAsRead(id);
         }
 //        // 주어진 알림 ID로 알림을 읽음 상태로 표시
@@ -70,7 +66,7 @@ public class NotificationController {
         // HTTP 204 No Content 응답 반환
         return ResponseEntity.noContent().build();
     }
-    
+
     // 특정 알림을 삭제하는 엔드포인트
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> deleteByNotificationId(@PathVariable Long id) {
@@ -78,8 +74,6 @@ public class NotificationController {
         // HTTP 204 No Content 응답 반환
         return ResponseEntity.noContent().build();
     }
-    
 
-    
-    
+
 }
