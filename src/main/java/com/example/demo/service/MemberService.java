@@ -40,4 +40,33 @@ public class MemberService {
         user.setBirthdate(birthdate);
         userRepository.save(user);
     }
+    public void updateNickname(String username, String nickname) throws Exception {
+        Users user = findByEmail(username);
+        user.setNickname(nickname);
+        userRepository.save(user);
+    }
+
+    public void updateName(String username, String name) throws Exception {
+        Users user = findByEmail(username);
+        user.setName(name);
+        userRepository.save(user);
+    }
+
+    public void updateBirthdate(String username, Date birthdate) throws Exception {
+        Users user = findByEmail(username);
+        user.setBirthdate(birthdate);
+        userRepository.save(user);
+    }
+    
+    public void changePassword(String username, String currentPassword, String newPassword) throws Exception {
+        Users user = findByEmail(username);
+        if (user.getProvider() != null) {
+            throw new Exception("소셜 로그인 계정은 비밀번호를 변경할 수 없습니다.");
+        }
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new Exception("현재 비밀번호가 일치하지 않습니다.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

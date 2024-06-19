@@ -1,24 +1,26 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PasswordChangeRequest;
 import com.example.demo.entity.Report;
 import com.example.demo.entity.Users;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/mypage")
 public class MyPageController {
 
     @Autowired
@@ -27,35 +29,72 @@ public class MyPageController {
     @Autowired
     private ReportService reportService;
 
-    @GetMapping("/mypage")
-    public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) throws Exception {
-        String email = userDetails.getUsername();
-        Users user = memberService.findByEmail(email);
-        model.addAttribute("user", user);
-        return "mypage";
-    }
-
-    @PostMapping("/mypage/change-profile-info")
-    public String changeProfileInfo(@RequestParam("nickname") String nickname,
-                                    @RequestParam("email") String email,
-                                    @RequestParam("name") String name,
-                                    @RequestParam("birthdate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthdate,
-                                    @AuthenticationPrincipal UserDetails userDetails,
-                                    RedirectAttributes redirectAttributes) {
+   
+    @PostMapping("/change-nickname")
+    public String changeNickname(@RequestParam("nickname") String nickname,
+                                 @AuthenticationPrincipal UserDetails userDetails,
+                                 RedirectAttributes redirectAttributes) {
         try {
-            memberService.updateUserProfileInfo(userDetails.getUsername(), nickname, email, name, birthdate);
-            redirectAttributes.addFlashAttribute("message", "Profile updated successfully.");
+            memberService.updateNickname(userDetails.getUsername(), nickname);
+            redirectAttributes.addFlashAttribute("message", "닉네임이 성공적으로 변경되었습니다.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "An error occurred: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("message", "오류가 발생했습니다: " + e.getMessage());
         }
-
+        
         return "redirect:/mypage";
     }
+    @PostMapping("/change-name")
+    public String changeName(@RequestParam("name") String name,
+                             @AuthenticationPrincipal UserDetails userDetails,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            memberService.updateName(userDetails.getUsername(), name);
+            redirectAttributes.addFlashAttribute("message", "이름이 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "오류가 발생했습니다: " + e.getMessage());
+        }
+        
+        return "redirect:/mypage";
+    }
+    @PostMapping("/change-birthdate")
+    public String changeBirthdate(@RequestParam("birthdate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthdate,
+                                  @AuthenticationPrincipal UserDetails userDetails,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            memberService.updateBirthdate(userDetails.getUsername(), birthdate);
+            redirectAttributes.addFlashAttribute("message", "생년월일이 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "오류가 발생했습니다: " + e.getMessage());
+        }
+        
+        return "redirect:/mypage";
+    }
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeRequest request,
+                                                 @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            memberService.changePassword(userDetails.getUsername(), request.getCurrentPassword(), request.getNewPassword());
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    @GetMapping("/is-social-login")
+    public ResponseEntity<Boolean> isSocialLogin(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            Users user = memberService.findByEmail(userDetails.getUsername());
+            boolean isSocialLogin = user.getProvider() != null;
+            return ResponseEntity.ok(isSocialLogin);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
     
     
     
-
-    @GetMapping("/mypage/reports")
+    
+    
+    @GetMapping("/reports")
     public String myReports(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String email = userDetails.getUsername();
         try {
@@ -69,7 +108,7 @@ public class MyPageController {
         }
     }
 
-    @PostMapping("/mypage/report")
+    @PostMapping("/report")
     public String createReport(@AuthenticationPrincipal UserDetails userDetails,
                                @RequestParam("reportedUser") String reportedUser,
                                @RequestParam("reason") String reason,
