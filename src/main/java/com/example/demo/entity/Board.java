@@ -113,7 +113,9 @@ public class Board {
         Date date = Date.from(this.createDate.atZone(ZoneId.systemDefault()).toInstant());
         return Time.calculateTime(date);
     }
-    
+
+
+
     // getters and setters...
 	
 }

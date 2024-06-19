@@ -47,14 +47,14 @@ public abstract class BoardService {
 
     @Autowired
     private LikeRepository likeRepository;
-    
+
     @Autowired
     private LikeService likeService;
     
 //    @Value("${file.upload-dir}")
 //    private String uploadDir;
-    
-    
+
+
     @Autowired
     public BoardService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -68,7 +68,7 @@ public abstract class BoardService {
 
         board.setUser(user);
         board.setCreateDate(LocalDateTime.now());
-        
+
         try {
             // 파일이 비어있지 않으면 파일을 저장
             if (!file.isEmpty()) {
@@ -99,7 +99,7 @@ public abstract class BoardService {
     public Page<Board> boardSearchListAvailable(String searchKeyword, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndStatusNot(searchKeyword, pageable, status);
     }
-    
+
     public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
         return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
@@ -127,24 +127,24 @@ public abstract class BoardService {
             throw e;
         }
     }
-    
+
     // 특정 카테고리 ID의 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> searchByCateIDAvailable(Integer searchCateID, Pageable pageable, Integer status) {
         return boardRepository.findByCateIDAndStatusNot(searchCateID, pageable, status);
     }
-    
+
     public Page<Board> searchByCateID(Integer searchCateID, Pageable pageable) {
         return boardRepository.findByCateID(searchCateID, pageable);
     }
-    
-    
-    
+
+
+
 
     // 특정 키워드와 카테고리 ID를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> searchByKeywordAndCateIDAvailable(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndCateIDAndStatusNot(searchKeyword, searchCateID, pageable, status);
     }
-    
+
     public Page<Board> searchByKeywordAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable) {
         return boardRepository.findByTitleContainingAndCateID(searchKeyword, searchCateID, pageable);
     }
@@ -214,6 +214,11 @@ public abstract class BoardService {
         return boardRepository.findByStatusNotOrderByCreateDateDesc(3, pageable);
     }
 
+    public String findAuthorEmailByPostId(Long postId) {
+        Board post = boardRepository.findById(Math.toIntExact(postId)).orElseThrow(() -> new IllegalArgumentException("잘못된 게시글 ID입니다."));
+        return post.getUser().getEmail(); // 작성자가 Users 엔티티로서 이메일 필드를 가지고 있다고 가정
+    }
+
 
     
 
@@ -221,7 +226,7 @@ public abstract class BoardService {
     public void likePost(Long id) {
         boardRepository.incrementLikes(id);
     }
-    
+
     public Page<Board> searchBoards(String searchKeyword, Integer searchCateID, Pageable pageable, boolean showCompleted, UserDetails userDetails) {
         Integer status = showCompleted ? null : 3; // showCompleted가 true이면 status를 null로 설정하여 모든 상태의 게시글을 가져옴
         Page<Board> boards = boardRepository.searchBoards(searchKeyword, searchCateID, status, pageable);
@@ -246,7 +251,7 @@ public abstract class BoardService {
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. postId: " + postId));
         return board.getTitle();
     }
-    
+
     public Page<Board> getBoardByUserId(Long userId, Pageable pageable) {
         return boardRepository.findByUserId(userId, pageable);
     }

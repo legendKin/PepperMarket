@@ -20,11 +20,15 @@ public class Report {
     private String reporter;  // 신고자 이메일
 
     @Column(nullable = false)
-    private String reportedUser;  // 신고된 사용자 이메일
-
-    @Column(nullable = false)
     private String reason;  // 신고 이유
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date reportedAt;  // 신고 날짜
+
+    private String reporterEmail;
+    private String reportedEmail;
+
+    @ManyToOne
+    @JoinColumn(name = "reported_user_id", nullable = false)
+    private Users reportedUser;
 }
