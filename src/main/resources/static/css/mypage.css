@@ -1,9 +1,72 @@
+.main-content {
+  background: lightgray;
+}
+.content-box {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 30px;
+  position: relative;
+  text-align: center;
+}
+.stack-1 {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.username-box {
+  background: #a8f552;
+  border-radius: 10px;
+  color: #366305;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  text-align: center;
+}
+
+.stack-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 40px;
+}
+.user-info {
+  border-left: 2px solid #dedede;
+  border-right: 2px solid #dedede;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  width: 100%;
+}
+.stack-2-title {
+  color: #919191;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+}
+.user-info-box {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 25px 0 50px;
+}
+.user-profile-pic-img {
+  display: flex;
+  margin-bottom: 10px;
+}
 .user-profile-pic {
+  margin-bottom: 10px;
   position: relative;
 }
 .user-profile-pic-img > img {
   border-radius: 50%;
   height: 200px;
+  object-fit: cover;
   width: 200px;
 }
 
@@ -12,22 +75,65 @@
   border-radius: 50%;
   bottom: 0;
   cursor: pointer;
-  height: 40px;
   line-height: 40px;
   position: absolute;
   right: 0;
   text-align: center;
-  width: 40px;
 }
 .user-profile-change-btn > i {
-  font-size: 20px;
+  font-size: 24px;
+  padding: 15px 12px 15px 15px;
+}
+.user-profile-change-btn:hover {
+  background: #a0a0a0;
+
+  transition: 0.3s;
 }
 
-.modify-nickname {
-  background-color: #dedede;
-  border-radius: 5px;
+.user-nickname > span {
+  font-size: 28px;
+  font-weight: bold;
+}
+.user-email > span {
+  color: #8b8b8b;
+}
+.user-info-modify-box {
   display: flex;
-  height: 50px;
-  padding: 20px 20px;
-  width: 200px;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.modify-nickname-box {
+  display: flex;
+}
+.modify-nickname {
+  align-items: center;
+  background-color: #efefef;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  border: none;
+  border-radius: 5px;
+  color: black;
+  display: flex;
+  font-size: 16px;
+  justify-content: space-around;
+  padding: 15px 14px;
+  width: 160px;
+}
+
+.stack-3 {
+  border-top: 2px solid #dedede;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding-top: 40px;
+}
+body.modal-open {
+  overflow: auto;
+}
+
+body {
+  padding-right: 0 !important;
+}
+.btn-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
