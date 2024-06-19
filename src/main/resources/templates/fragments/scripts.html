@@ -45,22 +45,22 @@
             }
             notificationList.append(
               `
-					<li class="${notificationClass}">
-					<a href="board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
-					${notification.message}</a>
-					<button onclick="markAsReadToggle(${notification.id})">읽음 표시</button>
-					<i class="far fa-trash-alt delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
-					</li>`,
+      	<li class="${notificationClass}">
+      	<a href="board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
+      	${notification.message}</a>
+      	<button onclick="markAsReadToggle(${notification.id})">읽음 표시</button>
+      	<i class="far fa-trash-alt delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
+      	</li>`,
             );
 
             notificationListPop.append(
               `
-    			                <li class="${notificationClass}">
-    			                <a href="/board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
-    			                ${notification.message}</a>
-    			                <i class="fas fa-times delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
-    			                </li>
-                          `,
+      			                <li class="${notificationClass}">
+      			                <a href="/board/view?id=${notification.board.id}" onclick="markAsRead(${notification.id})">
+      			                ${notification.message}</a>
+      			                <i class="fas fa-times delete-icon fa-lg btn-icon delete-noti" onclick="deleteNoti(${notification.id})"></i>
+      			                </li>
+                            `,
             );
           });
           // 안 읽은 알림 개수 업데이트

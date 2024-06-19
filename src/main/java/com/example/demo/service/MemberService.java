@@ -1,8 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,10 +18,14 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-
+    
+    
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    
+    @Autowired
+    private HttpSession session;
 
     @Autowired
     public MemberService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
@@ -48,12 +57,27 @@ public class MemberService {
         Users user = findByEmail(username);
         user.setProfilePicPath(profilePicPath);
         userRepository.save(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof PrincipalDetails principalDetails) {
+            // 사용자 정보가 업데이트된 경우 세션에 반영
+            if (principalDetails.getUsername().equals(user.getUsername())) {
+                principalDetails.getUser().setProfilePicPath(profilePicPath);
+            }
+        }
     }
     public void updateNickname(String username, String nickname) throws Exception {
         Users user = findByEmail(username);
         user.setNickname(nickname);
         userRepository.save(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof PrincipalDetails principalDetails) {
+	        // 사용자 정보가 업데이트된 경우 세션에 반영
+            if (principalDetails.getUsername().equals(user.getUsername())) {
+                principalDetails.getUser().setNickname(nickname);
+            }
+        }
     }
+    
 
     public void updateName(String username, String name) throws Exception {
         Users user = findByEmail(username);

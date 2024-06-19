@@ -34,20 +34,17 @@ public class MyPageController {
     
     @Autowired
     private UserService userService;
-
-   
+    
+    
     @PostMapping("/change-nickname")
-    public String changeNickname(@RequestParam("nickname") String nickname,
-                                 @AuthenticationPrincipal UserDetails userDetails,
-                                 RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> changeNickname(@RequestParam("nickname") String nickname, @AuthenticationPrincipal UserDetails userDetails) {
         try {
             memberService.updateNickname(userDetails.getUsername(), nickname);
-            redirectAttributes.addFlashAttribute("message", "닉네임이 성공적으로 변경되었습니다.");
+            return ResponseEntity.ok(nickname); // 닉네임 변경 성공 시 새로운 닉네임 반환
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("닉네임 변경 중 오류가 발생했습니다.");
         }
         
-        return "redirect:/mypage";
     }
     @PostMapping("/change-name")
     public String changeName(@RequestParam("name") String name,
