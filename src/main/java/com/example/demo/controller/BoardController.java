@@ -195,7 +195,7 @@ public class BoardController {
                 return user.getId();
             }
         }
-        return 1L; // 예시로 1을 반환
+        return 1L;
     }
     
     @GetMapping("/board/modify/{id}")

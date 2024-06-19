@@ -31,4 +31,8 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "reported_user_id", nullable = false)
     private Users reportedUser;
+
+    @ManyToOne
+    @JoinColumn(name = "reported_post_id", nullable = false)
+    private Board reportedPost;
 }
