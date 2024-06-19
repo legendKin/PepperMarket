@@ -33,6 +33,9 @@ public class ChatRoom {
     }
 
     public Long getPostId() {
+        if (this.board == null) {
+            throw new IllegalStateException("Board is not initialized");
+        }
         return Long.valueOf(board.getId());
     }
 

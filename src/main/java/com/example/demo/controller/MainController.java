@@ -40,8 +40,8 @@ public class MainController {
         // "main" 뷰를 반환 (resources/templates/main.html 파일을 가리킴)
         return "main"; // main.html 템플릿 반환
     }
-    
-    
+
+
     // "/chat" URL 요청을 처리하는 메서드
     @GetMapping("/chat")
     public ModelAndView showChatMainPage(@AuthenticationPrincipal PrincipalDetails principalDetails) {

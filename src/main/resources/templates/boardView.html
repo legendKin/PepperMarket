@@ -129,7 +129,29 @@
 				</div>
 			</div>
 		</div>
+		<div>
+			<h3>댓글</h3>
+			<br/>
+			<div th:each="comment : ${comments}">
+				<p th:text="${comment.nickname}">Nickname</p>
+				<p th:text="${comment.content}">Content</p>
+				<th:block th:if="${loggedInUser != null && loggedInUser.username == comment.user.email}">
+					<form method="post" style="display:inline;" th:action="@{/comment/delete/{id}(id=${comment.id})}">
+						<input name="_method" type="hidden" value="DELETE"/>
+						<button type="submit">댓글 삭제</button>
+					</form>
+				</th:block>
+				<br/>
+			</div>
+		</div>
 
+		<div>
+			<h3>댓글 작성</h3>
+			<form method="post" th:action="@{/board/add-comment/{boardId}(boardId=${board.id})}">
+				<textarea name="content" placeholder="댓글 내용" required></textarea>
+				<button type="submit">댓글 작성</button>
+			</form>
+		</div>
 		<!-- 신고하기 폼 -->
 		<form id="reportForm" method="post" th:action="@{/report}">
 			<input name="boardId" th:value="${board.id}" type="hidden"/>
