@@ -24,7 +24,11 @@
               <div class="user-profile-pic-img">
                 <img th:src="@{${user.profilePicPath}}" />
               </div>
-              <div class="user-profile-change-btn">
+              <div
+                class="user-profile-change-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#profile-photo-modify-modal"
+              >
                 <i class="far fa-edit"></i>
               </div>
             </div>
@@ -115,6 +119,92 @@
             >
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+                  <th:block th:if="${user.provider}==null">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+
+                      <form id="password-change-form">
+                        <div>
+                          <label for="current-password">현재 비밀번호</label>
+                          <input
+                            type="password"
+                            id="current-password"
+                            name="current-password"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label for="new-password">새 비밀번호</label>
+                          <input
+                            type="password"
+                            id="new-password"
+                            name="new-password"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label for="confirm-password">새 비밀번호 확인</label>
+                          <input
+                            type="password"
+                            id="confirm-password"
+                            name="confirm-password"
+                            required
+                          />
+                        </div>
+                        <button type="submit">비밀번호 변경</button>
+                      </form>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button type="button" class="btn btn-primary">
+                        Save changes
+                      </button>
+                    </div>
+                  </th:block>
+                  <th:block th:if="${user.provider} != null">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                      <p>소셜계정 가입 회원은 변경할 수 없습니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </th:block>
+                </div>
+              </div>
+            </div>
+            <div
+              class="modal fade"
+              id="profile-photo-modify-modal"
+              tabindex="-1"
+              aria-labelledby="profilePhotoModifyModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
                   <div class="modal-body">
                     <button
                       type="button"
@@ -122,38 +212,25 @@
                       data-bs-dismiss="modal"
                       aria-label="Close"
                     ></button>
-                    <form id="password-change-form">
-                      <div>
-                        <label for="current-password">현재 비밀번호</label>
+                    <form id="profile-photo-form" enctype="multipart/form-data">
+                      <div class="mb-3">
+                        <label for="profile-photo" class="form-label"
+                          >프로필 사진 선택</label
+                        >
                         <input
-                          type="password"
-                          id="current-password"
-                          name="current-password"
+                          type="file"
+                          class="form-control"
+                          id="profile-photo"
+                          name="profile-photo"
+                          accept="image/*"
                           required
                         />
                       </div>
-                      <div>
-                        <label for="new-password">새 비밀번호</label>
-                        <input
-                          type="password"
-                          id="new-password"
-                          name="new-password"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label for="confirm-password">새 비밀번호 확인</label>
-                        <input
-                          type="password"
-                          id="confirm-password"
-                          name="confirm-password"
-                          required
-                        />
-                      </div>
-                      <button type="submit">비밀번호 변경</button>
+                      <button type="submit" class="btn btn-primary">
+                        프로필 사진 변경
+                      </button>
                     </form>
                   </div>
-
                   <div class="modal-footer">
                     <button
                       type="button"
@@ -161,9 +238,6 @@
                       data-bs-dismiss="modal"
                     >
                       Close
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                      Save changes
                     </button>
                   </div>
                 </div>
@@ -376,6 +450,31 @@
             });
           });
 
+          $("#profile-photo-form").submit(function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+
+            var formData = new FormData();
+            formData.append("file", $("#profile-photo")[0].files[0]); // 파일 업로드 부분
+
+            $.ajax({
+              type: "POST",
+              url: "/mypage/change-profilepic",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                $("#profile-photo-modify-modal").modal("hide");
+                $("#successModal .modal-content p").text(response); // 성공 메시지 표시
+                $("#successModal").modal("show");
+              },
+              error: function (xhr, status, error) {
+                $("#profile-photo-modify-modal").modal("hide");
+                $("#errorModal .modal-content p").text(xhr.responseText); // 오류 메시지 표시
+                $("#errorModal").modal("show");
+              },
+            });
+          });
+
           $("#birthdate-form").submit(function (event) {
             event.preventDefault(); // 기본 폼 제출 동작을 막음
 
@@ -419,6 +518,7 @@
         $("#errorModal").on("hidden.bs.modal", function () {
           location.reload();
         });
+
         // 키워드 추가 함수
         function addKeyword() {
           const keyword = $("#new-keyword").val();

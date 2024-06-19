@@ -65,7 +65,7 @@ public class UserService {
         return userRepository.save(newUser).getId(); // 사용자의 ID 반환
     }
     //서버 올릴때 파일 경로 고쳐주세요
-    private String saveProfilePicture(MultipartFile profilePicture) throws IOException {
+    public String saveProfilePicture(MultipartFile profilePicture) throws IOException {
         // 프로필 사진 저장 로직 구현
         // 예: 파일 시스템에 저장 후 URL 반환
         String fileName = UUID.randomUUID() + "_" + profilePicture.getOriginalFilename();

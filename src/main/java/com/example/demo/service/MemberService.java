@@ -5,7 +5,9 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -14,11 +16,13 @@ public class MemberService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public MemberService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public MemberService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+	    this.userService = userService;
     }
 
     // 사용자 이메일로 사용자 찾기
@@ -38,6 +42,11 @@ public class MemberService {
         user.setEmail(email);
         user.setName(name);
         user.setBirthdate(birthdate);
+        userRepository.save(user);
+    }
+    public void updateProfilePic(String username, String profilePicPath) throws Exception {
+        Users user = findByEmail(username);
+        user.setProfilePicPath(profilePicPath);
         userRepository.save(user);
     }
     public void updateNickname(String username, String nickname) throws Exception {
