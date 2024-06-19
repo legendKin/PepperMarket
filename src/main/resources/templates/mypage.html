@@ -132,61 +132,66 @@
           >
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
-                <th:block th:if="${user.provider}==null">
-                  <div class="modal-body">
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
+                <div th:if="${user.provider}==null">
+                  <form id="password-change-form">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
 
-                    <form id="password-change-form">
-                      <div>
-                        <label for="current-password">현재 비밀번호</label>
+                      <div class="form-floating mb-3">
                         <input
                           type="password"
                           id="current-password"
                           name="current-password"
+                          class="form-control"
+                          placeholder="password"
                           required
                         />
+                        <label for="current-password">현재 비밀번호</label>
                       </div>
-                      <div>
-                        <label for="new-password">새 비밀번호</label>
+                      <div class="form-floating mb-3">
                         <input
                           type="password"
                           id="new-password"
                           name="new-password"
+                          class="form-control"
+                          placeholder="password"
                           required
                         />
+                        <label for="new-password">새 비밀번호</label>
                       </div>
-                      <div>
-                        <label for="confirm-password">새 비밀번호 확인</label>
+                      <div class="form-floating mb-3">
                         <input
                           type="password"
                           id="confirm-password"
                           name="confirm-password"
+                          class="form-control"
+                          placeholder="password"
                           required
                         />
+                        <label for="confirm-password">새 비밀번호 확인</label>
                       </div>
-                      <button type="submit">비밀번호 변경</button>
-                    </form>
-                  </div>
+                    </div>
 
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                      Save changes
-                    </button>
-                  </div>
-                </th:block>
-                <th:block th:if="${user.provider} != null">
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button type="submit" class="btn btn-primary">
+                        Save changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div th:if="${user.provider} != null">
                   <div class="modal-body">
                     <button
                       type="button"
@@ -205,10 +210,11 @@
                       Close
                     </button>
                   </div>
-                </th:block>
+                </div>
               </div>
             </div>
           </div>
+
           <div
             class="modal fade"
             id="profile-photo-modify-modal"

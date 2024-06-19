@@ -119,6 +119,18 @@
   width: 160px;
 }
 
+/* #password-change-form { */
+/*   display: flex; */
+/*   flex-direction: column; */
+/* } */
+/* .password-form-box { */
+/*   display: flex; */
+/*   flex-direction: column; */
+/* } */
+/* .password-form { */
+/*   display: flex; */
+/*   justify-content: space-between; */
+/* } */
 .stack-3 {
   border-top: 2px solid #dedede;
   display: grid;
