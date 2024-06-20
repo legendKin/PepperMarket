@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AddUserRequest;
+import com.example.demo.entity.Board;
 import com.example.demo.entity.UserRole;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.BoardRepository;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor // Lombok을 사용하여 필요한 생성자를 자동으로 생성
 @Service // 서비스 클래스임을 나타냄
@@ -110,6 +112,8 @@ public class UserService {
         user.setProfilePicPath(imagePath);
         userRepository.save(user);
     }
+    
+   
     
 
 }

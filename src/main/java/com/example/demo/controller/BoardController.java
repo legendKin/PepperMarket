@@ -235,6 +235,7 @@ public class BoardController {
         
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
+        boardTemp.setPrice(board.getPrice());
         boardTemp.setModifyDate(LocalDateTime.now());
         boardTemp.setStatus(board.getStatus());
         
