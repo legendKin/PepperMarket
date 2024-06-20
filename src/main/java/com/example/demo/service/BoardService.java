@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Keyword;
-import com.example.demo.entity.Notification;
-import com.example.demo.entity.Users;
-import com.example.demo.entity.Board;
+import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,8 +68,11 @@ public abstract class BoardService {
         Users user = userRepository.findByEmail(username).orElseThrow();
 
         board.setUser(user);
-        board.setCreateDate(LocalDateTime.now());
-
+//        if(board.getCreateDate() == null) {
+//            board.setCreateDate(LocalDateTime.now());
+//        }else{
+//            board.setModifyDate(LocalDateTime.now());
+//        }
         try {
             // 파일이 비어있지 않으면 파일을 저장
             if (!file.isEmpty()) {
@@ -258,4 +259,8 @@ public abstract class BoardService {
     public Page<Board> getBoardByUserId(Long userId, Pageable pageable) {
         return boardRepository.findByUserId(userId, pageable);
     }
+    public List<Board> getBoardByUserId(Long userId){
+        return boardRepository.findByUserIdOrderByCreateDateDesc(userId);
+    }
+    
 }

@@ -48,7 +48,8 @@
 .quality-btn-wrap > .btn {
   flex: 1;
 }
-.quality-select {
+.quality-select,
+.status-select {
   align-items: center;
   border: 1px solid #dee2e6;
   color: #000;
@@ -56,6 +57,7 @@
   font-size: 20px;
   font-weight: bold;
   justify-content: center;
+  width: 100%;
 }
 #quality-button {
 }

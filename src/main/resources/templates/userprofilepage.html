@@ -1,13 +1,13 @@
 <!doctype html>
 <html
-  layout:decorate="~{layouts/mypagelayout}"
+  layout:decorate="~{layouts/layout}"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   xmlns:th="http://www.thymeleaf.org"
 >
   <head>
     <meta charset="UTF-8" />
     <title>마이 페이지</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+    <link rel="stylesheet" th:href="@{/css/userprofilepage.css}" />
   </head>
   <body>
     <div layout:fragment="content">
@@ -28,42 +28,12 @@
                 <div class="user-profile-pic-img">
                   <img th:src="@{${user.profilePicPath}}" />
                 </div>
-                <div
-                  class="btn user-profile-change-btn"
-                  data-bs-target="#profile-photo-modify-modal"
-                  data-bs-toggle="modal"
-                >
-                  <i class="far fa-edit"></i>
-                </div>
               </div>
               <div class="user-nickname">
                 <span th:text="${user.nickname}"></span>
               </div>
               <div class="user-email">
                 <span id="userEmail" th:text="${user.email}"></span>
-              </div>
-            </div>
-            <div class="user-info-modify-box">
-              <div class="modify-nickname-box">
-                <button
-                  class="btn btn-primary modify-nickname"
-                  data-bs-target="#nickname-modify-modal"
-                  data-bs-toggle="modal"
-                  type="button"
-                >
-                  <i class="fas fa fa-plus"></i> 내 닉네임 수정
-                </button>
-              </div>
-              <div class="modify-password-box">
-                <button
-                  class="btn btn-primary modify-password"
-                  data-bs-target="#password-modify-modal"
-                  data-bs-toggle="modal"
-                  type="button"
-                >
-                  <i class="far fa-edit"></i>
-                  비밀번호 변경
-                </button>
               </div>
             </div>
           </div>
@@ -109,195 +79,6 @@
         </div>
       </div>
       <div class="modals">
-        <div class="user-info-modify-modal">
-          <div
-            aria-hidden="true"
-            aria-labelledby="nicknameModifyModalLabel"
-            class="modal fade"
-            id="nickname-modify-modal"
-            tabindex="-1"
-          >
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <form id="nickname-form">
-                  <div class="modal-body">
-                    <button
-                      aria-label="Close"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    ></button>
-                    <div class="mb-3 mt-3">
-                      <label class="form-label" for="nickname"
-                        >내 닉네임 수정</label
-                      >
-                      <input
-                        class="form-control mt-3"
-                        id="nickname"
-                        name="nickname"
-                        required
-                        th:value="${user.nickname}"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    >
-                      Close
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                      Save changes
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div
-            aria-hidden="true"
-            aria-labelledby="passwordModifyModalLabel"
-            class="modal fade"
-            id="password-modify-modal"
-            tabindex="-1"
-          >
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div th:if="${user.provider}==null">
-                  <form id="password-change-form">
-                    <div class="modal-body">
-                      <button
-                        aria-label="Close"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        type="button"
-                      ></button>
-
-                      <div class="form-floating mb-3 mt-5">
-                        <input
-                          class="form-control"
-                          id="current-password"
-                          name="current-password"
-                          placeholder="password"
-                          required
-                          type="password"
-                        />
-                        <label for="current-password">현재 비밀번호</label>
-                      </div>
-                      <div class="form-floating mb-3">
-                        <input
-                          class="form-control"
-                          id="new-password"
-                          name="new-password"
-                          placeholder="password"
-                          required
-                          type="password"
-                        />
-                        <label for="new-password">새 비밀번호</label>
-                      </div>
-                      <div class="form-floating mb-3">
-                        <input
-                          class="form-control"
-                          id="confirm-password"
-                          name="confirm-password"
-                          placeholder="password"
-                          required
-                          type="password"
-                        />
-                        <label for="confirm-password">새 비밀번호 확인</label>
-                      </div>
-                    </div>
-
-                    <div class="modal-footer">
-                      <button
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                        type="button"
-                      >
-                        Close
-                      </button>
-                      <button class="btn btn-primary" type="submit">
-                        Save changes
-                      </button>
-                    </div>
-                  </form>
-                </div>
-                <div th:if="${user.provider} != null">
-                  <div class="modal-body">
-                    <button
-                      aria-label="Close"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    ></button>
-                    <p class="mt-3">소셜계정 가입 회원은 변경할 수 없습니다.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            aria-hidden="true"
-            aria-labelledby="profilePhotoModifyModalLabel"
-            class="modal fade"
-            id="profile-photo-modify-modal"
-            tabindex="-1"
-          >
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <form enctype="multipart/form-data" id="profile-photo-form">
-                  <div class="modal-body">
-                    <button
-                      aria-label="Close"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    ></button>
-
-                    <div class="mb-3 mt-3">
-                      <label class="form-label" for="profile-photo"
-                        >프로필 사진 선택</label
-                      >
-                      <input
-                        accept="image/*"
-                        class="form-control mt-3"
-                        id="profile-photo"
-                        name="profile-photo"
-                        required
-                        type="file"
-                      />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    >
-                      Close
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                      프로필 사진 변경
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="user-stack3-modal">
           <div
             aria-hidden="true"
@@ -409,7 +190,7 @@
         function loadLikedBoards() {
           var userEmail = $("#userEmail").text();
           $.ajax({
-            url: "/mypage/liked-boards",
+            url: "/profile/liked-boards",
             method: "GET",
             data: { userEmail: userEmail },
             success: function (data) {
@@ -439,7 +220,7 @@
           var userId = $("#userId").text();
 
           $.ajax({
-            url: "/mypage/posted-boards",
+            url: `/profile/posted-boards`,
             method: "GET",
             data: { userId: userId },
             success: function (data) {

@@ -4,11 +4,13 @@ import com.example.demo.entity.Board;
 import com.example.demo.entity.Like;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.LikeRepository;
+import com.example.demo.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +25,9 @@ public class LikeService {
 
     @Autowired
     private BoardRepository boardRepository;
-
+	@Autowired
+	private UserRepository userRepository;
+    
     public boolean addLike(Long boardId, String userEmail) {
         Integer boardIdInt = boardId.intValue(); // Long을 Integer로 변환
         logger.info("addLike 호출됨: boardId={}, userEmail={}", boardIdInt, userEmail);
@@ -37,6 +41,7 @@ public class LikeService {
             Like like = new Like();
             like.setBoardId(boardIdInt);
             like.setUserEmail(userEmail);
+            like.setLikedTime(LocalDateTime.now());
             likeRepository.save(like);
             updateLikeCount(boardIdInt);
             logger.info("좋아요 추가됨: boardId={}, userEmail={}", boardIdInt, userEmail);
@@ -66,6 +71,12 @@ public class LikeService {
     }
 
     public List<Board> getLikedBoardsByUserEmail(String userEmail) {
+        List<Like> likes = likeRepository.findByUserEmail(userEmail);
+        List<Integer> boardIds = likes.stream().map(Like::getBoardId).collect(Collectors.toList());
+        return boardRepository.findAllById(boardIds);
+    }
+    public List<Board> getLikedBoardByUserId(Long userId){
+        String userEmail = String.valueOf(userRepository.findEmailById(userId));
         List<Like> likes = likeRepository.findByUserEmail(userEmail);
         List<Integer> boardIds = likes.stream().map(Like::getBoardId).collect(Collectors.toList());
         return boardRepository.findAllById(boardIds);
