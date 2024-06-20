@@ -65,7 +65,9 @@
                           Edit
                         </button>
                       </th:block>
-                      <small class="text-muted" th:text="${board.timeAgo}"
+                      <small
+                        class="text-muted"
+                        th:text="${board.getCreateDateFormatted()}"
                         >timeago</small
                       >
                     </div>

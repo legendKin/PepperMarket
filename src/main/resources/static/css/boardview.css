@@ -103,7 +103,10 @@ body {
 .product-info {
   margin-bottom: 20px;
 }
-
+.report-icon {
+  font-size: 50px;
+  position: absolute;
+}
 .product-image > img {
   height: 400px;
   max-width: 100%;
