@@ -31,6 +31,9 @@ public abstract class BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -118,7 +121,7 @@ public abstract class BoardService {
             commentRepository.deleteByBoardId(id);
             likeRepository.deleteByBoardId(id);
             notificationRepository.deleteByBoardId(id);
-
+            reportRepository.deleteByReportedPostId(id);
             // 게시글 삭제
             boardRepository.deleteById(id);
         } catch (Exception e) {

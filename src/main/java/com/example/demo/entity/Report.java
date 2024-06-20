@@ -32,7 +32,7 @@ public class Report {
     @JoinColumn(name = "reported_user_id", nullable = false)
     private Users reportedUser;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "reported_post_id", nullable = false)
-    private Board reportedPost;
+    private Board reportedPost;  // 신고된 게시글 추가
 }
