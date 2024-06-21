@@ -17,22 +17,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.*;
 
 @RequiredArgsConstructor // Lombok을 사용하여 필요한 생성자를 자동으로 생성
 @Service // 서비스 클래스임을 나타냄
 public class UserService {
+    
 
-
-
+    
     @Autowired
     private final UserRepository userRepository; // 사용자 레포지토리
     private final BoardRepository boardRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder; // 비밀번호 암호화를 위한 인코더
+    
+    
 
     // 새로운 사용자를 생성하고 저장하는 메서드
     public Long save(AddUserRequest dto, MultipartFile file) {
@@ -43,7 +42,7 @@ public class UserService {
         String email = dto.getEmail();
         String nickname = email.substring(0, email.indexOf("@"));
         String profilePicPath = null;
-
+        
         if (file != null && !file.isEmpty()) {
             try {
                 // 파일 저장 로직 (예: 파일 시스템, 클라우드 스토리지 등)
@@ -54,7 +53,7 @@ public class UserService {
         }else if(file == null || file.isEmpty()) {
             profilePicPath = "/files/profile/defaultProfile.png";
         }
-
+        
         Users newUser = Users.builder()
                                 .email(email)
                                 .password(bCryptPasswordEncoder.encode(dto.getPassword())) // 비밀번호를 암호화하여 저장
@@ -65,19 +64,18 @@ public class UserService {
                                 .build();
         return userRepository.save(newUser).getId(); // 사용자의 ID 반환
     }
-    //서버 올릴때 파일 경로 고쳐주세요
-    private String saveProfilePicture(MultipartFile profilePicture) throws IOException {
+
+    public String saveProfilePicture(MultipartFile profilePicture) throws IOException {
         // 프로필 사진 저장 로직 구현
-        // 예: 파일 시스템에 저장 후 URL 반환
         String fileName = UUID.randomUUID() + "_" + profilePicture.getOriginalFilename();
-        String profilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\profile";
+        String profilePath = "/home/ec2-user/pepper/files/profile";  // 외부 경로로 변경
         Path directoryPath = Paths.get(profilePath);
         Files.createDirectories(directoryPath);
         Path filePath = Paths.get(profilePath, fileName);
         Files.copy(profilePicture.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        return "/files/profile/" + fileName;
+        return "/files/profile/" + fileName;  // URL 반환
     }
-
+    
 
     // 사용자 ID로 사용자를 조회하는 메서드
     public Optional<Users> findById(Long id) {
@@ -104,13 +102,13 @@ public class UserService {
         user.setSuspended(false);
         userRepository.save(user);
     }
-
+    
     @Transactional
     public void updateUserProfileImage(Long userId, String imagePath) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         user.setProfilePicPath(imagePath);
         userRepository.save(user);
     }
-
+    
 
 }

@@ -188,6 +188,8 @@
   padding-top: 0 !important;
 }
 .product-album .container {
+  display: flex;
+  flex-direction: column;
   max-width: 1200px;
 }
 
@@ -319,7 +321,9 @@
   margin-bottom: 0.5rem;
   text-decoration: none;
 }
-
+.pagination {
+  justify-content: center;
+}
 .card-t:hover {
   text-decoration: underline;
 }

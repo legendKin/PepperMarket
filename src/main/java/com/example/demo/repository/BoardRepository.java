@@ -15,26 +15,26 @@ import java.util.List;
 
 @Repository // Spring Data JPA의 저장소로 사용
 public interface BoardRepository extends JpaRepository<Board, Integer> {
-    
-    
+
+
     // 특정 카테고리 ID로 게시글을 페이징하여 검색
     Page<Board> findByCateIDAndStatusNot(Integer searchCateID, Pageable pageable, Integer status);
-    
+
     Page<Board> findByCateID(Integer searchCateID, Pageable pageable);
-    
+
     Page<Board> findByUserId(Long user, Pageable pageable);
 
     // 제목에 특정 키워드를 포함하는 게시글을 페이징하여 검색
     Page<Board> findByTitleContainingAndStatusNot(String searchKeyword, Pageable pageable, Integer status);
-    
+
     Page<Board> findByTitleContaining(String searchKeyword, Pageable pageable);
 
     // 제목에 특정 키워드를 포함하고 특정 카테고리 ID를 가진 게시글을 페이징하여 검색
     Page<Board> findByTitleContainingAndCateIDAndStatusNot(String searchKeyword, Integer searchCateID, Pageable pageable, Integer status);
-    
+
     Page<Board> findByTitleContainingAndCateID(String searchKeyword, Integer searchCateID, Pageable pageable);
-    
-    
+
+
     // ID를 사용하여 게시글 삭제
     void deleteById(Long id);
 
@@ -55,17 +55,17 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Modifying
     @Query("update Board b set b.likes = b.likes + 1 where b.id = :id")
     void incrementLikes(Long id);
-    
-    
+
+
     Page<Board> findByStatusNotOrderByCreateDateDesc(Integer status, Pageable pageable);
-    
+
     @Query("SELECT b FROM Board b WHERE " +
-                   "(:searchKeyword IS NULL OR b.title LIKE %:searchKeyword%) AND " +
-                   "(:searchCateID IS NULL OR b.cateID = :searchCateID) AND " +
-                   "(:status IS NULL OR b.status <> :status)")
+            "(:searchKeyword IS NULL OR b.title LIKE %:searchKeyword%) AND " +
+            "(:searchCateID IS NULL OR b.cateID = :searchCateID) AND " +
+            "(:status IS NULL OR b.status <> :status)")
     Page<Board> searchBoards(@Param("searchKeyword") String searchKeyword,
                              @Param("searchCateID") Integer searchCateID,
                              @Param("status") Integer status,
                              Pageable pageable);
-    
+
 }

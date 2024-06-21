@@ -37,17 +37,19 @@ public class ChatMessage {
 
     @Transient
     private Long receiverId;
-    
-    
+
+    @Column(nullable = false)
+    private boolean isRead = false; // 읽음 여부 필드 추가
 
     public ChatMessage() {}
+
     public ChatMessage(Long chatRoomId, Long senderId, String content, LocalDateTime timestamp) {
         this.chatRoomId = chatRoomId;
         this.senderId = senderId;
         this.content = content;
         this.timestamp = timestamp;
     }
-    
+
     public String getSenderNickname() {
         return sender.getNickname();
     }

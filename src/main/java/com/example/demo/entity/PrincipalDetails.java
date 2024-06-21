@@ -47,7 +47,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         ).collect(Collectors.toList());
     }
 
-
     @Override
     public String getPassword() {
         return users.getPassword();
@@ -94,10 +93,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 
     public String getProfilePic() {
-        return (String) attributes.get("profile_picture_url");
-    }
-
-    public String getPPic() {
-        return users.getProfilePictureUrl();
+        return users.getProfilePicPath();
     }
 }

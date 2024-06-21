@@ -4,13 +4,14 @@ import com.example.demo.entity.Board;
 import com.example.demo.entity.Like;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.LikeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LikeService {
@@ -63,4 +64,11 @@ public class LikeService {
         boardRepository.save(board);
         logger.info("updateLikeCount 호출됨: boardId={}", boardId);
     }
+
+    public List<Board> getLikedBoardsByUserEmail(String userEmail) {
+        List<Like> likes = likeRepository.findByUserEmail(userEmail);
+        List<Integer> boardIds = likes.stream().map(Like::getBoardId).collect(Collectors.toList());
+        return boardRepository.findAllById(boardIds);
+    }
+
 }

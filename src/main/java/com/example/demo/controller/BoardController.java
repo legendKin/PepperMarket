@@ -36,21 +36,21 @@ import java.util.Map;
 
 @Controller
 public class BoardController {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-
+    
     @Autowired
     private CommentService commentService;
     
     @Autowired
     private CategoryService categoryService;
-
+    
     @Autowired
     private BoardService boardService;
-
+    
     @Autowired
     private NotificationService notificationService;
-
+    
     @Autowired
     private ViewedPostService viewedPostService;
 
@@ -59,7 +59,7 @@ public class BoardController {
 
     @Autowired
     private UserRepository userRepository;
-
+    
 
     @Autowired
     private LikeService likeService;
@@ -81,7 +81,7 @@ public class BoardController {
         model.addAttribute("username", email);
         return "boardWrite";
     }
-
+    
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -91,8 +91,6 @@ public class BoardController {
         Page<Board> list = boardService.searchBoards(searchKeyword, searchCateID, pageable, showCompleted, userDetails);
 
         model.addAttribute("list", list);
-
-
 
         logger.info("List size: " + list.getTotalElements());
 
@@ -116,10 +114,10 @@ public class BoardController {
         model.addAttribute("categNow", categNow);
         model.addAttribute("categList", categList);
         model.addAttribute("categoryPostCounts", categoryPostCounts);
-        
+
         Long loggedUserId = getCurrentUserId();
         model.addAttribute("loggedUserId", loggedUserId);
-        
+
         logger.info("Rendering boardList template");
         if (ajax) {
             long totalElements = list.getTotalElements();
@@ -133,15 +131,15 @@ public class BoardController {
             return "boardLists";
         }
     }
-    
+
     @GetMapping("/board/view")
     public String boardView(Model model, @RequestParam("id") Integer id, @AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
         }
-        
+
         logger.info("boardView 호출됨: id={}, userDetails={}", id, userDetails);
-        
+
         // 세션에서 좋아요 요청 플래그 확인
         Boolean likeRequest = (Boolean) session.getAttribute("likeRequest");
         if (likeRequest == null || !likeRequest) {
@@ -197,7 +195,7 @@ public class BoardController {
                 return user.getId();
             }
         }
-        return 1L; // 예시로 1을 반환
+        return 1L;
     }
     
     @GetMapping("/board/modify/{id}")
