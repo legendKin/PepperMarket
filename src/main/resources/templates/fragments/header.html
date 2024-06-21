@@ -137,9 +137,76 @@
 						내 물건 올리기
 					</a>
 				</div>
+				<div class="top-menu-btn"type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop"><span class="material-symbols-outlined">menu</span></div>
 			</div>
 		</div>
 		<div class="header-underline"></div>
+		<div class="offcanvas offcanvas-top top-menu" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+			<div class="offcanvas-header">
+				<h5 id="offcanvasTopLabel">카테고리 둘러보기</h5>
+				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			</div>
+			<div class="offcanvas-body">
+				<div class="top-categories">
+					<a href="/board/list" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">apps</span>
+					</div>
+						<span>전체 상품 보기</span>
+					</a>
+					<a href="/board/list?searchCateID=1" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined cloth-icon">apparel</span>
+						<span class="material-symbols-outlined man-icon">man</span>
+					</div>
+						<span>남성 의류</span>
+					</a>
+					<a href="/board/list?searchCateID=2" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined cloth-icon">apparel</span>
+						<span class="material-symbols-outlined man-icon">woman</span>
+					</div>
+						<span>여성 의류</span>
+					</a>
+					<a href="/board/list?searchCateID=3" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">shoppingmode</span>
+					</div>
+						<span>잡화</span>
+					</a>
+					<a href="/board/list?searchCateID=4" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">devices</span>
+					</div>
+						<span>디지털</span>
+					</a>
+					<a href="/board/list?searchCateID=5" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">stadia_controller</span>
+					</div>
+						<span>취미/게임</span>
+					</a>
+					<a href="/board/list?searchCateID=6" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">sports_and_outdoors</span>
+					</div>
+						<span>스포츠/레저</span>
+					</a>
+					<a href="/board/list?searchCateID=7" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">chair</span>
+					</div>
+						<span>가구/인테리어</span>
+					</a>
+					<a href="/board/list?searchCateID=8" class="top-icon-box">
+						<div class="top-icon">
+						<span class="material-symbols-outlined">pets</span>
+					</div>
+						<span>반려동물/식물</span>
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </th:block>
 </html>
