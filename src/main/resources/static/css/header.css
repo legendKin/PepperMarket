@@ -154,10 +154,8 @@
 
 .write {
     align-items: center;
-    border-radius: 10px;
-    border: none;
-    color: white;
-    background: #20b626;
+    border: 2px solid rgb(176, 184, 193);
+    border-radius: 25px;
     display: flex;
     font-size: 25px;
     justify-content: center;
@@ -234,5 +232,3 @@
 .delete-noti {
     cursor: pointer;
 }
-
-

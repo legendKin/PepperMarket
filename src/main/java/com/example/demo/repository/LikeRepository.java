@@ -18,7 +18,5 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     void deleteByBoardId(Integer boardId);
 
     List<Like> findByUserEmail(String userEmail);
-	
-	
 }
 

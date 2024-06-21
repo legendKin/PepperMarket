@@ -5,7 +5,6 @@ import com.example.demo.entity.Board;
 import com.example.demo.entity.PrincipalDetails;
 import com.example.demo.entity.Users;
 import com.example.demo.service.BoardService;
-import com.example.demo.service.LikeService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,11 +19,13 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -34,7 +35,6 @@ public class UserController {
 
     private final UserService userService;
     private final BoardService boardService;
-    private final LikeService likeService;
 
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult, @RequestParam("profilePic") MultipartFile file, Model model) {
@@ -91,20 +91,8 @@ public class UserController {
         model.addAttribute("userPostCount", userPostCount);
         model.addAttribute("principal", principalDetails);
         model.addAttribute("list", list);
-        
-        
-        return "userprofilepage";
-    }
-    
-    @GetMapping("/profile/liked-boards")
-    @ResponseBody
-    public List<Board> getLikedBoardsByUserEmail(@RequestParam String userEmail) {
-        return likeService.getLikedBoardsByUserEmail(userEmail);
-    }
-    @GetMapping("/profile/posted-boards")
-    @ResponseBody
-    public List<Board> getBoardsByUserId(@RequestParam Long userId) {
-        return boardService.getBoardByUserId(userId);
+
+        return "userProfile";
     }
     
 }

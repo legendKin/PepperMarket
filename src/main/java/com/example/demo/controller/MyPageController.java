@@ -3,10 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.dto.PasswordChangeRequest;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Users;
-import com.example.demo.service.*;
+import com.example.demo.service.LikeService;
+import com.example.demo.service.MemberService;
+import com.example.demo.service.ReportService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,6 @@ public class MyPageController {
 
     @Autowired
     private LikeService likeService;
-    
-    @Autowired
-    private BoardService boardService;
 
 
     @PostMapping("/change-nickname")
@@ -134,14 +132,6 @@ public class MyPageController {
     public List<Board> getLikedBoardsByUserEmail(@RequestParam String userEmail) {
         return likeService.getLikedBoardsByUserEmail(userEmail);
     }
-    
-    @GetMapping("/posted-boards")
-    @ResponseBody
-    public List<Board> getBoardsByUserId(@RequestParam String userId) {
-        return boardService.getBoardByUserId(Long.valueOf(userId));
-    }
-    
-    
 
 
 }

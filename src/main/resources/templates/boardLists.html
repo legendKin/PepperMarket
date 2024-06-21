@@ -143,17 +143,17 @@
                         th:href="@{/board/view(id=${board.id})}"
                         >거래 완료</a
                       >
-                      <a th:href="@{/board/view(id=${board.id})}">
-                        <img
-                          alt="상품이미지"
-                          class="card-img-top goods-img"
-                          height="300"
-                          onerror="this.src='/files/default.png'"
-                          th:src="@{/files/{filename}(filename=${board.filename})}"
-                          weight="225"
-                          width="100%"
-                        />
-                      </a>
+                        <a th:href="@{/board/view(id=${board.id})}">
+                          <img
+                            alt="상품이미지"
+                            class="card-img-top goods-img"
+                            height="300"
+                            onerror="this.src='/files/default.png'"
+                            th:src="@{/files/{filename}(filename=${board.filename})}"
+                            weight="225"
+                            width="100%"
+                          />
+                        </a>
 
                       <div class="card-body card-box">
                         <div class="card-cate">

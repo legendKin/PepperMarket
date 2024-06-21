@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,12 +41,7 @@ public class Users implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
-    
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<Board> boards;
-    
-    
+
     @Column(name = "provider")
     private String provider;
 

@@ -1,15 +1,11 @@
 
-.main-banner {
-    height: 500px;
-}
-
-.header-underline {
-    display: none;
+.main-banner > img {
+    margin: 0 auto;
 }
 
 .category-popular,
 .categories {
-    margin: 150px auto 0;
+    margin: 40px auto;
     max-width: 1200px;
     overflow: hidden;
     position: relative;
