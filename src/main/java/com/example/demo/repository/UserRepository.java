@@ -4,8 +4,6 @@ import com.example.demo.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
@@ -16,6 +14,10 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     @Query("SELECT u FROM Users u")
     List<Users> findAllUsers();
+    
+    Optional<Users> findUserIdByEmail(String email);
+
+    Optional<Users> findEmailById(Long userId);
     
     
 }

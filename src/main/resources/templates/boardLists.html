@@ -111,15 +111,15 @@
         <div class="product-section">
           <div class="product-count">
             <div class="product-count-left">
-              <h2><span th:text="${categNow}"></span></h2>
-              <span class="count-text">
-                <!--                <span id="product-count"></span>개의 상품이 있습니다.-->
-                <span
-                  id="product-count"
-                  th:text="${list.getTotalElements()}"
-                ></span
-                >개의 상품이 있습니다.
-              </span>
+              <h2 th:text="${categNow}"></h2>
+              <!--              <span class="count-text">-->
+              <!--                &lt;!&ndash;                <span id="product-count"></span>개의 상품이 있습니다.&ndash;&gt;-->
+              <!--                <span-->
+              <!--                  id="product-count"-->
+              <!--                  th:text="${list.getTotalElements()}"-->
+              <!--                ></span-->
+              <!--                >개의 상품이 있습니다.-->
+              <!--              </span>-->
             </div>
             <div class="recommendation">
               <div class="recommendation-text">추천순</div>
@@ -170,11 +170,6 @@
                           th:text="${board.getFormattedPrice()} + '원'"
                         ></span>
 
-                        <i
-                          class="heart-icon"
-                          th:classappend="${board.liked} ? 'fas fa-heart' : 'far fa-heart'"
-                          th:style="${board.liked} ? 'color: #ff0000' : ''"
-                        ></i>
                         <div class="card-bottom">
                           <th:block th:if="${board.writer == loggedUserId}">
                             <button

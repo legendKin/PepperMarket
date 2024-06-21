@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,7 +45,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
                 new SimpleGrantedAuthority("user")
         ).collect(Collectors.toList());
     }
-
 
     @Override
     public String getPassword() {
@@ -94,10 +92,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 
     public String getProfilePic() {
-        return (String) attributes.get("profile_picture_url");
+        return users.getProfilePicPath();
     }
 
-    public String getPPic() {
-        return users.getProfilePictureUrl();
+    public String getRole() {
+        return users.getRole().getAuthority();
     }
 }

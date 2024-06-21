@@ -4,22 +4,57 @@ body {
   padding: 0;
 }
 
+body.modal-open {
+  overflow: auto;
+}
+
+body {
+  padding-right: 0 !important;
+}
+.main-content {
+  height: 100vh;
+}
+.wrapper {
+  width: 100%;
+}
 .product-container {
   background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  margin: 0 auto;
+  margin: 50px auto;
   max-width: 1200px;
   padding: 20px;
+  position: relative;
+}
+
+.product-container > .completed {
+  align-items: center;
+  background-color: #0000008a;
+  color: white;
+  display: flex;
+  font-size: 50px;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
 }
 
 .left-section,
 .right-section {
   padding: 20px;
+  position: relative;
   width: 50%;
 }
+
 .product-image {
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
+
 .ev_detail img {
   width: 100%;
 }
@@ -48,14 +83,15 @@ body {
   text-decoration: none;
 }
 
-.seller-link .profile-img {
+.seller-pic {
   border-radius: 50%;
   height: 50px;
+  object-fit: cover;
   width: 50px;
 }
 
 .profile-info {
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .seller-name {
@@ -88,10 +124,18 @@ body {
   margin-bottom: 20px;
 }
 
+.report-icon {
+  color: red;
+  font-size: 50px;
+  position: absolute;
+  right: 20px;
+  top: 5px;
+}
+
 .product-image > img {
   height: 400px;
-  max-width: 100%;
   object-fit: cover;
+  width: 100%;
 }
 
 .category-box {
@@ -103,15 +147,18 @@ body {
   margin-bottom: 0.5rem;
   padding: 0.2rem 0.5rem;
 }
+
 .product-name {
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 10px;
 }
+
 .price {
   font-size: 35px;
   font-weight: bold;
 }
+
 .product-status {
   display: flex;
   justify-content: space-between;
@@ -148,6 +195,7 @@ body {
   margin-top: 30px;
   width: 100%;
 }
+
 .heart {
 }
 
@@ -165,10 +213,12 @@ body {
   display: flex;
   padding: 10px 20px;
 }
+
 .like-button {
   background: none;
   border: none;
 }
+
 .like-button > i {
   font-size: 40px;
 }
@@ -179,6 +229,7 @@ body {
   margin-right: 5px;
   width: 24px;
 }
+
 .chat-icon,
 .edit-icon {
   margin-right: 10px;
@@ -193,6 +244,7 @@ body {
   display: flex;
   font-size: 20px;
 }
+
 .edit-text::after {
   border-left: 1px solid #bbb;
   content: "";
