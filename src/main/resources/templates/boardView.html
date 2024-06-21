@@ -144,6 +144,47 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="comment-all">
+			<h5 class="comment-size">댓글</h5>
+		<div class="comments-section">
+			<div>
+			<div class="comment" th:each="comment : ${comments}">
+				<div class="comment-header">
+					<div class="comment-avatar">
+						<img class="seller-pic" alt="프로필 이미지" th:src="@{${comment.user.profilePicPath}}"/>
+					</div>
+					<small class="text-muted" th:text="${comment.formattedCreateDate}">timeago</small>
+					<div class="comment-details">
+						<a
+								class="seller-link"
+								th:href="@{'/profile/' + ${board.user.id}}"
+						><span class="comment-author" th:text="${comment.nickname}">Nickname</span></a>
+					</div>
+				</div>
+				<div class="comment-body">
+					<p th:text="${comment.content}">Content</p>
+				</div>
+				<th:block th:if="${loggedInUser != null && loggedInUser.username == comment.user.email}">
+					<form method="post" style="display:inline;" th:action="@{/comment/delete/{id}(id=${comment.id})}">
+						<input name="_method" type="hidden" value="DELETE"/>
+						<button type="submit">댓글 삭제</button>
+					</form>
+				</th:block>
+			</div>
+			</div>
+			<div class="comments-input">
+			<form method="post" th:action="@{/board/add-comment/{boardId}(boardId=${board.id})}">
+				<textarea name="content" placeholder="댓글 내용" required></textarea>
+				<button type="submit">댓글 작성</button>
+			</form>
+		</div>
+		</div>
+		</div>
+
+
+
+
 		<div class="modals">
 			<div aria-hidden="true" aria-labelledby="reportFormModalLabel" class="modal fade" data-bs-backdrop="static"
 			     data-bs-keyboard="false"
