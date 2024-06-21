@@ -70,4 +70,10 @@ public class MainController {
     public String usernametest() {
         return "usernametest";
     }
+
+    @GetMapping("/qna")
+    public String qna() {
+        return "qna";
+    }
+
 }

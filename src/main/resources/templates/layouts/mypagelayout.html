@@ -93,7 +93,7 @@
                 >
                 <a
                   class="list-group-item list-group-item-action sidemenu-tab"
-                  href="#"
+                  href="/qna"
                   >문의</a
                 >
                 <th:block
@@ -141,7 +141,11 @@
         document
           .querySelector(".sidemenu-tab:nth-child(3)")
           .classList.add("active");
-      } else {
+      }else if (currentPath.includes("qna")) {
+        document
+          .querySelector(".sidemenu-tab:nth-child(4)")
+          .classList.add("active");
+      } else { else {
         document
           .querySelector(".nav_btn_badge:first-child")
           .classList.add("active");
