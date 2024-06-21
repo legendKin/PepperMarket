@@ -72,16 +72,7 @@ public class NotificationService {
         }
     }
 
-    // 채팅 메시지와 관련된 알림을 생성하는 메서드 추가
-    public void notifyChatMessage(ChatMessage chatMessage, Long chatRoomId) {
-        Notification notification = new Notification();
-        notification.setReceiver(chatMessage.getReceiver());
-        notification.setChatMessage(chatMessage);
-        notification.setMessage(chatMessage.getContent());
-        notification.setRead(false);
-        notification.setChatRoomId(chatRoomId); // 채팅방 ID 설정
-        notificationRepository.save(notification);
-    }
+
 
     // 특정 알림을 읽음 상태로 표시하는 메서드
     public void markAsRead(Long id) {
