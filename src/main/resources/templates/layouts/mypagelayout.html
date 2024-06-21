@@ -16,7 +16,7 @@
 	<th:block layout:fragment="css"></th:block>
 
 	<style>
-      
+
       .container {
           display: grid;
           grid-column-gap: 10px;
@@ -33,13 +33,20 @@
 
       .side-title {
           align-items: center;
-          background-color: #0d6efd;
+          background-color: #20b626;
           border-top-left-radius: 0.25rem;
           border-top-right-radius: 0.25rem;
           color: rgb(255, 255, 255);
           display: flex;
           height: 100px;
           justify-content: center;
+      }
+
+      .list-group-item.active {
+          z-index: 2;
+          color: #fff;
+          background-color: #20b626;
+          border-color: #20b626;
       }
 
       .list-group-item:first-child {
@@ -84,11 +91,14 @@
 							href="#"
 						>문의</a
 						>
-						<a
-							class="list-group-item list-group-item-action sidemenu-tab"
-							href="/admin/user-list"
-						>관리자 페이지</a
-						>
+						<th:block th:if="${#authentication.principal.role}=='ROLE_ADMIN'">
+							<a
+								class="list-group-item list-group-item-action sidemenu-tab"
+								href="/admin/user-list"
+							>관리자 페이지</a
+							>
+						</th:block>
+
 					</div>
 				</div>
 			</div>

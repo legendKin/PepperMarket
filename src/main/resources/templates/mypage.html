@@ -15,6 +15,7 @@
 		<div class="stack-1">
 			<div class="username-box">
 				<p><span th:text="${user.nickname}"></span>님의 페이지</p>
+				<span id="userId" style="display: none" th:text="${user.id}"></span>
 			</div>
 		</div>
 		<div class="stack-2">
@@ -28,7 +29,7 @@
 							<img th:src="@{${user.profilePicPath}}"/>
 						</div>
 						<div
-							class="btn user-profile-change-btn"
+							class="btn-primary user-profile-change-btn"
 							data-bs-target="#profile-photo-modify-modal"
 							data-bs-toggle="modal"
 						>
@@ -71,7 +72,10 @@
 		<div class="stack-3">
 			<div class="post-list">
 				<button
-					class="btn btn-primary stack-3-btn user-posts"
+					class="btn btn-primary stack-3-btn user-posted"
+					data-bs-target="#posted-board-modal"
+					data-bs-toggle="modal"
+					id="showPostedBoards"
 					type="button"
 				>
 					<i class="fas fa-lg fa-inbox"></i>
@@ -276,11 +280,8 @@
 										type="file"
 									/>
 								</div>
-
-
 							</div>
 							<div class="modal-footer">
-
 								<button
 									class="btn btn-secondary"
 									data-bs-dismiss="modal"
@@ -296,19 +297,68 @@
 					</div>
 				</div>
 			</div>
-			<div aria-hidden="true" class="modal fade" id="liked-board-modal" tabindex="-1">
+		</div>
+		<div class="user-stack3-modal">
+			<div
+				aria-hidden="true"
+				class="modal fade"
+				id="liked-board-modal"
+				tabindex="-1"
+			>
 				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
+					<div class="modal-content liked-board-modal">
 						<div class="modal-header">
-							<h5 class="modal-title">Modal title</h5>
-							<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+							<h5 class="modal-title">찜 목록</h5>
+							<button
+								aria-label="Close"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								type="button"
+							></button>
 						</div>
 						<div class="modal-body" id="likedBoardsList">
 							<p>Modal body text goes here.</p>
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-primary" data-bs-dismiss="modal" type="button">Close</button>
-
+							<button
+								class="btn btn-primary"
+								data-bs-dismiss="modal"
+								type="button"
+							>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				aria-hidden="true"
+				class="modal fade"
+				id="posted-board-modal"
+				tabindex="-1"
+			>
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content posted-board-modal">
+						<div class="modal-header">
+							<h5 class="modal-title">판매 내역</h5>
+							<button
+								aria-label="Close"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								type="button"
+							></button>
+						</div>
+						<div class="modal-body" id="PostedBoardsList">
+							<p>Modal body text goes here.</p>
+						</div>
+						<div class="modal-footer">
+							<button
+								class="btn btn-primary"
+								data-bs-dismiss="modal"
+								type="button"
+							>
+								Close
+							</button>
 						</div>
 					</div>
 				</div>
@@ -357,26 +407,86 @@
 	<script th:inline="javascript">
       // API URL 설정
       function loadLikedBoards() {
-          var userEmail = $('#userEmail').text();
+          var userEmail = $("#userEmail").text();
           $.ajax({
-              url: '/mypage/liked-boards',
-              method: 'GET',
+              url: "/mypage/liked-boards",
+              method: "GET",
               data: {userEmail: userEmail},
               success: function (data) {
-                  var tbody = $('#likedBoardsList');
+                  var tbody = $("#likedBoardsList");
                   tbody.empty(); // Clear existing data
                   data.forEach(function (board) {
-                      var row = '<div>' +
-                          '<div>' + board.id + '</div>' +
-                          '<div>' + board.title + '</div>' +
-                          '<div>' + board.content + '</div>' +
-                          '</div>';
+                      var row = `<a class='liked-board-item' href='/board/view?id=${board.id}'>
+<div class='status-${board.status}'>거래 완료</div>
+            <div class='liked-board-img'>
+                <img src='${board.filepath}' onerror='this.onerror=null; this.src="/files/default.png";'>
+            </div>
+            <div class='liked-board-info'>
+                <div class='liked-board-title'>${board.title}</div>
+                <div class='liked-board-writer'>${board.user.nickname}님</div>
+                <div class='liked-board-id'></div>
+            </div>
+        </a>`;
                       tbody.append(row);
                   });
               },
               error: function (error) {
                   console.log("Error:", error);
-              }
+              },
+          });
+      }
+
+      function loadPostedBoards() {
+          var userId = $("#userId").text();
+
+          $.ajax({
+              url: "/mypage/posted-boards",
+              method: "GET",
+              data: {userId: userId},
+              success: function (data) {
+                  var tbody = $("#PostedBoardsList");
+                  tbody.empty(); // Clear existing data
+                  data.forEach(function (board) {
+                      var statusText;
+                      if (board.status == 1) {
+                          statusText = "거래 가능";
+                      } else if (board.status == 2) {
+                          statusText = "거래 진행중";
+                      } else if (board.status == 3) {
+                          statusText = "거래 완료";
+                      } else {
+                          statusText = "";
+                      }
+                      var modifiedTimeAgo;
+                      if (board.modifiedTimeAgo == "null") {
+                          modifiedTimeAgo = "";
+                      } else {
+                          modifiedTimeAgo = "마지막 수정: " + board.modifiedTimeAgo;
+                      }
+
+                      var row = `
+		
+			<a class='posted-board-item' href='/board/view?id=${board.id}'>
+			<div class='status-${board.status}'>거래 완료</div>
+                <div class='posted-board-img'>
+                    <img src='${board.filepath}' onerror='this.onerror=null; this.src="/files/default.png";'>
+                </div>
+                <div class='posted-board-info'>
+                    <div class='posted-board-title'>${board.title}</div>
+                    <div class='posted-board-price'>${board.formattedPrice}원</div>
+                    <div class='posted-board-date'>${board.createDateFormatted}</div>
+                    <div class='posted-board-date'>${modifiedTimeAgo}</div>
+                    <div class='posted-board-status'>${statusText}</div>
+                </div>
+                
+            </a>
+        `;
+                      tbody.append(row);
+                  });
+              },
+              error: function (error) {
+                  console.log("Error:", error);
+              },
           });
       }
 
@@ -528,11 +638,12 @@
                   },
               });
           });
-          $('#showLikedBoards').click(function () {
+          $("#showLikedBoards").click(function () {
               loadLikedBoards();
           });
-
-
+          $("#showPostedBoards").click(function () {
+              loadPostedBoards();
+          });
       });
 
       // 성공 모달의 확인 버튼 클릭 시 모달 닫기

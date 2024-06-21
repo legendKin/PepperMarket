@@ -1,27 +1,49 @@
 <!doctype html>
-<html lang="ko" layout:decorate="~{layouts/layout}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+<html
+	lang="ko"
+	layout:decorate="~{layouts/layout}"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+>
 <head>
 	<meta charset="UTF-8"/>
 	<title th:text="${board.title}"></title>
 	<link rel="stylesheet" th:href="@{/css/boardview.css}"/>
+
 </head>
 <body>
 <div layout:fragment="content">
 	<section class="wrapper">
 		<div class="product-container">
+			<th:block th:if="${board.status}==3">
+				<div class="completed">거래가 끝난 게시글입니다.</div>
+			</th:block>
 			<div class="left-section">
-				<div class="product-image">
-					<img alt="게시글 이미지"  th:src="@{${board.filepath}}"/>
-				</div>
+				<a class="product-image">
+					<img
+						alt="게시글 이미지"
+						data-bs-target="#goodsPhoto"
+						data-bs-toggle="modal"
+						onerror="this.src='/files/default.png'"
+						th:src="@{${board.filepath}}"
+					/>
+				</a>
 
 				<div class="seller-info">
 					<div class="seller-profile">
-						<a class="seller-link" th:href="@{'/profile/' + ${board.user.id}}">
-							<img class="seller-pic  " th:src="@{${board.user.profilePicPath}}">
+						<a
+							class="seller-link"
+							th:href="@{'/profile/' + ${board.user.id}}"
+						>
+							<img
+								class="seller-pic"
+								th:src="@{${board.user.profilePicPath}}"
+							/>
 							<div class="profile-info">
-								<div class="seller-name" th:text="${board.user.nickname}"></div>
+								<div
+									class="seller-name"
+									th:text="${board.user.nickname}"
+								></div>
 								<div class="seller-items">
 									<div class="item-count-label">판매상품</div>
 									<div class="item-count" th:text="${userPostCount}"></div>
@@ -33,95 +55,137 @@
 			</div>
 			<div class="right-section">
 				<div class="product-info">
-					<div class="category-box" th:text="${board.categName}">카테고리명</div>
+					<div class="category-box" th:text="${board.categName}">
+						카테고리명
+					</div>
 					<div class="product-name" th:text="${board.title}">상품명</div>
-					<div class="price" th:text="${board.getFormattedPrice()} + '원'"></div>
+					<div
+						class="price"
+						th:text="${board.getFormattedPrice()} + '원'"
+					></div>
+					<a class="material-symbols-outlined report-icon" data-bs-target="#report"
+					   data-bs-toggle="modal" type="button">
+						report
+					</a>
 				</div>
 				<div class="product-status">
 					<div class="left">
-						<div class="view-count" th:text="|조회수 ${board.viewcount}|"></div>
-						<span id="like-count" th:text="|좋아요: ${likeCount}개|">0</span>
+						<div
+							class="view-count"
+							th:text="|조회수 ${board.viewcount}|"
+						></div>
+						<span id="like-count" th:text="|좋아요: ${likeCount}개|"
+						>0</span
+						>
 					</div>
 					<div class="additional-info right">
-						<div class="condition"
-						     th:text="|제품 상태: ${board.qualityHangul() != null ? board.qualityHangul() : '정보 없음'}|"></div>
+						<div
+							class="condition"
+							th:text="|제품 상태: ${board.qualityHangul() != null ? board.qualityHangul() : '정보 없음'}|"
+						></div>
 						<div class="time-ago" th:text="|${board.getTimeAgo()}|"></div>
 					</div>
 				</div>
 				<div class="action-buttons">
 					<div class="like-chat">
 						<div class="like-set">
-							<a class="like-button" href="javascript:" th:onclick="|toggleLike(${board.id})|"></a>
+							<a
+								class="like-button"
+								href="javascript:"
+								th:onclick="|toggleLike(${board.id})|"
+							></a>
 						</div>
 						<div class="chat-button edit-button">
-							<th:block th:if="${board.user != null && loggedInUser != null && board.user.id != loggedInUser.id}">
-								<a class="chat-text"
-								   th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id},postId=${board.id})}">
-									<i class="far fa-comments fa-lg btn-icon chat-icon"></i>판매자와 채팅하기
+							<th:block
+								th:if="${board.user != null && loggedInUser != null && board.user.id != loggedInUser.id}"
+							>
+								<a
+									class="chat-text"
+									th:href="@{/chat/start(senderId=${loggedInUser.id},receiverId=${board.user.id},postId=${board.id})}"
+								>
+									<i class="far fa-comments fa-lg btn-icon chat-icon"></i
+									>판매자와 채팅하기
 								</a>
 							</th:block>
-							<th:block th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}">
-								<a class="edit-text" th:href="@{/board/modify/{id}(id=${board.id})}">
-									<i class="far fa-edit edit-icon fa-lg btn-icon"></i>글 수정
+							<th:block
+								th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}"
+							>
+								<a
+									class="edit-text"
+									th:href="@{/board/modify/{id}(id=${board.id})}"
+								>
+									<i class="far fa-edit edit-icon fa-lg btn-icon"></i>글
+									수정
 								</a>
 							</th:block>
-							<th:block th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}">
-								<a class="delete-text" th:href="@{/board/delete/{id}(id=${board.id})}">
-									<i class="far fa-trash-alt delete-icon fa-lg btn-icon"></i>
+							<th:block
+								th:if="${board.user != null && loggedInUser != null && (board.user.id == loggedInUser.id || 'admin' == loggedInUser.nickname)}"
+							>
+								<a
+									class="delete-text"
+									th:href="@{/board/delete/{id}(id=${board.id})}"
+								>
+									<i
+										class="far fa-trash-alt delete-icon fa-lg btn-icon"
+									></i>
 								</a>
 							</th:block>
 							<th:block th:if="${loggedInUser == null}">
 								<a class="gologin-text" href="/login">
-									<i class="far fa-comments fa-lg btn-icon chat-icon"></i>로그인하고 거래하기
+									<i class="far fa-comments fa-lg btn-icon chat-icon"></i
+									>로그인하고 거래하기
 								</a>
 							</th:block>
 						</div>
 					</div>
 				</div>
-				<div class="product-description" th:text="${board.content}">상품 설명</div>
+				<div class="product-description" th:text="${board.content}">
+					상품 설명
+				</div>
 			</div>
-
 		</div>
-<!--        <div class="comments-section">-->
-<!--            <h3>댓글</h3>-->
-<!--            <div th:each="comment : ${comments}" class="comment">-->
-<!--                <p th:text="${comment.nickname}">Nickname</p>-->
-<!--                <p th:text="${comment.content}">Content</p>-->
-<!--                <th:block th:if="${loggedInUser != null && loggedInUser.username == comment.user.email}">-->
-<!--                    <form method="post" style="display:inline;" th:action="@{/comment/delete/{id}(id=${comment.id})}">-->
-<!--                        <input name="_method" type="hidden" value="DELETE"/>-->
-<!--                        <button type="submit">댓글 삭제</button>-->
-<!--                    </form>-->
-<!--                </th:block>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="comments-section">-->
-<!--            &lt;!&ndash;			<h3>댓글 작성</h3>&ndash;&gt;-->
-<!--            <form method="post" th:action="@{/board/add-comment/{boardId}(boardId=${board.id})}">-->
-<!--                <textarea name="content" placeholder="댓글 내용" required></textarea>-->
-<!--                <button type="submit">댓글 작성</button>-->
-<!--            </form>-->
-<!--        </div>-->
-
-        <!-- 신고하기 폼 -->
-        <form id="reportForm" method="post" th:action="@{/report}">
-            <input name="boardId" th:value="${board.id}" type="hidden"/>
-            <label for="reason">신고 사유:</label>
-            <select id="reason" name="reason">
-                <option value="spam">스팸</option>
-                <option value="abuse">악용</option>
-                <option value="inappropriate">부적절한 내용</option>
-            </select>
-            <button type="submit">신고하기</button>
-        </form>
-
-
-<!-- 플래시 메시지 표시 -->
-<div class="alert alert-success" role="alert" th:if="${message}">
-    <p th:text="${message}"></p>
-</div>
+		<div class="modals">
+			<div aria-hidden="true" aria-labelledby="reportFormModalLabel" class="modal fade" data-bs-backdrop="static"
+			     data-bs-keyboard="false"
+			     id="report" tabindex="-1">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<form id="reportForm" method="post" th:action="@{/report}">
+							<div class="modal-header">
+								<h5 class="modal-title" id="reportFormModalLabel">신고하기</h5>
+								<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+							</div>
+							<div class="modal-body">
+								<input name="postId" th:value="${board.id}" type="hidden"/>
+								<label for="reason">신고 사유:</label>
+								<select id="reason" name="reason">
+									<option value="스팸">스팸</option>
+									<option value="악용">악용</option>
+									<option value="부적절한 내용">부적절한 내용</option>
+								</select>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+								<button class="btn btn-primary" type="submit">신고하기</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div aria-hidden="true" aria-labelledby="gPhotoModalLabel" class="modal fade" id="goodsPhoto" tabindex="-1">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<img alt="" th:onclick="" th:src="@{${board.filepath}}">
+					</div>
+				</div>
+			</div>
+		</div>
 
 
+		<!-- 플래시 메시지 표시 -->
+		<div class="alert alert-success" role="alert" th:if="${message}">
+			<p th:text="${message}"></p>
+		</div>
 	</section>
 
 	<script th:inline="javascript">

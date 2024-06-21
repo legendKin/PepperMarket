@@ -11,9 +11,9 @@
     flex-direction: column;
     justify-content: center;
     /* width: 100%; */
-    margin: 0 auto;
-    max-width: 1000px;
-    min-width: 800px;
+    margin: 40px auto;
+    max-width: 800px;
+    min-width: 500px;
     padding: 30px;
     position: relative;
     text-align: center;
@@ -25,9 +25,9 @@
 }
 
 .username-box {
-    background: #20b626;
+    background: #a8f552;
     border-radius: 10px;
-    color: #b9ff6f;
+    color: #366305;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,8 +36,8 @@
 }
 
 .stack-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: center;
     margin-bottom: 40px;
 }
 
@@ -47,7 +47,7 @@
     display: flex;
     flex-direction: column;
     padding: 0 10px;
-    width: 100%;
+    width: 50%;
 }
 
 .stack-2-title {
@@ -99,8 +99,8 @@
 }
 
 .user-profile-change-btn:hover {
-    background-color: #20b626;
-    color: #fff;
+    background-color: #a8f552;
+    color: #366305;
     transition: 0.3s;
 }
 
@@ -143,8 +143,8 @@
 
 .modify-nickname:hover,
 .modify-password:hover {
-    background-color: #20b626;
-    color: #fff;
+    background-color: #a8f552;
+    color: #366305;
     transition: 0.3s;
 }
 
@@ -168,6 +168,26 @@
     padding-top: 40px;
 }
 
+.stack-3-btn {
+    align-items: center;
+    background-color: #fff;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    color: black;
+    display: flex;
+    font-size: 20px;
+    height: 80px;
+    justify-content: flex-start;
+    padding: 15px 20px;
+    position: relative;
+    width: 250px;
+}
+
+.stack-3-btn > p {
+    font-size: 18px;
+    margin-left: 10px;
+}
 
 .xi-tab {
     font-size: 40px;
@@ -365,24 +385,6 @@ body {
     display: none;
 }
 
-.status-3 {
-    align-items: center;
-    background-color: #0000009c;
-    border-radius: 5px;
-    color: white;
-    content: "거래 완료";
-    display: flex;
-    font-size: 50px;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    margin: 15px 0;
-    position: absolute;
-    top: -15px;
-    width: 100%;
-    z-index: 1;
-}
-
 
 .stack-3-btn {
     align-items: center;
@@ -404,4 +406,8 @@ body {
 .stack-3-btn > p {
     font-size: 18px;
     margin-left: 10px;
+}
+
+.user-email {
+    padding: 10px;
 }
