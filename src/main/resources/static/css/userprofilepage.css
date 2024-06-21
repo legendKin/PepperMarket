@@ -158,8 +158,9 @@
 /* } */
 .stack-3 {
   border-top: 2px solid #dedede;
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr 1fr;
+  justify-content: space-around;
   justify-items: center;
   padding-top: 40px;
 }

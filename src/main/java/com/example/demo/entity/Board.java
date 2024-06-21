@@ -37,7 +37,7 @@ public class Board {
 
     private String title; // 게시글 제목
     private String content; // 게시글 내용
-    private String price; // 가격
+    private Integer price; // 가격
     private String filename; // 파일 이름
     private String filepath; // 파일 경로
     private Integer viewcount; // 조회수
@@ -107,11 +107,11 @@ public class Board {
 //    private Category category;
 
     public String getFormattedPrice() {
-        if (price == null || price.isEmpty()) {
+        if (price == null) {
             return "가격 정보 없음";
         }
         try {
-            double priceValue = Double.parseDouble(price);
+            double priceValue = Double.parseDouble(String.valueOf(price));
             DecimalFormat decimalFormat = new DecimalFormat("#,###");
             return decimalFormat.format(priceValue);
         } catch (NumberFormatException e) {

@@ -129,26 +129,14 @@
 }
 
 /* ê°€ê²© ê²€ìƒ‰ ì°½*/
-.price-filter {
+.sort-filter {
   align-items: center;
   background: rgb(249, 250, 251);
   border: 1.2px solid rgb(229, 232, 235);
   border-radius: 10px;
   display: flex;
   height: 103px;
-}
-
-.price-filter input {
-  border: none;
-  border-radius: 8px;
-  font-size: 0.938rem;
-  font-weight: 700;
-  height: 44px;
-  letter-spacing: -0.2px;
-  line-height: 134%;
-  padding: 0;
-  text-align: center;
-  width: 188px;
+  padding: 25px;
 }
 
 .price-divider {

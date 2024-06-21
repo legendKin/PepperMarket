@@ -81,28 +81,36 @@ public class BoardController {
         model.addAttribute("username", email);
         return "boardWrite";
     }
-
     @GetMapping("/board/list")
     public String boardList(Model model,
-                            @PageableDefault(page = 0, size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                            String searchKeyword, @RequestParam(required = false) Integer searchCateID,
-                            @RequestParam(required = false) boolean showCompleted, @RequestParam(required = false) boolean ajax, @AuthenticationPrincipal UserDetails userDetails) {
-        logger.info("boardList method called");
-        Page<Board> list = boardService.searchBoards(searchKeyword, searchCateID, pageable, showCompleted, userDetails);
-
+                            @PageableDefault(page = 0, size = 12) Pageable pageable,
+                            String searchKeyword,
+                            @RequestParam(required = false) Integer searchCateID,
+                            @RequestParam(required = false) boolean showCompleted,
+                            @RequestParam(required = false) boolean ajax,
+                            @RequestParam(defaultValue = "createDate") String sortBy,  // 기본 정렬 기준
+                            @RequestParam(defaultValue = "DESC") String direction,  // 기본 정렬 방향
+                            @AuthenticationPrincipal UserDetails userDetails) {
+        logger.info("boardList method called with: searchKeyword={}, searchCateID={}, showCompleted={}, sortBy={}, direction={}",
+                searchKeyword, searchCateID, showCompleted, sortBy, direction);
+        
+        Page<Board> list = boardService.searchBoards(searchKeyword, searchCateID, pageable, showCompleted, userDetails, sortBy, direction);
+        
         model.addAttribute("list", list);
-
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
+        
         logger.info("List size: " + list.getTotalElements());
-
+        
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
-
+        
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("totalPage", list.getTotalPages());
-
+        
         List<String> categList = categoryService.getCategoryList();
         Map<Integer, Long> categoryPostCounts = boardService.getCategoryPostCounts();
         String categNow;
@@ -114,10 +122,10 @@ public class BoardController {
         model.addAttribute("categNow", categNow);
         model.addAttribute("categList", categList);
         model.addAttribute("categoryPostCounts", categoryPostCounts);
-
+        
         Long loggedUserId = getCurrentUserId();
         model.addAttribute("loggedUserId", loggedUserId);
-
+        
         logger.info("Rendering boardList template");
         if (ajax) {
             long totalElements = list.getTotalElements();
@@ -131,7 +139,9 @@ public class BoardController {
             return "boardLists";
         }
     }
-
+    
+    
+    
     @GetMapping("/board/view")
     public String boardView(Model model, @RequestParam("id") Integer id, @AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
         if (id == null) {

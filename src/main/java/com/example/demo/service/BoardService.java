@@ -4,9 +4,7 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -73,6 +71,7 @@ public abstract class BoardService {
 //        }else{
 //            board.setModifyDate(LocalDateTime.now());
 //        }
+        board.setLikecount(0);
         try {
             // 파일이 비어있지 않으면 파일을 저장
             if (!file.isEmpty()) {
@@ -189,6 +188,7 @@ public abstract class BoardService {
     public List<Board> getPostsByViewcount() {
         return boardRepository.findByOrderByViewcountDesc();
     }
+    public List<Board> getPostsByLiked(){return boardRepository.findByOrderByLikecountDesc();}
 
     // 조회수가 높은 상위 10개의 게시글을 가져오는 메서드
     public List<Board> getTop10PostsByViewcount() {
@@ -230,10 +230,39 @@ public abstract class BoardService {
     public void likePost(Long id) {
         boardRepository.incrementLikes(id);
     }
-
-    public Page<Board> searchBoards(String searchKeyword, Integer searchCateID, Pageable pageable, boolean showCompleted, UserDetails userDetails) {
+    
+    public Page<Board> searchBoards(String searchKeyword, Integer searchCateID,
+                                    Pageable pageable, boolean showCompleted,
+                                    UserDetails userDetails, String sortBy, String direction) {
         Integer status = showCompleted ? null : 3; // showCompleted가 true이면 status를 null로 설정하여 모든 상태의 게시글을 가져옴
-        Page<Board> boards = boardRepository.searchBoards(searchKeyword, searchCateID, status, pageable);
+        
+        
+        // 기본 정렬 기준 설정
+        Sort defaultSort = Sort.by(Sort.Direction.DESC, "createDate");
+        
+        // 사용자가 선택한 정렬 기준에 따라 정렬 방식 설정
+        if ("likecount".equals(sortBy)) {
+            defaultSort = Sort.by(Sort.Direction.fromString(direction), "likecount", "createDate");
+        } else if ("viewcount".equals(sortBy)) {
+            defaultSort = Sort.by(Sort.Direction.fromString(direction), "viewcount", "createDate");
+        } else if ("priceASC".equals(sortBy)) {
+            defaultSort = Sort.by(Sort.Direction.ASC, "price");
+        } else if ("priceDESC".equals(sortBy)) {
+            defaultSort = Sort.by(Sort.Direction.DESC, "price");
+        }else if ("createDateAsc".equals(sortBy)) {
+            defaultSort = Sort.by(Sort.Direction.ASC, "createDate", "createDate");
+        } else if ("createDate".equals(sortBy)) {
+            defaultSort = Sort.by(Sort.Direction.DESC, "createDate", "createDate");
+        }
+        
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), defaultSort);
+        
+        // 검색 키워드에 와일드카드 추가
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            searchKeyword = "%" + searchKeyword + "%";
+        }
+        
+        Page<Board> boards = boardRepository.searchBoards(searchKeyword, searchCateID, status, sortedPageable);
         
         String username = userDetails != null ? userDetails.getUsername() : null;
         
@@ -244,7 +273,9 @@ public abstract class BoardService {
         
         return boards;
     }
-
+    
+    
+    
     public Board getBoardById(Long postId) {
         return boardRepository.findById(Math.toIntExact(postId))
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. postId: " + postId));
