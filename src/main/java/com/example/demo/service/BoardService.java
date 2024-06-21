@@ -51,7 +51,7 @@ public abstract class BoardService {
 
     @Autowired
     private LikeService likeService;
-
+    
 //    @Value("${file.upload-dir}")
 //    private String uploadDir;
 
@@ -97,8 +97,8 @@ public abstract class BoardService {
     public Page<Board> boardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
-
-
+    
+    
     // 특정 키워드를 포함하는 게시글 리스트를 페이징하여 가져오는 메서드
     public Page<Board> boardSearchListAvailable(String searchKeyword, Pageable pageable, Integer status) {
         return boardRepository.findByTitleContainingAndStatusNot(searchKeyword, pageable, status);
@@ -259,8 +259,8 @@ public abstract class BoardService {
     public Page<Board> getBoardByUserId(Long userId, Pageable pageable) {
         return boardRepository.findByUserId(userId, pageable);
     }
-//    public List<Board> getBoardByUserId(Long userId){
-//        return boardRepository.findByUserIdOrderByCreateDateDesc(userId);
-//    }
-
+    public List<Board> getBoardByUserId(Long userId){
+        return boardRepository.findByUserIdOrderByCreateDateDesc(userId);
+    }
+    
 }

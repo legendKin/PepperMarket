@@ -1,48 +1,41 @@
-
 .main-banner {
-    height: 500px;
+  height: 500px;
 }
-
+.container {
+  background: none;
+}
 .header-underline {
-    display: none;
+  display: none;
 }
-
-.category-popular,
-.categories {
-    margin: 150px auto 0;
-    max-width: 1200px;
-    overflow: hidden;
-    position: relative;
+footer {
+  background: url("../img/back_ani/footer_back_img.png");
 }
-
-.category-popular .swiper-slide img,
-.categories .swiper-slide img {
-    height: 400px;
-    object-fit: cover;
-    position: relative;
-    width: 250px;
-    /* This ensures the image covers the container */
+.category-popular {
+  margin: 150px auto 0;
+  max-width: 1200px;
+  overflow: hidden;
+  position: relative;
 }
 
 .pop > a > span {
-    background-color: rgba(0, 0, 0, 0.62);
-    bottom: 0;
-    color: #fff;
-    left: 0;
-    padding: 10px;
-    position: absolute;
-    right: 0;
-    text-align: right;
+  background-color: rgba(0, 0, 0, 0.62);
+  bottom: 0;
+  color: #fff;
+  left: 0;
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  text-align: right;
 }
 
 .categories .cat {
-    border: 1px solid #000;
-    border-radius: 50%;
-    height: 200px;
-    margin: 50px auto;
-    width: 200px;
+  border: 1px solid #000;
+  border-radius: 50%;
+  height: 200px;
+  margin: 50px auto;
+  width: 200px;
 }
 
 .more {
-    margin: 0 auto;
+  margin: 0 auto;
 }

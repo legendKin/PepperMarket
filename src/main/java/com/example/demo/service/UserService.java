@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AddUserRequest;
+import com.example.demo.entity.Board;
 import com.example.demo.entity.UserRole;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.BoardRepository;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor // Lombok을 사용하여 필요한 생성자를 자동으로 생성
 @Service // 서비스 클래스임을 나타냄
@@ -64,16 +66,17 @@ public class UserService {
                                 .build();
         return userRepository.save(newUser).getId(); // 사용자의 ID 반환
     }
-
+    //서버 올릴때 파일 경로 고쳐주세요
     public String saveProfilePicture(MultipartFile profilePicture) throws IOException {
         // 프로필 사진 저장 로직 구현
+        // 예: 파일 시스템에 저장 후 URL 반환
         String fileName = UUID.randomUUID() + "_" + profilePicture.getOriginalFilename();
-        String profilePath = "/home/ec2-user/pepper/files/profile";  // 외부 경로로 변경
+        String profilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\profile";
         Path directoryPath = Paths.get(profilePath);
         Files.createDirectories(directoryPath);
         Path filePath = Paths.get(profilePath, fileName);
         Files.copy(profilePicture.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        return "/files/profile/" + fileName;  // URL 반환
+        return "/files/profile/" + fileName;
     }
     
 
@@ -109,6 +112,8 @@ public class UserService {
         user.setProfilePicPath(imagePath);
         userRepository.save(user);
     }
+    
+   
     
 
 }
