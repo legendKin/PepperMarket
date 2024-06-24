@@ -12,7 +12,7 @@ import java.util.Date;
 public class ImageService {
 	
 //	private static final String IMAGE_DIRECTORY = "/path/to/server/images/";
-	private static final String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+	private static final String projectPath = "/home/ec2-user/pepper/files/profile/";
 
 	public static String getCurrentDateFormatted(String pattern) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
